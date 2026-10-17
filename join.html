@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Join the Crew | Student Works Painting</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root { --red:#E52027; --red-dark:#A50309; color-scheme: dark; }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin:0; background:#0A0A0A; color:#fff; font-family:"Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif; font-size:17px; line-height:1.6; }
+  .wrap { width:min(960px, 100% - 40px); margin-inline:auto; }
+  header { padding:16px 0; }
+  .bar { display:flex; align-items:center; justify-content:space-between; background:var(--red); border-radius:999px; padding:0 8px 0 18px; height:64px; }
+  .bar img { height:44px; display:block; }
+  a.back { color:#fff; text-decoration:none; font-weight:700; background:#0A0A0A; padding:10px 18px; border-radius:999px; }
+  h1, h2, h3 { margin:0; line-height:1.05; letter-spacing:-.03em; }
+  h1 { font-size:clamp(2.4rem, 9vw, 4.4rem); font-weight:900; margin:56px 0 16px; }
+  .kicker { display:inline-block; background:var(--red); font-weight:800; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; padding:6px 14px; border-radius:999px; }
+  .lede { font-size:1.2rem; opacity:.85; max-width:56ch; }
+  body::before { content:""; position:fixed; inset:0; background:radial-gradient(50% 40% at 15% 8%, rgba(229,32,39,.33), transparent 70%), radial-gradient(40% 35% at 90% 85%, rgba(229,32,39,.18), transparent 70%); pointer-events:none; z-index:0; }
+  .wrap, footer { position:relative; z-index:1; }
+  .steps { display:grid; gap:16px; margin:44px 0; }
+  @media (min-width:760px){ .steps { grid-template-columns:repeat(3,1fr); } }
+  .step { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:18px; padding:22px; }
+  .step b { display:grid; place-items:center; width:38px; height:38px; border-radius:50%; background:var(--red); font-weight:900; margin-bottom:12px; }
+  .step h3 { font-size:1.3rem; font-weight:800; margin-bottom:6px; }
+  .step p { margin:0; opacity:.78; font-size:.98rem; }
+  form { background:#fff; color:#111; border-radius:24px; padding:30px 24px; border-top:6px solid var(--red); margin:0 0 40px; max-width:560px; box-shadow:0 30px 80px rgba(0,0,0,.5); }
+  form h2 { font-size:1.7rem; font-weight:900; margin-bottom:4px; }
+  .sub { color:#666; margin:0 0 20px; font-size:.95rem; }
+  label { display:block; font-weight:700; font-size:.95rem; margin-bottom:6px; }
+  .field { margin-bottom:16px; }
+  input, textarea { width:100%; font:inherit; color:#111; background:#fafaf8; border:2px solid #d8d8d4; border-radius:8px; padding:13px 14px; }
+  input:focus, textarea:focus { outline:none; border-color:var(--red); box-shadow:0 0 0 4px rgba(229,32,39,.18); }
+  textarea { min-height:100px; resize:vertical; }
+  button { width:100%; font:inherit; font-weight:800; font-size:1.05rem; color:#fff; background:var(--red); border:0; border-radius:999px; padding:16px; cursor:pointer; box-shadow:0 10px 26px rgba(229,32,39,.4); transition:transform .25s, filter .25s; }
+  button:hover { transform:translateY(-2px); filter:brightness(1.08); }
+  .status { margin-top:12px; min-height:1.4em; text-align:center; color:#333; }
+  .note { opacity:.6; font-size:.85rem; margin:0 0 56px; }
+  footer { background:#000; padding:26px 0 40px; text-align:center; opacity:.8; font-size:.92rem; }
+  .rv { opacity:0; transform:translateY(28px); transition:opacity .8s, transform .8s; transition-delay:var(--d,0s); }
+  .rv.in { opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce) { .rv { opacity:1; transform:none; transition:none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="bar"><img src="logo-student-works.png" alt="Student Works Painting"><a class="back" href="./" onclick="if(history.length>1){history.back();return false;}">Back to site</a></div></header>
+  <main class="glow">
+    <span class="kicker rv">Join the crew</span>
+    <h1 class="rv" style="--d:.08s">Want to paint with us?</h1>
+    <p class="lede rv" style="--d:.16s">Student Works Painting is a student-run crew led by Alexander Frook. If you're hardworking and want to learn the trade, here's how to get in touch.</p>
+    <div class="steps">
+      <div class="step rv"><b>1</b><h3>Send your details</h3><p>Fill in the form below with your name, number and a bit about yourself.</p></div>
+      <div class="step rv" style="--d:.1s"><b>2</b><h3>Quick chat</h3><p>Alex will call you to talk about the role and the season ahead.</p></div>
+      <div class="step rv" style="--d:.2s"><b>3</b><h3>Join the crew</h3><p>Start prepping, painting and finishing jobs with the team.</p></div>
+    </div>
+    <form id="f" class="rv" novalidate>
+      <h2>Tell us about you</h2>
+      <p class="sub">Alex reads every message.</p>
+      <div class="field"><label for="n">Your name</label><input id="n" autocomplete="name" required></div>
+      <div class="field"><label for="p">Phone number</label><input id="p" type="tel" autocomplete="tel" required></div>
+      <div class="field"><label for="m">A bit about you</label><textarea id="m" placeholder="School or program, painting experience (if any), and when you're available"></textarea></div>
+      <button type="submit">Send my application &#8594;</button>
+      <div class="status" id="s" role="status" aria-live="polite"></div>
+    </form>
+    <p class="note">Hiring details are still being finalized, so reach out and we'll fill you in.</p>
+  </main>
+</div>
+<footer>Student Works Painting. Do it once. Do it right.</footer>
+<script>
+  var CONTACT_EMAIL = "alexander.frook@gmail.com";
+  document.getElementById("f").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var n = document.getElementById("n").value.trim(), p = document.getElementById("p").value.trim(), m = document.getElementById("m").value;
+    var s = document.getElementById("s");
+    if (!n || !p) { s.textContent = "Add your name and phone number so Alex can reach you."; return; }
+    s.textContent = "Opening your email app. Hit send and Alex will be in touch.";
+    window.location.href = "mailto:" + CONTACT_EMAIL + "?subject=" + encodeURIComponent("Job inquiry from " + n) + "&body=" + encodeURIComponent("Name: " + n + "\nPhone: " + p + "\n\n" + m);
+  });
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) { es.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }); }, { threshold: .12 });
+    document.querySelectorAll(".rv").forEach(function (el) { io.observe(el); });
+  } else document.querySelectorAll(".rv").forEach(function (el) { el.classList.add("in"); });
+</script>
+</body>
+</html>
