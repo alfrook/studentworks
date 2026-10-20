@@ -77,8 +77,13 @@
     var n = document.getElementById("n").value.trim(), p = document.getElementById("p").value.trim(), m = document.getElementById("m").value;
     var s = document.getElementById("s");
     if (!n || !p) { s.textContent = "Add your name and phone number so Alex can reach you."; return; }
-    s.textContent = "Opening your email app. Hit send and Alex will be in touch.";
-    window.location.href = "mailto:" + CONTACT_EMAIL + "?subject=" + encodeURIComponent("Job inquiry from " + n) + "&body=" + encodeURIComponent("Name: " + n + "\nPhone: " + p + "\n\n" + m);
+    var btn = document.querySelector("#f button[type=submit]");
+    btn.disabled = true; s.textContent = "Sending...";
+    fetch("https://formsubmit.co/ajax/" + CONTACT_EMAIL, { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify({ name: n, phone: p, message: m, _subject: "Job inquiry from " + n, _template: "table", _honey: "" }) })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function () { s.textContent = "Thanks! We got your message and Alex will be in touch."; document.getElementById("f").reset(); })
+      .catch(function () { s.innerHTML = 'Sorry, that did not go through. Please call <a href="tel:+16473888488">647-388-8488</a>.'; })
+      .then(function () { btn.disabled = false; });
   });
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (es) { es.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }); }, { threshold: .12 });
