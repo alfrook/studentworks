@@ -430,8 +430,8 @@
       </div>
       <div class="stats">
         <div><b class="ph">00</b><span>New jobs booked</span></div>
-        <div><b class="ph">00</b><span>Jobs completed</span></div>
-        <div><b class="ph">00</b><span>Jobs completed in 2026</span></div>
+        <div><b class="ph" data-stat="completed">00</b><span>Jobs completed</span></div>
+        <div><b class="ph" data-stat="completed2026">00</b><span>Jobs completed in 2026</span></div>
       </div>
     </div>
   </div>
@@ -584,6 +584,13 @@
       img.replaceWith(t);
     });
   });
+  // Live job counts: stats.json is updated each time a client is marked Paid
+  fetch("stats.json?v=" + Date.now()).then(function (r) { return r.json(); }).then(function (s) {
+    document.querySelectorAll("[data-stat]").forEach(function (e) {
+      var v = s[e.getAttribute("data-stat")];
+      if (typeof v === "number") { e.textContent = v; e.classList.remove("ph"); }
+    });
+  }).catch(function () {});
   // ======== EDIT THESE ========
   var CONTACT_EMAIL = "alexander.frook@gmail.com";
   var JOBS = [
