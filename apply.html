@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Join the crew | Student Works Painting</title>
+<meta name="description" content="Apply to paint with the Student Works crew. Do it once. Do it right.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0b; --panel:#111214; --line:#26282c; --text:#f4f4f5; --mute:#9a9ca3;
+  --red:#E52027; --red-soft:#ff5a5f; --ok:#3ddc84;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:"Be Vietnam Pro",system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+.bar{background:var(--red);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.bar b{letter-spacing:.14em;font-size:14px;font-weight:700;color:#fff}
+.bar a{color:#fff;font-size:13px;font-weight:500;text-decoration:none;opacity:.9}
+.wrap{max-width:680px;margin:0 auto;padding:0 20px}
+.hero{padding:56px 0 28px}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--red-soft);font-weight:600}
+h1{font-family:"Instrument Serif",serif;font-weight:400;font-size:clamp(44px,11vw,72px);line-height:1.02;margin:14px 0 16px;letter-spacing:-.01em}
+h1 em{color:var(--red-soft);font-style:italic}
+.lede{color:var(--mute);font-size:17px;max-width:520px}
+.big{font-family:"Instrument Serif",serif;font-size:clamp(28px,6.5vw,38px);line-height:1.15;margin:0 0 14px}
+.big em{color:var(--red-soft)}
+.roles{margin-top:26px}
+.roles .facts{margin-top:10px}
+.facts .hot{border-color:var(--red);color:var(--text);background:rgba(229,32,39,.12);font-weight:600}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.facts span{border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;color:var(--mute)}
+form{padding:12px 0 80px}
+fieldset{border:0;padding:0;margin:0}
+.sec{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px 20px;margin-top:18px}
+.sec h2{font-family:"Instrument Serif",serif;font-weight:400;font-size:28px;margin-bottom:4px}
+.sec h2 small{font-family:"Be Vietnam Pro",sans-serif;font-size:12px;color:var(--red-soft);letter-spacing:.14em;margin-right:10px;vertical-align:middle}
+.sub{color:var(--mute);font-size:14px;margin-bottom:18px}
+.field{margin-top:16px}
+label,legend{display:block;font-size:14px;font-weight:600;margin-bottom:8px;padding:0}
+.opt{color:var(--mute);font-weight:400}
+input[type=text],input[type=tel],input[type=email],select,textarea{
+  width:100%;background:#0a0a0b;border:1px solid var(--line);color:var(--text);
+  border-radius:12px;padding:14px 14px;font:inherit;font-size:16px;outline:none;transition:border-color .15s, box-shadow .15s}
+textarea{min-height:130px;resize:vertical}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#9a9ca3 50%),linear-gradient(135deg,#9a9ca3 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat;padding-right:38px}
+input:focus,select:focus,textarea:focus{border-color:var(--red-soft);box-shadow:0 0 0 3px rgba(229,32,39,.2)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:520px){.row{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;cursor:pointer;margin:0}
+.chip span{display:inline-block;border:1px solid var(--line);background:#0a0a0b;border-radius:999px;padding:10px 16px;font-size:14px;color:var(--mute);transition:all .15s;user-select:none}
+.chip input:checked + span{background:var(--red);border-color:var(--red);color:#fff;font-weight:600}
+.chip input:focus-visible + span{box-shadow:0 0 0 3px rgba(229,32,39,.35)}
+.err{color:var(--red-soft);font-size:13px;margin-top:6px;display:none}
+.bad .err{display:block}
+.bad input[type=text],.bad input[type=tel],.bad input[type=email],.bad select,.bad textarea{border-color:var(--red-soft)}
+.count{font-size:12px;color:var(--mute);text-align:right;margin-top:4px}
+.hp{position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden}
+.submit{margin-top:26px;width:100%;background:var(--red);color:#fff;border:0;border-radius:999px;padding:18px;font:inherit;font-size:17px;font-weight:600;cursor:pointer;transition:transform .1s, background .15s}
+.submit:hover{background:#c91a21}
+.submit:active{transform:scale(.99)}
+.submit[disabled]{opacity:.6;cursor:wait}
+.fine{color:var(--mute);font-size:13px;text-align:center;margin-top:14px}
+.banner{display:none;margin-top:16px;border:1px solid var(--red-soft);border-radius:12px;padding:14px 16px;font-size:14px;color:var(--text);background:rgba(229,32,39,.1)}
+.done{display:none;text-align:center;padding:72px 0 120px}
+.done .tick{width:76px;height:76px;border-radius:50%;background:rgba(61,220,132,.12);border:2px solid var(--ok);margin:0 auto 24px;display:grid;place-items:center}
+.done svg{width:36px;height:36px;stroke:var(--ok);fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40;stroke-dashoffset:40;animation:draw .6s .15s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.done h2{font-family:"Instrument Serif",serif;font-weight:400;font-size:44px;line-height:1.05}
+.done h2 em{color:var(--red-soft)}
+.done p{color:var(--mute);margin-top:14px}
+.done a{display:inline-block;margin-top:26px;color:var(--text);border:1px solid var(--line);border-radius:999px;padding:12px 22px;text-decoration:none;font-size:14px}
+</style>
+</head>
+<body>
+
+<div class="bar"><b>STUDENT WORKS</b><a href="./">Back to site</a></div>
+
+<main class="wrap">
+  <section id="formView">
+    <div class="hero">
+      <div class="eyebrow">Now hiring · 2027 season</div>
+      <h1>Paint with <em>the crew.</em></h1>
+      <p class="big">Want to work in <em>Forest Hill</em> this summer?!</p>
+      <p class="lede">Forget the usual summer job. Spend your days outside, build real skills, and work with people your age. We're a student-run crew painting some of the best homes in Toronto.</p>
+      <div class="roles">
+        <div class="eyebrow">Open positions</div>
+        <div class="facts"><span class="hot">Painter</span><span class="hot">Marketer</span><span class="hot">Sales</span><span class="hot">Production</span></div>
+      </div>
+      <div class="facts"><span>Small 2-person crews</span><span>Residential &amp; commercial</span><span>Great people, great summer</span></div>
+    </div>
+
+    <form id="apply" novalidate>
+      <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+      <fieldset class="sec">
+        <h2><small>01</small>About you</h2>
+        <p class="sub">So we know who to call.</p>
+        <div class="field" data-f="name">
+          <label for="name">Full name</label>
+          <input type="text" id="name" name="name" autocomplete="name" placeholder="First and last name">
+          <div class="err">Please enter your full name.</div>
+        </div>
+        <div class="row">
+          <div class="field" data-f="phone">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="416-555-0123">
+            <div class="err">Enter a phone number we can reach.</div>
+          </div>
+          <div class="field" data-f="email">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" placeholder="you@email.com">
+            <div class="err">Enter a valid email.</div>
+          </div>
+        </div>
+        <div class="field" data-f="roles">
+          <legend>Which role(s) interest you? <span class="opt">(pick all that apply)</span></legend>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="roles" value="Painter"><span>Painter</span></label>
+            <label class="chip"><input type="checkbox" name="roles" value="Marketer"><span>Marketer</span></label>
+            <label class="chip"><input type="checkbox" name="roles" value="Sales"><span>Sales</span></label>
+            <label class="chip"><input type="checkbox" name="roles" value="Production"><span>Production</span></label>
+            <label class="chip"><input type="checkbox" name="roles" value="Not sure yet"><span>Not sure yet</span></label>
+          </div>
+          <div class="err">Pick at least one.</div>
+        </div>
+        <div class="row">
+          <div class="field" data-f="area">
+            <label for="area">Where are you based?</label>
+            <select id="area" name="area">
+              <option value="">Choose one</option>
+              <option>Forest Hill</option>
+              <option>Cedarvale</option>
+              <option>Humewood</option>
+              <option>Other</option>
+            </select>
+            <input type="text" id="areaOther" name="areaOther" placeholder="Type your neighbourhood" style="display:none;margin-top:10px" autocomplete="off">
+            <div class="err">Pick where you're based, or type it in.</div>
+          </div>
+          <div class="field">
+            <label for="school">School &amp; year <span class="opt">(optional)</span></label>
+            <input type="text" id="school" name="school" placeholder="e.g. U of Guelph, 1st year">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="sec">
+        <h2><small>02</small>Experience</h2>
+        <p class="sub">No painting experience needed. A good attitude is.</p>
+        <div class="field" data-f="exp">
+          <legend>Painting experience</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="experience" value="None yet"><span>None yet</span></label>
+            <label class="chip"><input type="radio" name="experience" value="Some (helped on a project)"><span>Some</span></label>
+            <label class="chip"><input type="radio" name="experience" value="A season or more"><span>A season or more</span></label>
+          </div>
+          <div class="err">Pick one.</div>
+        </div>
+        <div class="field" data-f="licence">
+          <legend>Do you have a driver's licence?</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="licence" value="Yes, with a vehicle"><span>Yes, with a vehicle</span></label>
+            <label class="chip"><input type="radio" name="licence" value="Yes, no vehicle"><span>Yes, no vehicle</span></label>
+            <label class="chip"><input type="radio" name="licence" value="No"><span>No</span></label>
+          </div>
+          <div class="err">Pick one.</div>
+        </div>
+        <div class="field" data-f="heights">
+          <legend>Comfortable on ladders and working at heights?</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="heights" value="Yes"><span>Yes</span></label>
+            <label class="chip"><input type="radio" name="heights" value="Somewhat"><span>Somewhat</span></label>
+            <label class="chip"><input type="radio" name="heights" value="Not really"><span>Not really</span></label>
+          </div>
+          <div class="err">Pick one.</div>
+        </div>
+      </fieldset>
+
+      <div class="banner" id="banner" role="alert"></div>
+      <button class="submit" id="go" type="submit">Send my application</button>
+      <p class="fine">We reply by phone or email, usually within a couple of days.</p>
+    </form>
+  </section>
+
+  <section class="done" id="doneView" aria-live="polite">
+    <div class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h2>Application <em>received.</em></h2>
+    <p id="doneMsg">Thanks. We'll be in touch soon.</p>
+    <a href="./">Back to the site</a>
+  </section>
+</main>
+
+<script>
+(function(){
+  var TO = "paintwithfrook@gmail.com";
+  var CC = "gr8sk8er@icloud.com";
+  var form = document.getElementById("apply");
+  var banner = document.getElementById("banner");
+  var go = document.getElementById("go");
+
+  // "Not sure yet" is exclusive: picking it clears the other roles, picking a role clears it
+  form.querySelectorAll('input[name="roles"]').forEach(function(box){
+    box.addEventListener("change", function(){
+      if(!box.checked) return;
+      form.querySelectorAll('input[name="roles"]').forEach(function(other){
+        if(other === box) return;
+        if(box.value === "Not sure yet" || other.value === "Not sure yet") other.checked = false;
+      });
+    });
+  });
+
+  // "Other" neighbourhood reveals a text box
+  var areaSel = document.getElementById("area");
+  var areaOther = document.getElementById("areaOther");
+  areaSel.addEventListener("change", function(){
+    var other = areaSel.value === "Other";
+    areaOther.style.display = other ? "block" : "none";
+    if(other) areaOther.focus(); else areaOther.value = "";
+  });
+
+  function f(name){ return form.querySelector('[data-f="'+name+'"]'); }
+  function val(name){ var el = form.elements[name]; return el ? (el.value||"").trim() : ""; }
+  function radio(name){ var c = form.querySelector('input[name="'+name+'"]:checked'); return c ? c.value : ""; }
+  function checks(name){ return Array.prototype.map.call(form.querySelectorAll('input[name="'+name+'"]:checked'), function(c){return c.value;}); }
+
+  function validate(){
+    var bad = [];
+    var phoneDigits = val("phone").replace(/\D/g,"");
+    var rules = {
+      name: val("name").split(/\s+/).length >= 2 && val("name").length >= 3,
+      phone: phoneDigits.length >= 10,
+      email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val("email")),
+      area: !!val("area") && (val("area") !== "Other" || val("areaOther").length >= 2),
+      roles: checks("roles").length > 0,
+      exp: !!radio("experience"),
+      licence: !!radio("licence"),
+      heights: !!radio("heights")
+    };
+    Object.keys(rules).forEach(function(k){
+      var box = f(k);
+      if(!box) return;
+      if(rules[k]){ box.classList.remove("bad"); } else { box.classList.add("bad"); bad.push(box); }
+    });
+    return bad;
+  }
+
+  form.addEventListener("input", function(e){
+    var box = e.target.closest("[data-f]");
+    if(box) box.classList.remove("bad");
+  });
+  form.addEventListener("change", function(e){
+    var box = e.target.closest("[data-f]");
+    if(box) box.classList.remove("bad");
+  });
+
+  function showBanner(msg){ banner.textContent = msg; banner.style.display = "block"; }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    banner.style.display = "none";
+    var bad = validate();
+    if(bad.length){
+      bad[0].scrollIntoView({behavior:"smooth",block:"center"});
+      showBanner("A few answers are missing. Check the red fields.");
+      return;
+    }
+    if(form.elements["_honey"].value){ return; } // bot
+
+    var name = val("name");
+    var payload = {
+      "Name": name,
+      "Phone": val("phone"),
+      "Email": val("email"),
+      "Roles interested in": checks("roles").join(", "),
+      "Based in": val("area") === "Other" ? val("areaOther") : val("area"),
+      "School & year": val("school") || "-",
+      "Painting experience": radio("experience"),
+      "Driver's licence": radio("licence"),
+      "Ladders / heights": radio("heights"),
+      "_subject": "Job application from " + name + " - " + val("phone"),
+      "_replyto": val("email"),
+      "_cc": CC,
+      "_template": "table",
+      "_captcha": "false"
+    };
+
+    go.disabled = true; go.textContent = "Sending...";
+    fetch("https://formsubmit.co/ajax/" + TO, {
+      method: "POST",
+      headers: {"Content-Type":"application/json","Accept":"application/json"},
+      body: JSON.stringify(payload)
+    }).then(function(r){
+      return r.json().then(function(j){ return {ok:r.ok, j:j}; });
+    }).then(function(res){
+      if(res.ok && (res.j.success === "true" || res.j.success === true)){
+        document.getElementById("doneMsg").textContent = "Thanks " + name.split(/\s+/)[0] + ". We'll call or email you soon.";
+        document.getElementById("formView").style.display = "none";
+        document.getElementById("doneView").style.display = "block";
+        window.scrollTo({top:0,behavior:"smooth"});
+      } else { throw new Error("rejected"); }
+    }).catch(function(){
+      go.disabled = false; go.textContent = "Send my application";
+      showBanner("That didn't send. Try again, or email us at " + TO + " or call 647-388-8488.");
+    });
+  });
+})();
+</script>
+</body>
+</html>
