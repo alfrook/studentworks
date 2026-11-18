@@ -439,3 +439,11 @@
 .wordmark img { height: 56px; width: auto; display: block; }
 @media (max-width: 380px) { .wordmark img { height: 50px; } }
 .steps-logo { width: min(320px, 76vw); border-radius: 0; }
+
+/* ---------- Opening screen: only the ForestHill Student Painters logo ----------
+   While the logo fills the screen (html.on-logo, set by js/story.js), the header's
+   logo and Book a quote button are hidden; they fade in once you scroll past it. */
+.home .site-header .wrap > * { transition: opacity 0.5s var(--ease), visibility 0s linear 0s; }
+.on-logo .site-header { border-bottom-color: transparent; }
+.on-logo .site-header .wrap > * { opacity: 0; visibility: hidden; transition: opacity 0.3s var(--ease), visibility 0s linear 0.3s; }
+.on-logo .button--cta::after { animation: none; }
