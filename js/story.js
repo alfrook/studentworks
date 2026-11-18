@@ -108,8 +108,8 @@ for (const beat of DATA.beats) {
     const keys = [];
     [...preps, beat].forEach((st, i) => {
       const a = t + 0.45 + per * i;
-      WIPES.push({ key: st.key, u0: a - 0.04, u1: a + 0.1 });
-      if (st === beat) for (const k of beat.alsoPaint || []) if (DATA[beat.scene].wipes[k]) WIPES.push({ key: k, u0: a - 0.04, u1: a + 0.1 });
+      WIPES.push({ key: st.key, u0: a - 0.04, u1: a + 0.34 }); // a slow sweep across the deck
+      if (st === beat) for (const k of beat.alsoPaint || []) if (DATA[beat.scene].wipes[k]) WIPES.push({ key: k, u0: a - 0.04, u1: a + 0.34 });
       keys.push(st.key);
       CHAPTERS.push({ u: a - 0.04, fig: "", place: beat.label, sub: beat.caption, chip: null, steps: stages, stage: i + 1 });
     });
