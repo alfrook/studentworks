@@ -63,38 +63,37 @@ const CAMERA = [                         // centre + r (size of the square that 
   { u: 0.35, x: 470, y: 300, r: 760 },
   { u: 1.5, x: 362, y: 262, r: 70 },     // Forest Hill
   { u: 1.75, x: 362, y: 262, r: 70 },
-  { u: 2.55, x: HOUSE_AT[0], y: HOUSE_AT[1], r: 7 }, // the lot
-  { u: 3.2, box: HOUSE_FRAME },          // the house, unpainted
-  { u: 3.55, box: HOUSE_FRAME },
+  { u: 2.45, box: HOUSE_FRAME },         // straight into the house, unpainted
+  { u: 2.8, box: HOUSE_FRAME },
 ];
 const LAYERS = {
   toronto: { origin: [0, 0], k: 1, opacity: [[0, 1], [1.25, 1], [1.8, 0]] },
   labels: { origin: [0, 0], k: 1, opacity: [[0, 1], [0.65, 1], [1.0, 0]] },
-  fh: { origin: [FH_RECT[0], FH_RECT[1]], k: 1 / FH_SCALE, opacity: [[0, 0], [0.9, 0], [1.45, 1], [2.5, 1], [2.85, 0]] },
-  house: { origin: HOUSE_ORIGIN, k: HK, opacity: [[0, 0], [2.5, 0], [2.9, 1]] },
+  fh: { origin: [FH_RECT[0], FH_RECT[1]], k: 1 / FH_SCALE, opacity: [[0, 0], [0.9, 0], [1.45, 1], [1.85, 1], [2.08, 0]] },
+  house: { origin: HOUSE_ORIGIN, k: HK, opacity: [[0, 0], [2.04, 0], [2.3, 1]] }, // after the map (and its pin) has gone
   kitchen: { origin: KITCHEN_ORIGIN, k: KK, opacity: [[0, 0]] },
 };
 const CHAPTERS = [
   { u: 0, fig: "", lead: "Located in", place: "Toronto", sub: "" },
   { u: 1.05, fig: "", place: "Forest Hill", sub: "and surrounding areas" },
-  { u: 2.75, fig: "", lead: "", place: "Residential or Commercial", sub: "" },
+  { u: 2.2, fig: "", lead: "", place: "Residential or Commercial", sub: "" },
 ];
 const WIPES = []; // { key, u0, u1 }
 
 const SPANS = []; // each beat: when it starts and ends, and its wipes in order (used by photo plates)
-let t = 3.55, inKitchen = false, n = 1;
+let t = 2.8, inKitchen = false, n = 1;
 for (const beat of DATA.beats) {
   if (beat.scene === "kitchen" && !inKitchen) {          // zoom through the kitchen window
     CAMERA.push({ u: t + 0.4, box: WINDOW_BOX });
-    LAYERS.kitchen.opacity.push([t + 0.22, 0], [t + 0.42, 1]);
-    LAYERS.house.opacity.push([t + 0.28, 1], [t + 0.45, 0]);
+    LAYERS.house.opacity.push([t + 0.12, 1], [t + 0.27, 0]);   // the house fades out first...
+    LAYERS.kitchen.opacity.push([t + 0.27, 0], [t + 0.42, 1]); // ...then the room fades in: never both at once
     CHAPTERS.push({ u: t + 0.1, fig: "", place: "Interiors", sub: "", chip: null });
     t += 0.45;
     inKitchen = true;
   } else if (beat.scene === "house" && inKitchen) {      // and back out
     CAMERA.push({ u: t + 0.3, box: WINDOW_BOX });
-    LAYERS.kitchen.opacity.push([t + 0.05, 1], [t + 0.22, 0]);
-    LAYERS.house.opacity.push([t, 0], [t + 0.15, 1]);
+    LAYERS.kitchen.opacity.push([t + 0.02, 1], [t + 0.14, 0]);
+    LAYERS.house.opacity.push([t + 0.14, 0], [t + 0.28, 1]);
     t += 0.3;
     inKitchen = false;
   }
@@ -109,8 +108,8 @@ for (const beat of DATA.beats) {
     const keys = [];
     [...preps, beat].forEach((st, i) => {
       const a = t + 0.45 + per * i;
-      WIPES.push({ key: st.key, u0: a + 0.06, u1: a + 0.36 });
-      if (st === beat) for (const k of beat.alsoPaint || []) if (DATA[beat.scene].wipes[k]) WIPES.push({ key: k, u0: a + 0.06, u1: a + 0.36 });
+      WIPES.push({ key: st.key, u0: a - 0.04, u1: a + 0.1 });
+      if (st === beat) for (const k of beat.alsoPaint || []) if (DATA[beat.scene].wipes[k]) WIPES.push({ key: k, u0: a - 0.04, u1: a + 0.1 });
       keys.push(st.key);
       CHAPTERS.push({ u: a - 0.04, fig: "", place: beat.label, sub: beat.caption, chip: null, steps: stages, stage: i + 1 });
     });
@@ -119,7 +118,7 @@ for (const beat of DATA.beats) {
   } else {
     CAMERA.push({ u: t + 0.3, box }, { u: t + BEAT, box });
     WIPES.push({ key: beat.key, u0: t + 0.22, u1: t + 0.62 });
-    CHAPTERS.push({ u: t + 0.08, fig: "", place: beat.label, sub: "", chip: beat });
+    CHAPTERS.push({ u: t + 0.08, fig: "", place: beat.label, sub: "", chip: null });
     SPANS.push({ key: beat.key, start: t, end: t + BEAT, wipes: [beat.key] });
     t += BEAT;
   }
