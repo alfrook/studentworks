@@ -7,7 +7,7 @@
 
 :root {
   --stage-h: 100svh;
-  --logo-red: #e3253e;   /* the red in images/logo.png (opening screen) */
+  --logo-red: #ffffff;   /* opening screen background, behind images/logo-fhsp.png */
   /* light palette for the drawings */
   --m-land: #f1f0ec;
   --m-lake: #b9c9dc;      /* navy-leaning water */
@@ -431,3 +431,11 @@
 .steps-logo { border-radius: 16px; }
 .wordmark .wm-2 { font-size: 0.6875rem; letter-spacing: 0.2em; }
 @media (max-width: 380px) { .wordmark .wm-2 { font-size: 0.625rem; letter-spacing: 0.16em; } }
+
+/* ---------- ForestHill Student Painters logo: opening screen and header ---------- */
+.splash { background: #fff; }
+.splash__logo { width: min(86vw, 760px); height: auto; transform-origin: 54% 27%; } /* zoom into the space under the roof */
+.wordmark { display: block; line-height: 0; }
+.wordmark img { height: 56px; width: auto; display: block; }
+@media (max-width: 380px) { .wordmark img { height: 50px; } }
+.steps-logo { width: min(320px, 76vw); border-radius: 0; }

@@ -627,7 +627,7 @@ def build_steps(hsvg, hdata, ksvg, kdata, html):
         inner = painted(src, data, done[sc])
         alt = f'{b["label"]} painted {b["colour"].lower()}.'
         add(f"{i + 4:02d}-{b['key']}.svg", framed(inner, box, hs_css), "", b["label"], b["caption"], alt, b)
-    add("99-finished.svg", framed(painted(hin, hdata, done["house"]), frame, hs_css), "", "Forest Hill Student Works Painting", "",
+    add("99-finished.svg", framed(painted(hin, hdata, done["house"]), frame, hs_css), "", "ForestHill Student Painters", "",
         "The finished house: " + ", ".join(f'{b["label"].lower()} in {b["colour"].lower()}' for b in BEATS if b["scene"] == "house") + ".")
 
     items = []

@@ -127,7 +127,7 @@ for (const beat of DATA.beats) {
 // leave room under the house for the Book a quote button
 const FINALE_FRAME = HOUSE_FRAME; // the Book a quote button takes the bottom bar's place, not the drawing's
 CAMERA.push({ u: t + 0.6, box: FINALE_FRAME, short: HOUSE_FRAME }, { u: t + 1.1, box: FINALE_FRAME, short: HOUSE_FRAME });
-CHAPTERS.push({ u: t + 0.2, fig: "", lead: "", place: "Forest Hill Student Works Painting", sub: "", finale: true });
+CHAPTERS.push({ u: t + 0.2, fig: "", lead: "", place: "ForestHill Student Painters", sub: "", finale: true });
 // The opening logo screen comes first: shift everything after it by INTRO screens.
 const INTRO = 0.8;
 for (const k of CAMERA) k.u += INTRO;
