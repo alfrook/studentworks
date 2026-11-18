@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /thanks.html
+
+# [PLACEHOLDER] Replace example.com with your real domain
+Sitemap: https://alfrook.github.io/studentworks/sitemap.xml

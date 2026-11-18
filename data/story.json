@@ -1,0 +1,82 @@
+{
+  "_readme": "The paint beats of the homepage story, in order. Edit a label, colour name, colour (hex) or caption here, then run: python3 tools/build-scenes.py. 'scene' is house or kitchen. 'hex2' is a second colour painted in the same beat (exterior trim, kitchen cabinets, deck and balcony railings). 'before'/'before2' are the colours before painting. 'preps' are steps before the colour (the deck is pressure washed, then sanded); 'stages' are the labels shown for each step. 'alsoPaint' lists other parts painted in the same beat (the balcony, with the deck).",
+  "beats": [
+    {
+      "key": "siding",
+      "scene": "house",
+      "label": "Exteriors",
+      "colour": "Deep navy, white trim",
+      "hex": "#1f3557",
+      "hex2": "#f7f7f5",
+      "caption": "Washed, scraped and primed. Two coats of blue, then crisp white trim."
+    },
+    {
+      "key": "door",
+      "scene": "house",
+      "label": "Doors",
+      "colour": "Sunflower yellow",
+      "hex": "#efb11d",
+      "caption": "The first thing your guests see."
+    },
+    {
+      "key": "garage",
+      "scene": "house",
+      "label": "Garage doors",
+      "colour": "Black",
+      "hex": "#1f2021",
+      "caption": "Every panel edge cut in by hand."
+    },
+    {
+      "key": "walls",
+      "scene": "kitchen",
+      "label": "Interiors",
+      "colour": "Bright white",
+      "hex": "#fbfbf9",
+      "caption": "Dated beige walls and cabinets, made bright white.",
+      "hex2": "#ffffff",
+      "before": "#cdbb94",
+      "before2": "#b59d72"
+    },
+    {
+      "key": "fence",
+      "scene": "house",
+      "label": "Fences",
+      "colour": "Cedar stain",
+      "hex": "#9a6b43",
+      "caption": "Stained on both sides, top to bottom."
+    },
+    {
+      "key": "deck",
+      "scene": "house",
+      "label": "Decks and balconies",
+      "colour": "Rich walnut stain",
+      "hex": "#7a3f1d",
+      "hex2": "#141414",
+      "caption": "We pressure wash decks.",
+      "preps": [
+        {
+          "key": "deckwash",
+          "label": "Pressure washed",
+          "colour": "Raw wood",
+          "hex": "#a8865d"
+        },
+        {
+          "key": "decksand",
+          "label": "Sanded",
+          "colour": "Smooth bare cedar",
+          "hex": "#dcbb8e"
+        }
+      ],
+      "before": "#77826f",
+      "stages": [
+        "Weathered",
+        "Pressure washed",
+        "Sanded",
+        "Stained"
+      ],
+      "alsoPaint": [
+        "balcony"
+      ]
+    }
+  ]
+}
