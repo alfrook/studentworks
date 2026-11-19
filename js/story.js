@@ -344,7 +344,7 @@ function startStory() {
 
     let c = 0;
     for (let i = 0; i < CHAPTERS.length; i++) if (u >= CHAPTERS[i].u) c = i;
-    if (c !== chapter) setChapter(c, chapter !== -1);
+    if (c !== chapter) setChapter(c);
 
     for (const w of WIPES) setWipe(w.key, ease(clamp((u - w.u0) / (w.u1 - w.u0), 0, 1)));
     renderPlates(u);
@@ -364,37 +364,37 @@ function startStory() {
     bar.style.transform = `scaleX(${(u / UNITS).toFixed(4)})`;
   }
 
-  function setChapter(i, animate) {
+  // Swap the words instantly: one element per line, its text replaced in one go, so two
+  // words can never be on screen at once (no timers, no cross-fading text).
+  const fadeIn = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function setText(el, text) {
+    if (el.textContent === text) return false;
+    el.textContent = text;
+    return true;
+  }
+  function setChapter(i) {
     chapter = i;
     const ch = CHAPTERS[i];
     finale.classList.toggle("is-on", !!ch.finale);
     root.classList.toggle("finale-on", !!ch.finale);
     finale.inert = !ch.finale;
-    const apply = () => {
-      hud.fig.textContent = ch.fig;
-      hud.place.textContent = ch.place;
-      hud.lead.textContent = ch.lead ?? "We paint"; // the small line above the big word
-      hud.lead.hidden = !hud.lead.textContent;
-      hud.sub.textContent = ch.sub;
-      if (ch.chip) {
-        hud.swatch.style.background = ch.chip.hex2 ? `linear-gradient(135deg, ${ch.chip.hex} 50%, ${ch.chip.hex2} 50%)` : ch.chip.hex;
-        hud.colour.textContent = `${ch.chip.label} · ${ch.chip.colour}`;
-      }
-      hud.chip.classList.toggle("is-on", !!ch.chip);
-    if (ch.steps && ch.steps.length) {
-      hud.steps.innerHTML = ch.steps.map((label, i) => `<li${i === ch.stage ? ' class="is-now"' : i < ch.stage ? ' class="is-done"' : ""}><b>${i + 1}</b>${label}</li>`).join("");
+    const lead = ch.lead ?? "We paint"; // the small line above the big word
+    setText(hud.lead, lead);
+    hud.lead.hidden = !lead;
+    setText(hud.sub, ch.sub || "");
+    const changed = setText(hud.place, ch.place);
+    if (changed && fadeIn && hud.place.animate) {
+      hud.place.getAnimations().forEach((an) => an.cancel());
+      hud.place.animate([{ opacity: 0.25, transform: "translateY(4px)" }, { opacity: 1, transform: "none" }], { duration: 260, easing: "ease-out" });
     }
-    hud.steps.hidden = !(ch.steps && ch.steps.length);
-    hud.chip.hidden = !hud.steps.hidden;
-      hud.place.classList.remove("is-swapping");
-      hud.sub.classList.remove("is-swapping");
-    };
-    if (!animate) return apply();
-    hud.place.classList.add("is-swapping");
-    hud.sub.classList.add("is-swapping");
-    hud.chip.classList.add("is-swapping");
-    setTimeout(() => { apply(); hud.chip.classList.remove("is-swapping"); }, 180);
+    const hasSteps = !!(ch.steps && ch.steps.length);
+    if (hasSteps) {
+      const html = ch.steps.map((label, k) => `<li${k === ch.stage ? ' class="is-now"' : k < ch.stage ? ' class="is-done"' : ""}><b>${k + 1}</b>${label}</li>`).join("");
+      if (hud.steps.innerHTML !== html) hud.steps.innerHTML = html;
+    }
+    hud.steps.hidden = !hasSteps;
   }
+
 
   let queued = false;
   function schedule() {
