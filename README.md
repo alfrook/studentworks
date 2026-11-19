@@ -75,6 +75,18 @@ All colours and the font live in `:root` at the top of `css/styles.css`: `--bg` 
 - **Decks and balconies:** four labelled stages: Weathered, Pressure washed, Sanded, Stained. The balcony over the deck is painted in the Stained stage. There is no separate balcony step.
 - **Photo placeholders:** `images/plates/kitchen-before.jpg`, `kitchen-after.jpg`, `deck-1-weathered.jpg`, `deck-2-pressure-washed.jpg`, `deck-3-sanded.jpg` and `deck-4-stained.jpg` say "PHOTO COMING". Overwrite them with your photos (same names, same camera position for every stage), then set `"use": true` for `walls` and `deck` in `data/scenes.json`.
 
+## The film (scroll video)
+
+The top story now plays your AI video, scrubbed by scroll. The video is stored as 158 still frames in `images/film/` (about 4 MB, loaded a few at a time so the page opens fast). The settings live in the `film-data` block in `index.html`:
+
+- `"use": false` switches back to the drawn house story (nothing else to change).
+- `chapters` sets which words show at which second of the video.
+- `keys` sets how much scrolling each part of the video takes.
+
+To use a new video, make the frames with ffmpeg (free):
+`ffmpeg -i video.mp4 -vf scale=960:-2 -c:v libwebp -quality 62 images/film/f%03d.webp`, then set `count` to the number of frames.
+People who turn off motion, or have JavaScript off, still see the drawn step-by-step version.
+
 ## Your photos (data/scenes.json)
 
 The story is drawn until your photos arrive. For each beat, shoot a **before** and an **after** from the same locked camera position (tripod, same zoom, same time of day). The deck needs four: **before** (grey and dirty), **washed**, **sanded** and **after**. Put the files in `images/plates/` and their paths in `data/scenes.json`.

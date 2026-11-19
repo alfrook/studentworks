@@ -29,6 +29,28 @@
   <script>document.documentElement.className = "js";</script>
   <script type="module" src="js/story.js"></script>
   <script type="module" src="js/book.js"></script>
+  <!-- FILM: the scroll story plays these video frames instead of the drawings while "use" is true.
+       frames: images/film/f001.webp ... (made from the video with ffmpeg, see README "Film").
+       keys: [video seconds, screens of scrolling] pairs, so each part gets about one screen.
+       chapters: when the words change, in video seconds. Set "use" to false to go back to the drawings. -->
+  <script type="application/json" id="film-data">
+  {
+    "use": true,
+    "frames": "images/film/f%03d.webp",
+    "count": 158,
+    "fps": 24,
+    "keys": [[0, 0], [2.3, 1.7], [3.4, 2.7], [4.45, 3.7], [5.25, 4.8], [5.78, 5.8], [6.2, 6.7], [6.58, 7.5]],
+    "chapters": [
+      { "t": 0,    "lead": "Located in", "place": "Toronto" },
+      { "t": 2.3,  "lead": "We paint",   "place": "Forest Hill", "sub": "and surrounding areas" },
+      { "t": 3.4,  "lead": "",           "place": "Residential or Commercial" },
+      { "t": 4.45, "lead": "We paint",   "place": "Exteriors" },
+      { "t": 5.25, "lead": "We paint",   "place": "Doors" },
+      { "t": 5.8,  "lead": "We paint",   "place": "Garage doors" },
+      { "t": 6.22, "lead": "We paint",   "place": "Decks and fences" }
+    ]
+  }
+  </script>
   <!-- STORY-DATA:START --><script type="application/json" id="story-data">{"beats":[{"key":"siding","scene":"house","label":"Exteriors","colour":"Deep navy, white trim","hex":"#1f3557","hex2":"#f7f7f5","caption":"Washed, scraped and primed. Two coats of blue, then crisp white trim."},{"key":"door","scene":"house","label":"Doors","colour":"Sunflower yellow","hex":"#efb11d","caption":"The first thing your guests see."},{"key":"garage","scene":"house","label":"Garage doors","colour":"Black","hex":"#1f2021","caption":"Every panel edge cut in by hand."},{"key":"walls","scene":"kitchen","label":"Interiors","colour":"Bright white","hex":"#fbfbf9","caption":"Dated beige walls and cabinets, made bright white.","hex2":"#ffffff","before":"#cdbb94","before2":"#b59d72"},{"key":"fence","scene":"house","label":"Fences","colour":"Cedar stain","hex":"#9a6b43","caption":"Stained on both sides, top to bottom."},{"key":"deck","scene":"house","label":"Decks and balconies","colour":"Rich walnut stain","hex":"#7a3f1d","hex2":"#141414","caption":"We pressure wash decks.","preps":[{"key":"deckwash","label":"Pressure washed","colour":"Raw wood","hex":"#a8865d"},{"key":"decksand","label":"Sanded","colour":"Smooth bare cedar","hex":"#dcbb8e"}],"before":"#77826f","stages":["Weathered","Pressure washed","Sanded","Stained"],"alsoPaint":["balcony"]}],"house":{"viewBox":[-838.1,-353.0,1788.7,1267.0],"wipes":{"fence":{"bbox":[-100.1,140.5,903.4,789.0],"travel":1230.5},"siding":{"bbox":[-449.1,-276.0,343.5,482.0],"travel":1057.9},"door":{"bbox":[-236.1,148.8,-179.6,266.0],"travel":97.5},"garage":{"bbox":[-272.5,285.0,-91.3,478.0],"travel":248.8},"deckwash":{"bbox":[30.6,211.0,575.6,562.0],"travel":667.8},"decksand":{"bbox":[30.6,211.0,575.6,562.0],"travel":667.8},"deck":{"bbox":[28.9,211.0,577.3,562.0],"travel":671.2},"balcony":{"bbox":[97.3,176.5,312.3,414.0],"travel":298.1}},"anchors":{"fence":[614.9,575.0],"siding":[-199.2,145.0],"kitchen":[-99.6,257.5],"door":[-207.8,210.0],"garage":[-181.9,381.0],"deck":[303.1,381.0],"balcony":[203.5,262.5]}},"kitchen":{"viewBox":[-386.8,-222.0,1050.7,828.0],"wipes":{"walls":{"bbox":[-350.4,-184.0,627.5,364.0],"travel":1169.7}},"anchors":{"walls":[311.8,60.0]}}}</script><!-- STORY-DATA:END -->
   <script type="application/ld+json">
   {
@@ -118,7 +140,11 @@
               </svg>
             </div>
 
-            <!-- Photo plates from data/scenes.json cover the drawings beat by beat, once your photos are in -->
+              <!-- Film mode: the filmed story (see #film-data). Hidden until switched on. -->
+            <canvas class="film" data-film hidden role="img" aria-label="Film of Toronto from the air, down into Forest Hill, then a stone house being painted: navy walls with white trim, a yellow front door, a black garage door and a stained deck."></canvas>
+            <p class="film-label" data-film-label hidden>AI illustration</p>
+
+          <!-- Photo plates from data/scenes.json cover the drawings beat by beat, once your photos are in -->
             <div class="plates" data-plates></div>
             <div class="grain" aria-hidden="true"></div>
 
