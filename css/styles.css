@@ -11,8 +11,21 @@
   --surface-2: #ffffff;
   --paper: #0a0a0a;                          /* text: black */
   --muted: #4d4d4d;                          /* secondary text: a black tint, 8.4:1 on white */
-  --accent: #e10600;                         /* red: buttons, accents, highlighted words (4.97:1 with white) */
-  --accent-strong: #e10600;
+  --accent: #b11f24;                         /* brand red (brand board): buttons, accents, highlighted words, 7.0:1 with white */
+
+  /* ---- Brand tokens (ForestHill Student Painters brand board) ---- */
+  --brand-red: #b11f24;
+  --brand-black: #111111;
+  --brand-cream: #f6f4ee;
+  --brand-grey: #d9d9d9;
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;   /* headlines, bold italic */
+  --font-brand: "Montserrat", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; /* body text in the brand sections */
+  --step--1: 0.875rem; --step-0: 1rem; --step-1: 1.25rem; --step-2: 1.625rem; --step-3: clamp(2rem, 6.5vw, 3.25rem); --step-4: clamp(2.5rem, 8.5vw, 4.5rem);
+  --r-sm: 12px; --r-md: 18px; --r-lg: 28px; --r-pill: 999px;
+  --shadow-card: 0 1px 2px rgb(17 17 17 / 0.06), 0 8px 24px rgb(17 17 17 / 0.06);
+  --shadow-lift: 0 2px 4px rgb(17 17 17 / 0.08), 0 16px 40px rgb(17 17 17 / 0.12);
+  --space-section: clamp(72px, 11vw, 120px);
+  --accent-strong: #b11f24;
   --hairline: rgb(10 10 10 / 0.12);
   --hairline-strong: rgb(10 10 10 / 0.28);
   --bg: var(--night);

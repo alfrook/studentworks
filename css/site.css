@@ -1,0 +1,169 @@
+/* ==========================================================================
+   Brand sections (ForestHill Student Painters brand board + Banana-style layout).
+   Loaded after home.css. Styles only the header, the new sections, the operator
+   and booking sections (looks only) and the footer. The scroll story is not touched.
+   Tokens live in :root in styles.css.
+   ========================================================================== */
+
+/* ---------- Header: logo left, Call + Book a quote right ---------- */
+.header-actions { display: flex; align-items: center; gap: 8px; }
+.site-header .button { font-family: var(--font-brand); }
+.button--call {
+  min-height: 46px; padding: 0 16px; gap: 6px; font-size: 0.9375rem; font-weight: 600;
+  background: #fff; color: var(--brand-black); border: 1.5px solid var(--brand-black); border-radius: var(--r-pill);
+}
+.button--call svg { width: 16px; height: 16px; fill: currentColor; flex: none; }
+.button--call:hover { background: var(--brand-black); color: #fff; opacity: 1; }
+@media (max-width: 560px) { .button--call .call-number { display: none; } .button--call { padding: 0 14px; } }
+@media (max-width: 360px) { .header-actions { gap: 6px; } .button--call { padding: 0 11px; } .button--call span:not(.call-number) { display: none; } }
+/* the brand red button, with a red glow in the brand red */
+.button--cta { background: var(--brand-red); border-color: var(--brand-red); box-shadow: 0 6px 22px rgb(177 31 36 / 0.35); }
+.button--cta::after { box-shadow: 0 0 0 3px rgb(177 31 36 / 0.55); }
+.button--dark { background: var(--brand-black); border-color: var(--brand-black); color: #fff; font-weight: 700; }
+
+/* ---------- Shared section rhythm ---------- */
+.bsec { padding-block: var(--space-section); background: #fff; font-family: var(--font-brand); }
+.bsec--cream { background: var(--brand-cream); }
+.bsec + .bsec, .bsec + #operator, #operator + .bsec { border-top: 0; }
+.wrap--narrow { max-width: 860px; }
+.bhead { max-width: 760px; margin-bottom: clamp(36px, 6vw, 64px); }
+.bhead--center { margin-inline: auto; text-align: center; }
+.bhead .eyebrow, #operator .eyebrow, #book .eyebrow {
+  color: var(--brand-red); font-family: var(--font-brand); font-weight: 700; letter-spacing: 0.16em; font-size: 0.75rem;
+}
+.bsec h2, .closing h2, #operator h2, #book h2 {
+  font-family: var(--font-display); font-style: italic; font-weight: 800; letter-spacing: -0.01em; line-height: 1.08;
+  font-size: var(--step-3); color: var(--brand-black);
+}
+.bhead p { color: var(--muted); font-size: 1.0625rem; margin: 16px auto 0; max-width: 56ch; }
+.bsec h3 { font-family: var(--font-brand); font-weight: 700; font-size: var(--step-1); letter-spacing: -0.01em; color: var(--brand-black); }
+.bsec p { font-family: var(--font-brand); }
+
+/* ---------- Catchphrase strip ---------- */
+.marquee { background: var(--brand-red); color: #fff; overflow: hidden; border-block: 2px solid var(--brand-black); padding-block: 18px; }
+.marquee__track { display: flex; width: max-content; }
+.marquee__run { display: flex; align-items: center; gap: 28px; padding-right: 28px; white-space: nowrap; }
+.marquee__run span { font-family: var(--font-display); font-style: italic; font-weight: 800; font-size: clamp(1.375rem, 4vw, 2rem); line-height: 1; }
+.marquee__run i { display: inline-flex; width: 34px; color: #fff; }
+.marquee__run svg { width: 100%; height: auto; }
+@media (prefers-reduced-motion: no-preference) {
+  .marquee__track { animation: marquee 70s linear infinite; }
+  .marquee:hover .marquee__track { animation-play-state: paused; }
+}
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* ---------- Service cards ---------- */
+.svc-grid { list-style: none; display: grid; gap: 18px; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .svc-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1080px) { .svc-grid { grid-template-columns: repeat(4, 1fr); } }
+.svc-card { background: #fff; border-radius: var(--r-md); box-shadow: var(--shadow-card); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease); }
+.svc-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+.svc-card__img { aspect-ratio: 4 / 3; background: #fff; overflow: hidden; border-bottom: 1px solid var(--brand-grey); }
+.svc-card__img img { width: 100%; height: 100%; object-fit: cover; }
+.svc-card h3 { margin: 18px 20px 6px; }
+.svc-card p { margin: 0 20px 14px; color: var(--muted); font-size: 0.9375rem; line-height: 1.55; flex: 1; }
+.svc-card__link { margin: 0 20px 20px; min-height: 44px; display: inline-flex; align-items: center; gap: 6px; color: var(--brand-red); font-weight: 700; font-size: 0.9375rem; text-decoration: none; }
+.svc-card__link:hover { text-decoration: underline; opacity: 1; }
+
+/* ---------- Meet the operator: same content, brand type ---------- */
+#operator { font-family: var(--font-brand); }
+#operator .operator__photo img { box-shadow: 0 0 0 6px var(--brand-cream), 0 0 0 7px var(--brand-grey); }
+
+/* ---------- Process: 4 numbered steps ---------- */
+.pstep { list-style: none; display: grid; gap: 28px; grid-template-columns: 1fr; counter-reset: none; position: relative; }
+@media (min-width: 800px) {
+  .pstep { grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .pstep::before { content: ""; position: absolute; left: 12%; right: 12%; top: 32px; height: 2px; background: var(--brand-grey); }
+}
+.pstep li { position: relative; text-align: center; padding-inline: 8px; }
+.pstep__no {
+  position: relative; display: inline-grid; place-items: center; width: 64px; height: 64px; border-radius: 50%;
+  background: var(--brand-black); color: #fff; font-family: var(--font-display); font-style: italic; font-weight: 800; font-size: 1.375rem;
+  box-shadow: 0 0 0 8px #fff;
+}
+.pstep h3 { margin: 16px 0 6px; text-transform: uppercase; letter-spacing: 0.06em; font-size: 1.0625rem; }
+.pstep p { margin: 0 auto; color: var(--muted); max-width: 30ch; font-size: 0.9375rem; }
+
+/* ---------- Packages (no prices) ---------- */
+.packs { list-style: none; display: grid; gap: 20px; grid-template-columns: 1fr; align-items: stretch; }
+@media (min-width: 900px) { .packs { grid-template-columns: repeat(3, 1fr); align-items: center; } }
+.pack { position: relative; background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-card); padding: 30px 26px 26px; display: flex; flex-direction: column; border: 1px solid var(--brand-grey); }
+.pack h3 { font-family: var(--font-display); font-style: italic; font-weight: 800; font-size: 1.75rem; color: var(--brand-red); }
+.pack__sub { color: var(--muted); margin: 6px 0 18px; }
+.pack__list { list-style: none; display: grid; gap: 10px; margin: 0 0 24px; padding: 18px 0 0; border-top: 1px solid var(--brand-grey); flex: 1; }
+.pack__list li { display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start; font-size: 0.9375rem; }
+.pack__list svg { width: 20px; height: 20px; color: var(--brand-red); margin-top: 1px; }
+.pack .button { width: 100%; min-height: 50px; }
+.pack--featured { background: var(--brand-black); color: #fff; border-color: var(--brand-black); box-shadow: var(--shadow-lift); }
+@media (min-width: 900px) { .pack--featured { padding-block: 44px 34px; } }
+.pack--featured h3 { color: #fff; }
+.pack--featured .pack__sub { color: #c9c9c9; }
+.pack--featured .pack__list { border-top-color: rgb(255 255 255 / 0.18); }
+.pack--featured .pack__list svg { color: #fff; }
+.pack--featured .pack__list li, .pack--featured .pack__list span { color: #fff; }
+.pack__tag {
+  position: absolute; top: -13px; left: 50%; transform: translateX(-50%); margin: 0;
+  background: var(--brand-red); color: #fff; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 5px 14px; border-radius: var(--r-pill); white-space: nowrap;
+}
+
+/* ---------- Trust ---------- */
+.values { list-style: none; display: grid; gap: 18px; grid-template-columns: 1fr; }
+@media (min-width: 800px) { .values { grid-template-columns: repeat(3, 1fr); } }
+.values li { background: var(--brand-cream); border-radius: var(--r-md); padding: 26px 24px; border-top: 4px solid var(--brand-red); }
+.values h3 { margin-bottom: 8px; }
+.values p { margin: 0; color: var(--muted); }
+.badges { list-style: none; display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.badges li { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 16px; border-radius: var(--r-pill); border: 1.5px solid var(--brand-black); font-weight: 600; font-size: 0.9375rem; }
+.badges svg { width: 18px; height: 18px; color: var(--brand-red); flex: none; }
+.badge--ph { flex-wrap: wrap; }
+
+/* ---------- FAQ (native details, works without JavaScript) ---------- */
+.faq { display: grid; gap: 10px; }
+.faq__item { background: #fff; border-radius: var(--r-sm); border: 1px solid var(--brand-grey); }
+.faq__item summary {
+  list-style: none; cursor: pointer; min-height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 14px 20px; font-weight: 700; font-size: 1rem; color: var(--brand-black);
+}
+.faq__item summary::-webkit-details-marker { display: none; }
+.faq__item summary::after { content: "+"; flex: none; font-size: 1.5rem; line-height: 1; color: var(--brand-red); transition: transform 0.3s var(--ease); }
+.faq__item[open] summary::after { transform: rotate(45deg); }
+.faq__item summary:focus-visible { outline: 2px solid var(--brand-red); outline-offset: 2px; border-radius: var(--r-sm); }
+.faq__a { padding: 0 20px 18px; }
+.faq__a p { margin: 0; color: var(--muted); line-height: 1.65; }
+
+/* ---------- Closing band ---------- */
+.closing { background: var(--brand-black); color: #fff; text-align: center; padding-block: clamp(80px, 12vw, 128px); font-family: var(--font-brand); }
+.closing h2 { color: #fff; font-size: var(--step-4); max-width: 16ch; margin-inline: auto; }
+.closing h2::after { content: ""; display: block; width: 120px; height: 5px; border-radius: 3px; background: var(--brand-red); margin: 22px auto 0; }
+.closing p { color: #d4d4d4; margin: 22px auto 30px; max-width: 48ch; font-size: 1.0625rem; }
+
+/* ---------- Booking: same form, brand type ---------- */
+#book { font-family: var(--font-brand); background: var(--brand-cream); }
+#book .form--card { background: #fff; border: 1px solid var(--brand-grey); border-radius: var(--r-lg); box-shadow: var(--shadow-card); }
+#book .step-no { color: var(--brand-red); }
+#book .tile span { border-radius: var(--r-sm); }
+
+/* ---------- Footer ---------- */
+.site-footer--brand { background: var(--brand-cream); color: var(--brand-black); font-family: var(--font-brand); padding-block: 56px 28px; border-top: 2px solid var(--brand-black); }
+.foot-grid { display: grid; gap: 32px; grid-template-columns: 1fr; }
+@media (min-width: 800px) { .foot-grid { grid-template-columns: 1.4fr 1fr 1.4fr; } }
+.foot-brand img { height: 72px; width: auto; }
+.foot-brand p { margin: 14px 0 0; font-family: var(--font-display); font-style: italic; font-weight: 700; font-size: 1.125rem; }
+.foot-h { font-family: var(--font-brand); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--brand-red); margin-bottom: 12px; }
+.foot-list { list-style: none; display: grid; gap: 2px; }
+.foot-list a { display: inline-flex; align-items: center; min-height: 32px; color: var(--brand-black); text-decoration: none; }
+.foot-list a:hover { color: var(--brand-red); opacity: 1; }
+.foot-list--areas { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
+.foot-base { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--brand-grey); display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; font-size: 0.875rem; color: var(--muted); }
+.foot-base a { color: var(--brand-black); min-height: 32px; display: inline-flex; align-items: center; }
+
+/* phones: logo, round Call button, Book a quote on one line */
+@media (max-width: 440px) {
+  .site-header .wrap { gap: 8px; }
+  .wordmark img { height: 48px; }
+  .button--call { width: 44px; min-height: 44px; padding: 0; justify-content: center; }
+  .button--call span { display: none; }
+  .button--call svg { width: 18px; height: 18px; }
+  .site-header .button--header.button--cta { padding: 0 16px; font-size: 0.9375rem; white-space: nowrap; }
+}
