@@ -4,7 +4,7 @@ A fast website made of plain HTML, CSS, JavaScript and SVG drawings. It has no f
 
 The homepage opens on the logo, then a short film that plays on its own (see "The film" below): Toronto from the air, down into Forest Hill, then a house being painted, with the words changing above it, ending back on the logo.
 
-After the film come the services, **Meet the operator**, how it works, packages, FAQ and **Book a quote**.
+After the film come the services, **Meet the operator**, how it works, **Book a quote**, and the frequently asked questions at the very bottom. (The red sliding strip, "Pick a starting point" and "Three things we never cut corners on" were taken out; they are in git history, commit 7dd262f and earlier, if you want them back.)
 
 Sections marked *(drawn story)* describe the drawn, scroll-driven version: it's the fallback for reduced motion and no JavaScript, and comes back fully with `"use": false`.
 
