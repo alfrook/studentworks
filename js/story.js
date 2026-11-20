@@ -344,29 +344,87 @@ function startStory() {
     }
   }
 
-  /* ---------- Film: plays on its own, like a video, then ends on the logo ---------- */
+  /* ---------- Film: plays on its own like a video; when it ends you can scroll back and forth through it ---------- */
+  // mode "auto": it plays by itself and the page is locked (it's a video).
+  // mode "scrub": the film has ended (or was paused); scrolling moves through it, forwards and back.
   const film = FILM && document.querySelector("[data-film]");
   const ctl = document.querySelector("[data-story-ctl]");
   const bigPlay = document.querySelector("[data-film-play]");
-  let outroAt = 1e4;      // story time when the logo starts coming back (just after the last shot)
-  let filmEnd = 1e4;      // story time when the logo is fully back
+  const SCRUB = FILM ? FILM.scrub ?? 6 : 0;       // screens of scrolling for the whole film
+  let D = FILM ? FILM.duration || 13 : 0;         // film length in seconds (corrected from the file once it loads)
+  let outroAt = D + (FILM ? FILM.end ?? 0.4 : 0); // story time when the logo starts coming back
+  let filmEnd = outroAt + INTRO;                  // story time when the logo is fully back
+  let mode = "auto";
+  let scrubU = 0;         // story time (seconds) in scrub mode
   let endedAt = 0;        // when the film finished (performance.now), 0 while it plays
   let introDone = false;  // the opening logo has zoomed away
   let wanted = true;      // false once the visitor pauses
   let running = false;
+  let seeking = false, seekWanted = null;
   function filmClock() {
-    if (endedAt) return Math.min(filmEnd, (film.duration || 0) + (performance.now() - endedAt) / 1000);
+    if (mode === "scrub") return scrubU;
+    if (endedAt) return Math.min(filmEnd, D + (performance.now() - endedAt) / 1000);
     return film.currentTime;
   }
   function tick() {
     render();
-    if (endedAt && filmClock() >= filmEnd) running = false;
-    if (running) requestAnimationFrame(tick);
+    if (mode === "auto" && endedAt && filmClock() >= filmEnd) { running = false; enterScrub(filmEnd); return; }
+    if (mode === "auto" && running) requestAnimationFrame(tick);
+    else running = false;
   }
   function run() { if (!running) { running = true; requestAnimationFrame(tick); } }
+  let ctlState = "";
   function setCtl() {
-    ctl.dataset.state = wanted ? "pause" : "play";
-    ctl.setAttribute("aria-label", wanted ? "Pause the film" : "Play the film");
+    const state = mode === "auto" ? "pause" : scrubU >= D - 0.05 ? "replay" : "play";
+    if (state === ctlState) return;
+    ctlState = state;
+    ctl.dataset.state = state;
+    ctl.setAttribute("aria-label", { pause: "Pause the film", play: "Play the film", replay: "Watch it again" }[state]);
+  }
+  // seek the video to a time, one seek at a time (a new one starts when the last has landed)
+  function seekTo(t) {
+    t = clamp(t, 0, D);
+    if (Math.abs(film.currentTime - t) < 0.012) return;
+    if (seeking) { seekWanted = t; return; }
+    seeking = true;
+    try { film.currentTime = t; } catch { seeking = false; }
+  }
+  function enterScrub(u) {
+    mode = "scrub";
+    running = false;
+    wanted = false;
+    endedAt = 0;
+    film.pause();
+    scrubU = clamp(u, 0, filmEnd);
+    root.classList.remove("story-lock");
+    bigPlay.hidden = true;
+    ctl.hidden = false;
+    measure();
+    scrollTo({ top: trackTop + (scrubU / filmEnd) * SCRUB * unit, behavior: "instant" }); // the scroll bar matches where the film is
+    seekTo(Math.min(scrubU, D));
+    setCtl();
+    render();
+  }
+  function lock() { root.classList.add("story-lock"); }
+  function restart() {                                // watch it again from the start
+    scrollTo({ top: 0, behavior: "instant" });
+    lock();
+    mode = "auto"; wanted = true; endedAt = 0; introDone = false; scrubU = 0;
+    bigPlay.hidden = true; ctl.hidden = false;
+    seekWanted = null;
+    try { film.currentTime = 0; } catch {}
+    setCtl();
+    play();
+    render();
+  }
+  function resume() {                                 // carry on from where it was paused
+    if (scrubU >= D - 0.05) return restart();
+    lock();
+    mode = "auto"; wanted = true; endedAt = 0; introDone = scrubU >= INTRO;
+    bigPlay.hidden = true;
+    try { film.currentTime = scrubU; } catch {}
+    setCtl();
+    play();
   }
   function play() {
     film.muted = true;
@@ -374,35 +432,38 @@ function startStory() {
     const p = film.play();
     if (p && p.catch) p.catch((e) => {
       if (e && e.name !== "NotAllowedError") return; // still loading: it starts when it's ready
-      // autoplay blocked (iPhone Low Power Mode, some in-app browsers): skip the logo, show a big play button
-      wanted = false;
-      introDone = true;
+      // autoplay blocked (iPhone Low Power Mode, some in-app browsers): show the first shot, a big Play button, and let them scroll
+      enterScrub(INTRO);
+      ctl.hidden = true;
       bigPlay.hidden = false;
-      setCtl();
-      render();
     });
   }
-  function showStill() {                     // the video can't play here at all: show its first picture and words
-    introDone = true;
+  function showStill() {                              // the video can't play here at all: the first picture and the words, scrollable
+    enterScrub(INTRO);
     ctl.hidden = true;
-    bigPlay.hidden = true;
-    render();
   }
   function startFilm() {
     film.hidden = false;
     document.querySelector(".story").classList.add("story--play");
     document.querySelector(".scroll-cue")?.setAttribute("hidden", "");
+    track.style.setProperty("--units", SCRUB);
     ctl.hidden = false;
+    lock();
     setCtl();
     if (CHAPTERS[CHAPTERS.length - 1].finale) CHAPTERS.pop(); // the film ends on the logo, not on an end card
     const timed = () => {
-      outroAt = film.duration + (FILM.end ?? 0.4);
+      if (film.duration && isFinite(film.duration)) D = film.duration;
+      outroAt = D + (FILM.end ?? 0.4);
       filmEnd = outroAt + INTRO;
     };
     if (film.readyState >= 1) timed(); else film.addEventListener("loadedmetadata", timed, { once: true });
     film.addEventListener("playing", run);
-    film.addEventListener("seeked", () => render());
-    film.addEventListener("ended", () => { endedAt = performance.now(); ctl.hidden = true; run(); });
+    film.addEventListener("seeked", () => {
+      seeking = false;
+      if (seekWanted !== null) { const t = seekWanted; seekWanted = null; seekTo(t); }
+      schedule();
+    });
+    film.addEventListener("ended", () => { if (mode === "auto") { endedAt = performance.now(); ctl.hidden = true; run(); } });
     // Some hosts can't send a video in pieces, and iPhones won't play it then: download it whole and play it from memory.
     let triedWhole = false;
     film.addEventListener("error", () => {
@@ -414,47 +475,39 @@ function startStory() {
         .catch(showStill);
     }, true);
     ctl.addEventListener("click", () => {
-      wanted = !wanted;
-      bigPlay.hidden = true;
-      if (wanted) play(); else film.pause();
-      setCtl();
+      if (mode === "auto") { wanted = false; film.pause(); enterScrub(film.currentTime); }   // pausing lets you look around
+      else resume();
     });
-    bigPlay.addEventListener("click", () => {
-      wanted = true;
-      bigPlay.hidden = true;
-      play();
+    bigPlay.addEventListener("click", restart);
+    // scrolling moves through the film once it has ended
+    addEventListener("scroll", () => {
+      if (mode !== "scrub") return;
+      const end = trackTop + (SCRUB + 1.5) * unit;
+      scrubU = clamp((scrollY - trackTop) / (SCRUB * unit), 0, 1) * filmEnd;
+      if (scrollY < end) schedule();
       setCtl();
-    });
-    // pause while it's scrolled off screen; carry on when it's back
-    let onScreen = true, started = false;
-    if ("IntersectionObserver" in window) {
-      new IntersectionObserver(([e]) => {
-        onScreen = e.isIntersecting;
-        if (!onScreen) film.pause();
-        else if (wanted && !endedAt && film.paused && started) play();
-      }).observe(stage);
-    }
+    }, { passive: true });
+    let started = false;   // (no need to pause when scrolled away: while it plays by itself the page is locked)
     // the logo shows for a moment and covers the loading: the film starts once enough of it
     // has downloaded to play straight through without stalling (or after 4 s on a slow connection)
     let held = false, ready = film.readyState >= 4;
     const go = () => {
       if (started || !held || !ready) return;
       started = true;
-      if (wanted && onScreen) play();
+      if (wanted && mode === "auto") play();
     };
     film.addEventListener("canplaythrough", () => {
       ready = true;
-      if (started && wanted && onScreen && !endedAt && film.paused) play(); // e.g. ready after downloading it whole
+      if (started && wanted && mode === "auto" && !endedAt && film.paused) play(); // e.g. ready after downloading it whole
       go();
     });
     setTimeout(() => { held = true; go(); }, (FILM.hold ?? 0.5) * 1000);
     setTimeout(() => { ready = true; go(); }, 4000);
-    // the header stays hidden while the logo fills the screen, until the visitor scrolls
-    addEventListener("scroll", schedule, { passive: true });
   }
 
   function render() {
     const u = film ? filmClock() : clamp((scrollY - trackTop) / unit, 0, UNITS);
+    if (film && mode === "scrub") seekTo(Math.min(u, D));
     const cam = camera(u);
     const S = Math.min(vw, vh) / cam.r; // screen pixels per map unit
 
@@ -482,8 +535,9 @@ function startStory() {
 
     // Opening logo: zoom into the paintbrush and fade into the map (or the film)
     if (film && u >= INTRO) introDone = true;
-    // (film: the logo opens it, and comes back at the end, zooming out)
-    const su = film && endedAt ? INTRO * (1 - clamp((u - outroAt) / INTRO, 0, 1)) : introDone ? INTRO : u;
+    // film: the logo opens it, and comes back at the end (zooming out); scrolling back through it plays this both ways
+    let su = introDone ? INTRO : u;
+    if (film) su = u >= outroAt ? INTRO * (1 - clamp((u - outroAt) / INTRO, 0, 1)) : mode === "scrub" ? Math.min(u, INTRO) : su;
     const zoom = ease(clamp((su - 0.04) / (INTRO - 0.04), 0, 1));
     const fade = 1 - ease(clamp((su - INTRO * 0.4) / (INTRO * 0.6), 0, 1));
     if (fade !== logoFade || zoom !== logoZoom) {
@@ -492,8 +546,11 @@ function startStory() {
       logo.style.transform = `scale(${Math.pow(9, zoom).toFixed(4)})`;
       splash.style.opacity = fade.toFixed(3);
       splash.style.visibility = fade > 0.001 ? "visible" : "hidden";
+      splash.style.pointerEvents = fade > 0.9 ? "auto" : "none"; // a fading logo must not block the buttons underneath
     }
-    root.classList.toggle("on-logo", fade > 0.5 && !(film && scrollY > 40));
+    // the header stays hidden while the logo fills the screen, and comes back once the story has scrolled away
+    root.classList.toggle("on-logo", fade > 0.5 && (!film || track.getBoundingClientRect().bottom > innerHeight * 0.6));
+    if (film) root.classList.toggle("show-cue", mode === "scrub" && fade > 0.9 && bigPlay.hidden);
 
     bar.style.transform = `scaleX(${clamp(u / (film ? filmEnd : UNITS), 0, 1).toFixed(4)})`;
   }

@@ -78,19 +78,24 @@ All colours and the font live in `:root` at the top of `css/styles.css`: `--bg` 
 
 ## The film (top of the homepage)
 
-The story at the top plays on its own like a video. Nobody has to scroll. The logo shows for half a second and zooms away. Then your AI video plays (about 14 s), with the words above it changing as each shot comes up. At the end it zooms back out to the logo, which stays on screen (the header appears once you scroll). The film waits until enough of it has downloaded to play without stalling, and the logo covers that wait. It runs at 60 frames a second, so it plays evenly on phones. A button in the bottom bar pauses it, and it also pauses if you scroll away.
+The top of the page plays your AI video like a video, and then lets the visitor scroll through it.
 
-- The video: `images/film/film.mp4` (2.6 MB) and its first frame, `images/film/poster.webp`. It was made from the 6.6 s Hailuo clip by slowing each shot separately (2.3–3×, so every shot gets about 2 seconds), adding in-between frames up to 60 fps, and replacing the hard cuts with half-second dissolves.
+1. **It plays by itself.** The logo shows for half a second and zooms away. Then the video plays (about 13 s) with the words above it changing on each shot. The page is locked while it plays, so it behaves like a video. Pausing unlocks it.
+2. **It ends on the logo.** The last shot zooms back out to the logo, with a small "Scroll" hint.
+3. **Then scrolling moves through it.** Scroll up to rewind through the shots (the words follow), scroll down to go forward again. Past the end of it, the page carries on as normal and the header (logo, Call, Book a quote) appears. A button in the bottom bar plays, pauses or "watches again".
+
+- The video: `images/film/film.mp4` (2.8 MB) and its first frame, `images/film/poster.webp`. It was made from the 6.6 s Hailuo clip by slowing each shot separately, adding in-between frames up to 60 fps, cutting out the blurry dive through the trees, and joining the shots with 0.9 s dissolves. A keyframe every 24 frames keeps scrolling through it smooth.
 - The settings: the `film-data` block in `index.html`.
   - `chapters`: when each word appears, in seconds of the video.
-  - `hold`: how long the logo shows first.
-  - `rate`: playback speed (1 = as made, 0.85 = a bit slower, 1.2 = faster).
-  - `end`: the pause on the last shot before it zooms back out to the logo.
+  - `scrub`: how many screens of scrolling it takes to go through the whole film (more = slower).
+  - `hold`: how long the logo shows first. `end`: the pause on the last shot before the logo comes back.
+  - `rate`: playback speed (1 = as made). `duration`: the length in seconds (a fallback; the real length is read from the file).
   - `"use": false`: back to the drawn story you scroll through.
+- If the video can't play (the host can't stream it, or autoplay is blocked) there is a big Play button, or the first picture, and the page can still be scrolled.
 - People with "reduce motion" turned on, or JavaScript off, see the drawn step-by-step version instead.
 - To use a new video (free, with ffmpeg):
-  `ffmpeg -i new.mp4 -an -vf "minterpolate=fps=60,scale=1280:-2" -c:v libx264 -crf 27 -pix_fmt yuv420p -movflags +faststart images/film/film.mp4`
-  then `ffmpeg -i images/film/film.mp4 -frames:v 1 images/film/poster.webp`, and update the times in `chapters`.
+  `ffmpeg -i new.mp4 -an -vf "minterpolate=fps=60,scale=1280:-2" -c:v libx264 -crf 28 -g 24 -bf 0 -pix_fmt yuv420p -movflags +faststart images/film/film.mp4`
+  then `ffmpeg -i images/film/film.mp4 -frames:v 1 images/film/poster.webp`, and update `duration` and the times in `chapters`.
 
 ## Your photos (data/scenes.json) *(drawn story)*
 

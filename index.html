@@ -32,17 +32,19 @@
   <!-- FILM: the story plays this video (instead of the drawings) while "use" is true. It plays on its own, no scrolling.
        hold: seconds the logo shows before the film starts. rate: playback speed (1 = normal; the video is about 14 s).
        end: seconds on the last shot before it zooms back out to the logo.
+       scrub: how many screens of scrolling it takes to go through the whole film once it has ended (more = slower).
+       duration: the film's length in seconds (a fallback; the real length is read from the file).
        chapters: when the words change, in seconds of the video. Set "use" to false to go back to the drawn, scroll-driven story. -->
   <script type="application/json" id="film-data">
-  { "use": true, "src": "images/film/film.mp4", "hold": 0.5, "rate": 1, "end": 0.6,
+  { "use": true, "src": "images/film/film.mp4", "duration": 13.27, "scrub": 6, "hold": 0.5, "rate": 1, "end": 0.6,
     "chapters": [
       { "t": 0,    "lead": "Located in", "place": "Toronto" },
-      { "t": 2.1,  "lead": "We paint",   "place": "Forest Hill", "sub": "and surrounding areas" },
+      { "t": 2.25, "lead": "We paint",   "place": "Forest Hill", "sub": "and surrounding areas" },
       { "t": 4.0,  "lead": "",           "place": "Residential or Commercial" },
-      { "t": 6.2,  "lead": "We paint",   "place": "Exteriors" },
-      { "t": 8.1,  "lead": "We paint",   "place": "Doors" },
-      { "t": 9.8,  "lead": "We paint",   "place": "Garage doors" },
-      { "t": 11.5, "lead": "We paint",   "place": "Decks and fences" } ] }
+      { "t": 5.65, "lead": "We paint",   "place": "Exteriors" },
+      { "t": 7.5,  "lead": "We paint",   "place": "Doors" },
+      { "t": 9.2,  "lead": "We paint",   "place": "Garage doors" },
+      { "t": 10.8, "lead": "We paint",   "place": "Decks and fences" } ] }
   </script>
   <!-- STORY-DATA:START --><script type="application/json" id="story-data">{"beats":[{"key":"siding","scene":"house","label":"Exteriors","colour":"Deep navy, white trim","hex":"#1f3557","hex2":"#f7f7f5","caption":"Washed, scraped and primed. Two coats of blue, then crisp white trim."},{"key":"door","scene":"house","label":"Doors","colour":"Sunflower yellow","hex":"#efb11d","caption":"The first thing your guests see."},{"key":"garage","scene":"house","label":"Garage doors","colour":"Black","hex":"#1f2021","caption":"Every panel edge cut in by hand."},{"key":"walls","scene":"kitchen","label":"Interiors","colour":"Bright white","hex":"#fbfbf9","caption":"Dated beige walls and cabinets, made bright white.","hex2":"#ffffff","before":"#cdbb94","before2":"#b59d72"},{"key":"fence","scene":"house","label":"Fences","colour":"Cedar stain","hex":"#9a6b43","caption":"Stained on both sides, top to bottom."},{"key":"deck","scene":"house","label":"Decks and balconies","colour":"Rich walnut stain","hex":"#7a3f1d","hex2":"#141414","caption":"We pressure wash decks.","preps":[{"key":"deckwash","label":"Pressure washed","colour":"Raw wood","hex":"#a8865d"},{"key":"decksand","label":"Sanded","colour":"Smooth bare cedar","hex":"#dcbb8e"}],"before":"#77826f","stages":["Weathered","Pressure washed","Sanded","Stained"],"alsoPaint":["balcony"]}],"house":{"viewBox":[-838.1,-353.0,1788.7,1267.0],"wipes":{"fence":{"bbox":[-100.1,140.5,903.4,789.0],"travel":1230.5},"siding":{"bbox":[-449.1,-276.0,343.5,482.0],"travel":1057.9},"door":{"bbox":[-236.1,148.8,-179.6,266.0],"travel":97.5},"garage":{"bbox":[-272.5,285.0,-91.3,478.0],"travel":248.8},"deckwash":{"bbox":[30.6,211.0,575.6,562.0],"travel":667.8},"decksand":{"bbox":[30.6,211.0,575.6,562.0],"travel":667.8},"deck":{"bbox":[28.9,211.0,577.3,562.0],"travel":671.2},"balcony":{"bbox":[97.3,176.5,312.3,414.0],"travel":298.1}},"anchors":{"fence":[614.9,575.0],"siding":[-199.2,145.0],"kitchen":[-99.6,257.5],"door":[-207.8,210.0],"garage":[-181.9,381.0],"deck":[303.1,381.0],"balcony":[203.5,262.5]}},"kitchen":{"viewBox":[-386.8,-222.0,1050.7,828.0],"wipes":{"walls":{"bbox":[-350.4,-184.0,627.5,364.0],"travel":1169.7}},"anchors":{"walls":[311.8,60.0]}}}</script><!-- STORY-DATA:END -->
   <script type="application/ld+json">
@@ -157,6 +159,7 @@
           <!-- Opening screen: the logo fills the screen; scrolling zooms into it (js/story.js). -->
           <div class="splash" data-splash>
             <img class="splash__logo" data-splash-logo src="images/logo-fhsp.png" width="1100" height="628" alt="ForestHill Student Painters logo" fetchpriority="high">
+            <span class="splash__cue" aria-hidden="true"><i>Scroll</i><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
 
         </div>
