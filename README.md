@@ -2,15 +2,15 @@
 
 A fast website made of plain HTML, CSS, JavaScript and SVG drawings. It has no frameworks, no paid services, no API keys and no map tiles.
 
-The homepage opens on a full-screen **hero video** (see "The hero video" below): Toronto from the air, down into Forest Hill, then a house being painted, with the logo, one changing line of words and Book a quote / Call buttons over it.
+The homepage opens on the logo, then a short film that plays on its own (see "The film" below): Toronto from the air, down into Forest Hill, then a house being painted, with the words changing above it, ending on Book a quote.
 
-After the hero come the services, **Meet the operator**, how it works, packages, FAQ and **Book a quote**.
+After the film come the services, **Meet the operator**, how it works, packages, FAQ and **Book a quote**.
 
-Sections further down marked *(drawn story, retired)* describe the old scroll-driven drawing story, which is no longer on the homepage.
+Sections marked *(drawn story)* describe the drawn, scroll-driven version: it's the fallback for reduced motion and no JavaScript, and comes back fully with `"use": false`.
 
 ```
 student-works-painting/
-├── index.html              The homepage: hero video, sections, operator, booking form
+├── index.html              The homepage: the film/story, sections, operator, booking form
 ├── thanks.html             Shown after the form is sent
 ├── gallery.html, project.html, about.html, contact.html, credits.html, 404.html
 │                           Older pages. Still online, no longer linked from the homepage.
@@ -18,22 +18,20 @@ student-works-painting/
 ├── data/story.json         ← the paint beats: labels, colours, captions
 ├── data/projects.json      Projects for the (unlinked) gallery pages
 ├── css/styles.css          Shared colours, fonts, header, forms
-├── css/home.css            Homepage operator and booking styles (and the retired story)
-├── css/site.css            Brand styles: header, hero video, sections, footer
-├── js/hero.js              The hero video: words, pause button, header
+├── css/home.css            The homepage story, operator and booking styles
+├── css/site.css            Brand styles: header, film, sections, footer
 ├── js/book.js              The Book a quote form
-├── js/story.js             The retired scroll story (not loaded)
+├── js/story.js             The story engine: plays the film (or scrolls the drawings)
 ├── js/contact.js           Quote form helpers (subject line, call/email switch)
 ├── images/
-│   ├── logo-fhsp*.png      The ForestHill logo (header, and white for the hero)
-│   ├── hero/               The hero video and its two posters
+│   ├── logo-fhsp*.png      The ForestHill logo (opening screen and header)
+│   ├── film/               The film and its poster
 │   ├── operator.jpg        ← your photo (placeholder now)
 │   ├── scenes/             The drawings: forest-hill.svg, house.svg, kitchen.svg
-│   └── scenes/steps/       Still pictures (the service cards use these)
+│   └── scenes/steps/       Still pictures (service cards and the reduced-motion version)
 ├── tools/
 │   ├── build-map.py        Draws Toronto and Forest Hill
 │   ├── build-scenes.py     Draws the house, the kitchen and the still pictures from data/story.json
-│   ├── toronto-map.html    The Toronto map build-scenes.py uses
 │   ├── set-site-url.py     Writes SITE_URL into every page, the sitemap and robots.txt
 │   ├── resize.py           Makes the two photo sizes the gallery pages use
 │   └── make-placeholders.py
@@ -78,21 +76,23 @@ All colours and the font live in `:root` at the top of `css/styles.css`: `--bg` 
 - **Decks and balconies:** four labelled stages: Weathered, Pressure washed, Sanded, Stained. The balcony over the deck is painted in the Stained stage. There is no separate balcony step.
 - **Photo placeholders:** `images/plates/kitchen-before.jpg`, `kitchen-after.jpg`, `deck-1-weathered.jpg`, `deck-2-pressure-washed.jpg`, `deck-3-sanded.jpg` and `deck-4-stained.jpg` say "PHOTO COMING". Overwrite them with your photos (same names, same camera position for every stage), then set `"use": true` for `walls` and `deck` in `data/scenes.json`.
 
-## The hero video (top of the homepage)
+## The film (top of the homepage)
 
-The homepage opens on your AI video, full screen, playing on its own (muted). It holds on the last shot (the deck) for a moment, then starts again. Over it: the white logo, one line of words that follows the video, and Book a quote / Call buttons. The header logo and Book a quote appear once you scroll past it.
+The story at the top plays on its own like a video. Nobody has to scroll. The logo shows for half a second and zooms away. Then your AI video plays at real speed (about 6.6 s), with the words above it changing as each shot comes up. It ends on "ForestHill Student Painters" and Book a quote. A button in the bottom bar pauses it, and it becomes "watch again" at the end. The film also pauses if you scroll away, and carries on when you come back.
 
-- The video: `images/hero/hero.mp4` (2.4 MB). It is your 6.6 s clip slowed to about 10 s and smoothed to 30 frames a second, so it isn't rushed.
-- The words and when they change: the `hero-data` block in `index.html` (`t` is the second of the video; `hold` is how long it stays on the last shot).
-- There's a pause button (needed for accessibility). If someone has "reduce motion" turned on, the video doesn't play: they see the painted house (`images/hero/poster-house.webp`) and a play button.
+- The video: `images/film/film.mp4` (2 MB) and its first frame, `images/film/poster.webp`.
+- The settings: the `film-data` block in `index.html`.
+  - `chapters`: when each word appears, in seconds of the video.
+  - `hold`: how long the logo shows first.
+  - `rate`: playback speed (1 = real speed, 0.75 = slower).
+  - `end`: the pause on the last shot before the end card.
+  - `"use": false`: back to the drawn story you scroll through.
+- People with "reduce motion" turned on, or JavaScript off, see the drawn step-by-step version instead.
 - To use a new video (free, with ffmpeg):
-  `ffmpeg -i new.mp4 -an -vf "setpts=1.5*PTS,minterpolate=fps=30,scale=1280:-2" -c:v libx264 -crf 25 -pix_fmt yuv420p -movflags +faststart images/hero/hero.mp4`
-  (leave out `setpts=1.5*PTS,minterpolate=fps=30,` to keep the original speed). Then update the times in `hero-data`, and the two posters:
-  `ffmpeg -i images/hero/hero.mp4 -frames:v 1 images/hero/poster.webp` and `ffmpeg -ss 7.3 -i images/hero/hero.mp4 -frames:v 1 images/hero/poster-house.webp`.
+  `ffmpeg -i new.mp4 -an -vf scale=1280:-2 -c:v libx264 -crf 25 -pix_fmt yuv420p -movflags +faststart images/film/film.mp4`
+  then `ffmpeg -i images/film/film.mp4 -frames:v 1 images/film/poster.webp`, and update the times in `chapters`.
 
-The drawn scroll story (`js/story.js`) is no longer on the homepage. It's still in the git history (commit a22441e) if you ever want it back. `tools/build-scenes.py` still draws the service card pictures; the Toronto map it uses is kept in `tools/toronto-map.html`.
-
-## Your photos (data/scenes.json) *(drawn story, retired)*
+## Your photos (data/scenes.json) *(drawn story)*
 
 The story is drawn until your photos arrive. For each beat, shoot a **before** and an **after** from the same locked camera position (tripod, same zoom, same time of day). The deck needs four: **before** (grey and dirty), **washed**, **sanded** and **after**. Put the files in `images/plates/` and their paths in `data/scenes.json`.
 
@@ -104,7 +104,7 @@ The story is drawn until your photos arrive. For each beat, shoot a **before** a
 
 ## Change the paint beats (colours, labels, captions)
 
-*Now this only changes the drawings on the service cards; the hero is a video.*
+*While the film is on, this changes the drawings on the service cards and the reduced-motion version.*
 
 Everything about the paint sequence lives in **`data/story.json`**: the order, each label (e.g. "Front door"), the colour name (e.g. "Signal red"), the colour itself (`hex`) and the one-line caption.
 
@@ -134,7 +134,7 @@ Three steps, almost all taps: **Call me** (name, phone, best time) or **Email me
 - The red "Book a quote" button is in the header, at the end of the story, under the bio, and sticky at the bottom right on phones. The sticky one hides while the form is on screen.
 - First use: FormSubmit emails a one-time activation link to paintwithfrook@gmail.com. Click it, or requests won't arrive.
 
-## How the story works (for whoever maintains it) *(drawn story, retired)*
+## How the story works (for whoever maintains it) *(drawn story)*
 
 - **One progress value:** the story is a tall scroll track with a pinned stage. Scroll progress, measured in screens, drives everything: the camera, which drawing is showing, the labels, the colour chip, the paint wipes and the progress bar.
 - **Cheap to animate:** while scrolling, only CSS transforms and opacity change, plus the position of each paint mask.

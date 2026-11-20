@@ -595,9 +595,8 @@ def build_steps(hsvg, hdata, ksvg, kdata, html):
         open(os.path.join(d, name), "w", encoding="utf-8").write(svg)
         steps.append((name, h, fig, title, text, alt, beat))
 
-    tmap = open(os.path.join(ROOT, "tools", "toronto-map.html"), encoding="utf-8").read()  # the map left the homepage with the hero film
-    tor = re.search(r"<!-- TORONTO:START -->(.*?)<!-- TORONTO:END -->", tmap, re.S).group(1)
-    lab = re.search(r"<!-- TORONTO-LABELS:START -->(.*?)<!-- TORONTO-LABELS:END -->", tmap, re.S).group(1)
+    tor = re.search(r"<!-- TORONTO:START -->(.*?)<!-- TORONTO:END -->", html, re.S).group(1)
+    lab = re.search(r"<!-- TORONTO-LABELS:START -->(.*?)<!-- TORONTO-LABELS:END -->", html, re.S).group(1)
     add("01-toronto.svg", framed(tor + lab, (60, 20, 900, 500), map_css), "Located in", "Toronto", "Lake Ontario to Steeles",
         "Map of Toronto from Lake Ontario to Steeles Avenue, with the Humber and Don valleys, the main highways and Forest Hill marked.")
     fh = inner_of(open(os.path.join(ROOT, "images", "scenes", "forest-hill.svg"), encoding="utf-8").read())
@@ -662,10 +661,11 @@ if __name__ == "__main__":
     html, n = re.subn(r"(<!-- STORY-DATA:START -->).*?(<!-- STORY-DATA:END -->)",
                       lambda m: m.group(1) + f'<script type="application/json" id="story-data">{blob}</script>' + m.group(2), html, flags=re.S)
     if not n:
-        print("index.html has no drawn story any more (the hero film replaced it): only the pictures are updated")
+        raise SystemExit("STORY-DATA markers not found in index.html")
     steps = build_steps(hsvg, hdata, ksvg, kdata, html)
     html, n = re.subn(r"(<!-- STEPS:START -->).*?(<!-- STEPS:END -->)", lambda m: m.group(1) + steps + m.group(2), html, flags=re.S)
-    # (no STEPS list on the homepage now; the step pictures are still written to images/scenes/steps/)
+    if not n:
+        raise SystemExit("STEPS markers not found in index.html")
     open(index, "w", encoding="utf-8").write(html)
     print(f"house.svg {len(hsvg) // 1024} KB, kitchen.svg {len(ksvg) // 1024} KB, story data {len(blob) // 1024} KB")
     print("house viewBox", hdata["viewBox"], "kitchen viewBox", kdata["viewBox"])

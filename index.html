@@ -25,22 +25,25 @@
   <link rel="stylesheet" href="css/home.css">
   <link rel="stylesheet" href="css/site.css">
   <script type="module" src="js/reveal.js"></script>
-  <link rel="preload" as="image" href="images/hero/poster.webp" fetchpriority="high">
-  <script>document.documentElement.className = "js on-logo";</script>
-  <script type="module" src="js/hero.js"></script>
+  <link rel="preload" as="image" href="images/logo-fhsp.png">
+  <script>document.documentElement.className = "js";</script>
+  <script type="module" src="js/story.js"></script>
   <script type="module" src="js/book.js"></script>
-  <!-- Words over the hero film: "t" is the second of images/hero/hero.mp4 where each one starts. -->
-  <script type="application/json" id="hero-data">
-  { "hold": 1.6,
+  <!-- FILM: the story plays this video (instead of the drawings) while "use" is true. It plays on its own, no scrolling.
+       hold: seconds the logo shows before the film starts. rate: playback speed (1 = real speed, about 6.6 s).
+       chapters: when the words change, in seconds of the video. Set "use" to false to go back to the drawn, scroll-driven story. -->
+  <script type="application/json" id="film-data">
+  { "use": true, "src": "images/film/film.mp4", "hold": 0.5, "rate": 1, "end": 0.6,
     "chapters": [
       { "t": 0,    "lead": "Located in", "place": "Toronto" },
-      { "t": 3.45, "lead": "We paint",   "place": "Forest Hill" },
-      { "t": 5.1,  "lead": "",           "place": "Residential or Commercial" },
-      { "t": 6.65, "lead": "We paint",   "place": "Exteriors" },
-      { "t": 7.85, "lead": "We paint",   "place": "Doors" },
-      { "t": 8.68, "lead": "We paint",   "place": "Garage doors" },
-      { "t": 9.3,  "lead": "We paint",   "place": "Decks and fences" } ] }
+      { "t": 2.3,  "lead": "We paint",   "place": "Forest Hill", "sub": "and surrounding areas" },
+      { "t": 3.4,  "lead": "",           "place": "Residential or Commercial" },
+      { "t": 4.45, "lead": "We paint",   "place": "Exteriors" },
+      { "t": 5.25, "lead": "We paint",   "place": "Doors" },
+      { "t": 5.8,  "lead": "We paint",   "place": "Garage doors" },
+      { "t": 6.22, "lead": "We paint",   "place": "Decks and fences" } ] }
   </script>
+  <!-- STORY-DATA:START --><script type="application/json" id="story-data">{"beats":[{"key":"siding","scene":"house","label":"Exteriors","colour":"Deep navy, white trim","hex":"#1f3557","hex2":"#f7f7f5","caption":"Washed, scraped and primed. Two coats of blue, then crisp white trim."},{"key":"door","scene":"house","label":"Doors","colour":"Sunflower yellow","hex":"#efb11d","caption":"The first thing your guests see."},{"key":"garage","scene":"house","label":"Garage doors","colour":"Black","hex":"#1f2021","caption":"Every panel edge cut in by hand."},{"key":"walls","scene":"kitchen","label":"Interiors","colour":"Bright white","hex":"#fbfbf9","caption":"Dated beige walls and cabinets, made bright white.","hex2":"#ffffff","before":"#cdbb94","before2":"#b59d72"},{"key":"fence","scene":"house","label":"Fences","colour":"Cedar stain","hex":"#9a6b43","caption":"Stained on both sides, top to bottom."},{"key":"deck","scene":"house","label":"Decks and balconies","colour":"Rich walnut stain","hex":"#7a3f1d","hex2":"#141414","caption":"We pressure wash decks.","preps":[{"key":"deckwash","label":"Pressure washed","colour":"Raw wood","hex":"#a8865d"},{"key":"decksand","label":"Sanded","colour":"Smooth bare cedar","hex":"#dcbb8e"}],"before":"#77826f","stages":["Weathered","Pressure washed","Sanded","Stained"],"alsoPaint":["balcony"]}],"house":{"viewBox":[-838.1,-353.0,1788.7,1267.0],"wipes":{"fence":{"bbox":[-100.1,140.5,903.4,789.0],"travel":1230.5},"siding":{"bbox":[-449.1,-276.0,343.5,482.0],"travel":1057.9},"door":{"bbox":[-236.1,148.8,-179.6,266.0],"travel":97.5},"garage":{"bbox":[-272.5,285.0,-91.3,478.0],"travel":248.8},"deckwash":{"bbox":[30.6,211.0,575.6,562.0],"travel":667.8},"decksand":{"bbox":[30.6,211.0,575.6,562.0],"travel":667.8},"deck":{"bbox":[28.9,211.0,577.3,562.0],"travel":671.2},"balcony":{"bbox":[97.3,176.5,312.3,414.0],"travel":298.1}},"anchors":{"fence":[614.9,575.0],"siding":[-199.2,145.0],"kitchen":[-99.6,257.5],"door":[-207.8,210.0],"garage":[-181.9,381.0],"deck":[303.1,381.0],"balcony":[203.5,262.5]}},"kitchen":{"viewBox":[-386.8,-222.0,1050.7,828.0],"wipes":{"walls":{"bbox":[-350.4,-184.0,627.5,364.0],"travel":1169.7}},"anchors":{"walls":[311.8,60.0]}}}</script><!-- STORY-DATA:END -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -80,28 +83,96 @@
 
   <main id="main" tabindex="-1">
 
-    <!-- HERO: a full-screen film that plays on its own (js/hero.js). Words follow the film; edit them in #hero-data in the head. -->
-    <section class="hero" data-hero aria-labelledby="hero-title">
-      <video class="hero__video" data-hero-video autoplay muted loop playsinline preload="auto" poster="images/hero/poster.webp" aria-hidden="true" tabindex="-1">
-        <source src="images/hero/hero.mp4" type="video/mp4">
-      </video>
-      <script>if (matchMedia("(prefers-reduced-motion: reduce)").matches) { const v = document.querySelector("[data-hero-video]"); v.removeAttribute("autoplay"); v.preload = "none"; v.poster = "images/hero/poster-house.webp"; }</script>
-      <div class="hero__shade" aria-hidden="true"></div>
-      <div class="hero__inner">
-        <h1 class="hero__title" id="hero-title"><img src="images/logo-fhsp-white.png" width="800" height="457" alt="ForestHill Student Painters" fetchpriority="high"></h1>
-        <p class="hero__caption" data-hero-caption><span data-hero-lead>We paint</span> <strong data-hero-place>Forest Hill</strong></p>
-        <p class="visually-hidden">House painting in Toronto: Forest Hill and surrounding areas. Residential or commercial. We paint exteriors, doors, garage doors, interiors, decks and fences.</p>
-        <div class="hero__actions">
-          <a class="button button--big button--cta" href="#book">Book a quote</a>
-          <a class="button button--big hero__call" href="tel:+16473888488">Call 647-388-8488</a>
+    <!-- THE STORY: plays on its own like a video (js/story.js): logo, the film with words above it, then Book a quote -->
+    <section class="story" aria-labelledby="story-title" aria-describedby="story-desc">
+      <h1 class="visually-hidden" id="story-title">ForestHill Student Painters, house painting in Toronto</h1>
+      <p class="visually-hidden" id="story-desc">A short film that plays on its own: Toronto from the air, down into Forest Hill, then a stone house being painted. Navy walls with white trim, a yellow front door, a black garage door and a stained deck. It ends with a Book a quote button.</p>
+
+      <div class="story__track" data-track>
+        <div class="stage" data-stage>
+
+          <div class="hud" aria-hidden="true">
+            <p class="fig" data-hud-eyebrow></p>
+            <p class="hud__lead" data-hud-lead>Located in</p>
+            <p class="hud__place" data-hud-place>Toronto</p>
+            <p class="hud__sub" data-hud-sub>Lake Ontario to Steeles</p>
+            <p class="hud__chip" data-hud-chip><i data-hud-swatch></i><span data-hud-colour></span></p>
+            <ol class="hud__steps" data-hud-steps hidden aria-hidden="true"></ol>
+          </div>
+
+          <!-- the drawings, in their own row: nothing is ever drawn under the words -->
+          <div class="scene-area" data-scene>
+            <div class="layer" data-layer="toronto">
+              <svg class="scene" viewBox="0 0 1000 520" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Map of Toronto, from Lake Ontario north to Steeles Avenue, with the Humber and Don valleys and the main highways.">
+                <g class="cam"><!-- TORONTO:START --><path class="m-land" d="M-600 -600L1600 -600L1600 100L1000 140L930 170L850 215L760 270L680 315L610 352L560 370L500 385L445 395L400 392L330 400L265 405L205 410L170 425L90 455L0 470L-600 480Z"/><path class="m-lake" d="M-600 480L0 470L90 455L170 425L205 410L265 405L330 400L400 392L445 395L500 385L560 370L610 352L680 315L760 270L850 215L930 170L1000 140L1600 100L1600 1400L-600 1400Z"/><path class="m-ripple" d="M560 430L620 430M640 452L700 452M720 410L780 410M300 470L360 470M420 488L480 488M820 330L880 330M900 300L960 300M120 500L180 500M680 500L740 500"/><path class="m-land m-shore" d="M300 424L330 436L372 442L420 443L452 430L456 418L440 416L420 426L380 430L340 426L312 416Z"/><path class="m-land m-shore" d="M470 398L480 420L492 446L506 462L512 458L498 440L486 414L478 396Z"/><path class="m-shoreline" d="M0 470C15 467.5 61.7 462.5 90 455C118.3 447.5 150.8 432.5 170 425C189.2 417.5 189.2 413.3 205 410C220.8 406.7 244.2 406.7 265 405C285.8 403.3 307.5 402.2 330 400C352.5 397.8 380.8 392.8 400 392C419.2 391.2 428.3 396.2 445 395C461.7 393.8 480.8 389.2 500 385C519.2 380.8 541.7 375.5 560 370C578.3 364.5 590 361.2 610 352C630 342.8 655 328.7 680 315C705 301.3 731.7 286.7 760 270C788.3 253.3 821.7 231.7 850 215C878.3 198.3 905 182.5 930 170C955 157.5 988.3 145 1000 140"/><path class="m-ravine" d="M205 410C204.2 403.3 203.2 384.7 200 370C196.8 355.3 187.7 338.3 186 322C184.3 305.7 193.3 289 190 272C186.7 255 172.7 238.7 166 220C159.3 201.3 156 180 150 160C144 140 136.3 120 130 100C123.7 80 116.7 63.3 112 40C107.3 16.7 103.7 -26.7 102 -40"/><path class="m-ravine" d="M472 397C471 390.8 466 372.5 466 360C466 347.5 468 335 472 322C476 309 484.5 294 490 282C495.5 270 502.5 255.3 505 250"/><path class="m-ravine" d="M505 250C500.8 242.5 488.3 220 480 205C471.7 190 461.7 177.5 455 160C448.3 142.5 444.5 120 440 100C435.5 80 431 63.3 428 40C425 16.7 423 -26.7 422 -40"/><path class="m-ravine" d="M505 250C509.2 241.7 523.3 216.7 530 200C536.7 183.3 541.3 168.3 545 150C548.7 131.7 549.5 121.7 552 90C554.5 58.3 558.7 -18.3 560 -40"/><path class="m-park" d="M246 322L270 322L276 350L268 372L248 372L240 346Z"/><path class="m-river" d="M205 410C204.2 403.3 203.2 384.7 200 370C196.8 355.3 187.7 338.3 186 322C184.3 305.7 193.3 289 190 272C186.7 255 172.7 238.7 166 220C159.3 201.3 156 180 150 160C144 140 136.3 120 130 100C123.7 80 116.7 63.3 112 40C107.3 16.7 103.7 -26.7 102 -40"/><path class="m-river" d="M472 397C471 390.8 466 372.5 466 360C466 347.5 468 335 472 322C476 309 484.5 294 490 282C495.5 270 502.5 255.3 505 250"/><path class="m-river" d="M505 250C500.8 242.5 488.3 220 480 205C471.7 190 461.7 177.5 455 160C448.3 142.5 444.5 120 440 100C435.5 80 431 63.3 428 40C425 16.7 423 -26.7 422 -40"/><path class="m-river" d="M505 250C509.2 241.7 523.3 216.7 530 200C536.7 183.3 541.3 168.3 545 150C548.7 131.7 549.5 121.7 552 90C554.5 58.3 558.7 -18.3 560 -40"/><path class="m-limit" d="M0 470L0 0L1000 0L1000 140"/><path class="m-road" d="M400 392L400 -40"/><path class="m-road" d="M40 322C83.3 321.3 240 319 300 318C360 317 363.3 316.7 400 316C436.7 315.3 483.3 315 520 314C556.7 313 603.3 310.7 620 310"/><path class="m-road" d="M40 252C90 251 280 247 340 246C400 245 340 247.3 400 246C460 244.7 613.3 240.7 700 238C786.7 235.3 883.3 231.3 920 230"/><path class="m-road" d="M180 286C206.7 285.5 303.3 283.5 340 283C376.7 282.5 370 283.5 400 283C430 282.5 500 280.5 520 280"/><path class="m-road" d="M363 395L363 246"/><path class="m-road" d="M340 395L340 -40"/><path class="m-road" d="M389 330L389 150"/><path class="m-road" d="M560 330C583.3 323.3 651.7 307.5 700 290C748.3 272.5 803.3 245.8 850 225C896.7 204.2 958.3 175 980 165"/><path class="m-road" d="M330 246L322 160"/><path class="m-hwy" d="M-40 178C-23.3 177 20 175 60 172C100 169 143.3 165.3 200 160C256.7 154.7 316.7 145.3 400 140C483.3 134.7 593.3 133.7 700 128C806.7 122.3 983.3 109.7 1040 106"/><path class="m-hwy" d="M0 448C15 446 61.7 442.3 90 436C118.3 429.7 150.8 416.3 170 410C189.2 403.7 178.3 402 205 398C231.7 394 297.5 389 330 386C362.5 383 376.3 380.7 400 380C423.7 379.3 460 381.7 472 382"/><path class="m-hwy" d="M472 382C473.7 374.2 477.3 353.3 482 335C486.7 316.7 493.3 293.7 500 272C506.7 250.3 515.3 225.3 522 205C528.7 184.7 535.7 162.8 540 150C544.3 137.2 546 159.7 548 128C550 96.3 551.3 -12 552 -40"/><path class="m-hwy" d="M60 452L60 -40"/><path class="m-hwy" d="M172 158C170 145 163.7 113 160 80C156.3 47 151.7 -20 150 -40"/><!-- TORONTO:END --></g>
+              </svg>
+            </div>
+
+            <div class="layer" data-layer="labels">
+              <svg class="scene" viewBox="0 0 1000 520" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                <g class="cam"><!-- TORONTO-LABELS:START --><path class="m-fh" d="M334 245L390 245L390 283L334 283Z"/><text class="m-lbl m-lbl--lake" x="640" y="470">Lake Ontario</text><text class="m-lbl m-lbl--area" x="95" y="270">Etobicoke</text><text class="m-lbl m-lbl--area" x="470" y="60">North York</text><text class="m-lbl m-lbl--area" x="790" y="150">Scarborough</text><text class="m-lbl m-lbl--area" x="405" y="372">Downtown</text><text class="m-lbl m-lbl--small" x="130" y="205">Humber River</text><text class="m-lbl m-lbl--small" x="512" y="228">Don Valley</text><text class="m-lbl m-lbl--small" x="600" y="122">Hwy 401</text><text class="m-lbl m-lbl--small" x="310" y="458">Toronto Islands</text><text class="m-lbl m-lbl--fh" x="344" y="232">Forest Hill</text><g class="m-north" transform="translate(960 470)"><circle r="14"/><path d="M0 -10L5 7L0 3L-5 7Z"/><text y="28">N</text></g><!-- TORONTO-LABELS:END --></g>
+              </svg>
+            </div>
+
+            <div class="layer" data-layer="fh" data-src="images/scenes/forest-hill.svg">
+              <svg class="scene" role="img" aria-label="Street map of Forest Hill, between Bathurst Street and Avenue Road, with tree-lined streets and large lots. One house is marked.">
+                <g class="cam"></g>
+              </svg>
+            </div>
+
+            <div class="layer" data-layer="house" data-src="images/scenes/house.svg">
+              <svg class="scene" role="img" aria-label="Drawing of a two-storey house with an attached garage, a front door with a porch, a balcony over a large deck, and a big fenced backyard.">
+                <g class="cam"></g>
+              </svg>
+            </div>
+
+            <div class="layer" data-layer="kitchen" data-src="images/scenes/kitchen.svg">
+              <svg class="scene" role="img" aria-label="Cutaway drawing of an open-plan kitchen and living room: wood cabinets, an island with stools and pendant lights, a sofa under two big windows, a rug, a coffee table, an armchair, a floor lamp and a plant.">
+                <g class="cam"></g>
+              </svg>
+            </div>
+
+            <!-- Film mode: the filmed story (see #film-data), played like a video. Hidden until switched on. -->
+            <video class="film" data-film hidden muted playsinline preload="auto" poster="images/film/poster.webp" aria-hidden="true" tabindex="-1">
+              <source src="images/film/film.mp4" type="video/mp4">
+            </video>
+            <p class="film-label" data-film-label hidden>AI illustration</p>
+
+          <!-- Photo plates from data/scenes.json cover the drawings beat by beat, once your photos are in -->
+            <div class="plates" data-plates></div>
+            <div class="grain" aria-hidden="true"></div>
+
+          </div>
+
+          <div class="hud-foot">
+            <span class="scroll-cue" aria-hidden="true">Scroll</span>
+            <button class="story-ctl" type="button" data-story-ctl hidden aria-label="Pause"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-pause" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/><path class="i-play" d="M8 5v14l11-7z"/><path class="i-replay" d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg></button>
+            <div class="finale" data-finale inert>
+              <a class="button button--big button--cta" href="#book">Book a quote</a>
+            </div>
+            <span class="progress" aria-hidden="true"><span data-progress></span></span>
+          </div>
+
+          <!-- Opening screen: the logo fills the screen; scrolling zooms into it (js/story.js). -->
+          <div class="splash" data-splash>
+            <img class="splash__logo" data-splash-logo src="images/logo-fhsp.png" width="1100" height="628" alt="ForestHill Student Painters logo" fetchpriority="high">
+          </div>
+
         </div>
       </div>
-      <p class="hero__tag">AI illustration</p>
-      <button class="hero__pause" type="button" data-hero-pause hidden aria-label="Pause the video"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-pause" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/><path class="i-play" d="M8 5v14l11-7z"/></svg></button>
-      <a class="hero__more" href="#services" aria-label="Scroll to what we paint"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+
+      <!-- The same story as still frames: shown when the visitor prefers reduced motion, or without JavaScript. -->
+      <div class="story-steps" aria-labelledby="steps-title">
+        <div class="story-steps__intro">
+          <img class="steps-logo" src="images/logo-fhsp.png" width="1100" height="628" alt="ForestHill Student Painters logo">
+          <h2 id="steps-title" class="caption">We paint Forest Hill and surrounding areas</h2>
+        </div>
+        <ol class="story-steps__list"><!-- STEPS:START --><li class="sstep"><figure><img src="images/scenes/steps/01-toronto.svg" width="800" height="444" loading="lazy" decoding="async" alt="Map of Toronto from Lake Ontario to Steeles Avenue, with the Humber and Don valleys, the main highways and Forest Hill marked."><figcaption><h3>Toronto</h3></figcaption></figure></li><li class="sstep"><figure><img src="images/scenes/steps/02-forest-hill.svg" width="800" height="800" loading="lazy" decoding="async" alt="Street map of part of Forest Hill: curving streets, large lots with houses and street trees, and one lot marked with a red pin."><figcaption><h3>Forest Hill</h3></figcaption></figure></li><li class="sstep"><figure><img src="images/scenes/steps/03-house.svg" width="800" height="594" loading="lazy" decoding="async" alt="Drawing of the unpainted house: three floors, a garage built into the ground floor, a balcony over a big deck, and a fenced backyard."><figcaption><h3>Residential or Commercial</h3></figcaption></figure></li><li class="sstep"><figure><img src="images/scenes/steps/04-siding.svg" width="800" height="765" loading="lazy" decoding="async" alt="Exteriors painted deep navy, white trim."><figcaption><h3>Exteriors</h3></figcaption></figure></li><li class="sstep"><figure><img src="images/scenes/steps/05-door.svg" width="800" height="587" loading="lazy" decoding="async" alt="Doors painted sunflower yellow."><figcaption><h3>Doors</h3></figcaption></figure></li><li class="sstep"><figure><img src="images/scenes/steps/06-garage.svg" width="800" height="587" loading="lazy" decoding="async" alt="Garage doors painted black."><figcaption><h3>Garage doors</h3></figcaption></figure></li><li class="sstep"><figure><img src="images/scenes/steps/07-walls.svg" width="800" height="630" loading="lazy" decoding="async" alt="Interiors painted bright white."><figcaption><h3>Interiors</h3></figcaption></figure></li><li class="sstep"><figure><img src="images/scenes/steps/08-fence.svg" width="800" height="517" loading="lazy" decoding="async" alt="Fences painted cedar stain."><figcaption><h3>Fences</h3></figcaption></figure></li><li class="sstep"><figure><img src="images/scenes/steps/09-deck-1.svg" width="800" height="512" loading="lazy" decoding="async" alt="Decks and balconies, stage 1 of 4: weathered."><figcaption><h3>Decks and balconies: Weathered</h3><p class="hud__chip is-on"><span>1. Weathered</span></p></figcaption></figure></li><li class="sstep"><figure><img src="images/scenes/steps/09-deck-2.svg" width="800" height="512" loading="lazy" decoding="async" alt="Decks and balconies, stage 2 of 4: pressure washed."><figcaption><h3>Decks and balconies: Pressure washed</h3><p class="hud__chip is-on"><span>2. Pressure washed</span></p></figcaption></figure></li><li class="sstep"><figure><img src="images/scenes/steps/09-deck-3.svg" width="800" height="512" loading="lazy" decoding="async" alt="Decks and balconies, stage 3 of 4: sanded."><figcaption><h3>Decks and balconies: Sanded</h3><p class="hud__chip is-on"><span>3. Sanded</span></p></figcaption></figure></li><li class="sstep"><figure><img src="images/scenes/steps/09-deck-4.svg" width="800" height="512" loading="lazy" decoding="async" alt="Decks and balconies, stage 4 of 4: stained."><figcaption><h3>Decks and balconies: Stained</h3><p class="hud__chip is-on"><span>4. Stained</span></p></figcaption></figure></li><li class="sstep"><figure><img src="images/scenes/steps/99-finished.svg" width="800" height="594" loading="lazy" decoding="async" alt="The finished house: exteriors in deep navy, white trim, doors in sunflower yellow, garage doors in black, fences in cedar stain, decks and balconies in rich walnut stain."><figcaption><h3>ForestHill Student Painters</h3></figcaption></figure></li><li class="sstep sstep--end"><a class="button button--big button--cta" href="#book">Book a quote</a></li><!-- STEPS:END --></ol>
+      </div>
     </section>
 
-    <!-- ===== Added sections (brand pass). The hero above, the operator and the booking are unchanged. ===== -->
+
+    <!-- ===== Added sections (brand pass). The story above, the operator and the booking are unchanged. ===== -->
     <!-- Catchphrase strip: brand taglines, scrolling slowly (static with reduced motion) -->
     <div class="marquee" role="region" aria-label="Student-Powered Painting. Professional Results.">
       <div class="marquee__track" aria-hidden="true"><div class="marquee__run"><span>Student-Powered Painting.</span><i><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 18L20 3l18 15" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="27" y="4" width="5" height="7" fill="currentColor"/></svg></i><span>Professional Results.</span><i><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 18L20 3l18 15" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="27" y="4" width="5" height="7" fill="currentColor"/></svg></i><span>Trusted in Forest Hill.</span><i><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 18L20 3l18 15" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="27" y="4" width="5" height="7" fill="currentColor"/></svg></i><span>Exterior &amp; Interior Experts.</span><i><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 18L20 3l18 15" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="27" y="4" width="5" height="7" fill="currentColor"/></svg></i><span>Local. Reliable. On Time.</span><i><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 18L20 3l18 15" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="27" y="4" width="5" height="7" fill="currentColor"/></svg></i></div><div class="marquee__run"><span>Student-Powered Painting.</span><i><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 18L20 3l18 15" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="27" y="4" width="5" height="7" fill="currentColor"/></svg></i><span>Professional Results.</span><i><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 18L20 3l18 15" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="27" y="4" width="5" height="7" fill="currentColor"/></svg></i><span>Trusted in Forest Hill.</span><i><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 18L20 3l18 15" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="27" y="4" width="5" height="7" fill="currentColor"/></svg></i><span>Exterior &amp; Interior Experts.</span><i><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 18L20 3l18 15" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="27" y="4" width="5" height="7" fill="currentColor"/></svg></i><span>Local. Reliable. On Time.</span><i><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 18L20 3l18 15" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="27" y="4" width="5" height="7" fill="currentColor"/></svg></i></div></div>

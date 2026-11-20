@@ -124,40 +124,33 @@ for (const beat of DATA.beats) {
   }
 }
 /* ---------- Film mode (data in index.html #film-data) ----------
-   When a filmed version of the story is switched on, scrolling moves through its
-   frames instead of the drawings; the words switch at the times listed in the config.
-   The drawings stay as the fallback (and for reduced motion / no JavaScript). */
+   When the filmed story is switched on, it plays on its own like a video (no scrolling):
+   the logo, then the film with the words above it, then Book a quote. Story time is
+   then in seconds of the film, and the logo zooms away during its first INTRO seconds.
+   The drawings stay for reduced motion / no JavaScript, and come back (scroll-driven)
+   when "use" is false. */
+const INTRO = 0.8; // the opening logo screen: screens of scrolling, or seconds in film mode
 const FILM = (() => {
   try {
     const f = JSON.parse(document.getElementById("film-data")?.textContent || "null");
     return f && f.use ? f : null;
   } catch { return null; }
 })();
-let filmU = (sec) => 0;                                  // film time (s) -> story time (screens, before INTRO)
 if (FILM) {
-  const keys = FILM.keys;                                // [[seconds, screens], ...]
-  filmU = (sec) => {
-    for (let i = 0; i < keys.length - 1; i++) {
-      const [s0, u0] = keys[i], [s1, u1] = keys[i + 1];
-      if (sec <= s1) return u0 + (u1 - u0) * Math.max(0, (sec - s0) / (s1 - s0));
-    }
-    return keys[keys.length - 1][1];
-  };
   CAMERA.length = 0;
   CAMERA.push({ u: 0, x: 470, y: 300, r: 760 });
   for (const L of Object.values(LAYERS)) L.opacity = [[0, 0]];  // drawings hidden
   CHAPTERS.length = 0;
-  for (const c of FILM.chapters) CHAPTERS.push({ u: filmU(c.t), fig: "", lead: c.lead, place: c.place, sub: c.sub || "", chip: null });
+  for (const c of FILM.chapters) CHAPTERS.push({ u: Math.max(0, c.t - INTRO), fig: "", lead: c.lead, place: c.place, sub: c.sub || "", chip: null });
   WIPES.length = 0;
   SPANS.length = 0;
-  t = keys[keys.length - 1][1];
+  t = 1e4; // the end card's time is set from the video's length once it loads
 }
 // leave room under the house for the Book a quote button
 const FINALE_FRAME = HOUSE_FRAME; // the Book a quote button takes the bottom bar's place, not the drawing's
 CAMERA.push({ u: t + 0.6, box: FINALE_FRAME, short: HOUSE_FRAME }, { u: t + 1.1, box: FINALE_FRAME, short: HOUSE_FRAME });
 CHAPTERS.push({ u: t + 0.2, fig: "", lead: "", place: "ForestHill Student Painters", sub: "", finale: true });
 // The opening logo screen comes first: shift everything after it by INTRO screens.
-const INTRO = 0.8;
 for (const k of CAMERA) k.u += INTRO;
 for (const L of Object.values(LAYERS)) for (const p of L.opacity) if (p[0] > 0) p[0] += INTRO;
 for (const ch of CHAPTERS) ch.u += INTRO;
@@ -351,68 +344,83 @@ function startStory() {
     }
   }
 
-  /* ---------- Film frames on a canvas ---------- */
+  /* ---------- Film: plays on its own, like a video ---------- */
   const film = FILM && document.querySelector("[data-film]");
-  const filmFrames = [];
-  let filmShown = -1, filmW = 0, filmH = 0;
-  function uToSec(u) {                                   // story time (screens, after INTRO) -> film seconds
-    const k = FILM.keys, x = u - INTRO;
-    if (x <= k[0][1]) return k[0][0];
-    for (let i = 0; i < k.length - 1; i++) {
-      const [s0, u0] = k[i], [s1, u1] = k[i + 1];
-      if (x <= u1) return s0 + (s1 - s0) * ((x - u0) / (u1 - u0));
-    }
-    return k[k.length - 1][0];
+  const ctl = document.querySelector("[data-story-ctl]");
+  let filmEnd = 1e4;      // story time when the end card is fully in
+  let endedAt = 0;        // when the film finished (performance.now), 0 while it plays
+  let introDone = false;  // the logo only opens the first play, not a replay
+  let wanted = true;      // false once the visitor pauses
+  let running = false;
+  function filmClock() {
+    if (endedAt) return Math.min(filmEnd, (film.duration || 0) + (performance.now() - endedAt) / 1000);
+    return film.currentTime;
   }
-  function frameSrc(i) { return FILM.frames.replace("%03d", String(i + 1).padStart(3, "0")); }
-  function nearestLoaded(i) {
-    for (let d = 0; d < FILM.count; d++) {
-      if (filmFrames[i - d]?.ok) return i - d;
-      if (filmFrames[i + d]?.ok) return i + d;
-    }
-    return -1;
+  function tick() {
+    render();
+    if (endedAt && filmClock() >= filmEnd) running = false;
+    if (running) requestAnimationFrame(tick);
   }
-  function sizeFilm() {
-    if (!film) return;
-    const r = film.getBoundingClientRect(), dpr = Math.min(devicePixelRatio || 1, 2);
-    filmW = Math.round(r.width * dpr); filmH = Math.round(r.height * dpr);
-    film.width = filmW; film.height = filmH;
-    filmShown = -1;
+  function run() { if (!running) { running = true; requestAnimationFrame(tick); } }
+  function setCtl() {
+    const state = endedAt ? "replay" : wanted ? "pause" : "play";
+    ctl.dataset.state = state;
+    ctl.setAttribute("aria-label", { pause: "Pause the film", play: "Play the film", replay: "Watch it again" }[state]);
   }
-  function renderFilm(u) {
-    const want = Math.max(0, Math.min(FILM.count - 1, Math.round(uToSec(u) * FILM.fps)));
-    const i = filmFrames[want]?.ok ? want : nearestLoaded(want);
-    if (i < 0 || i === filmShown || !filmW) return;
-    filmShown = i;
-    const img = filmFrames[i].img, ctx = film.getContext("2d");
-    const sc = Math.max(filmW / img.naturalWidth, filmH / img.naturalHeight);   // cover the drawing area
-    const w = img.naturalWidth * sc, h = img.naturalHeight * sc;
-    ctx.drawImage(img, (filmW - w) / 2, (filmH - h) / 2, w, h);
+  function play() {
+    film.playbackRate = FILM.rate || 1;
+    const p = film.play();
+    if (p && p.catch) p.catch(() => {        // autoplay blocked (e.g. iPhone Low Power Mode): skip the logo, show a play button
+      wanted = false;
+      introDone = true;
+      setCtl();
+      render();
+    });
   }
-  function loadFilm() {
+  function startFilm() {
     film.hidden = false;
     document.querySelector("[data-film-label]")?.removeAttribute("hidden");
-    sizeFilm();
-    // coarse frames first (every 8th, then every 4th, 2nd, all) so scrolling works straight away
-    const order = [];
-    for (const step of [8, 4, 2, 1]) for (let i = 0; i < FILM.count; i += step) if (!order.includes(i)) order.push(i);
-    let next = 0, busy = 0;
-    const pump = () => {
-      while (busy < 6 && next < order.length) {
-        const i = order[next++], img = new Image();
-        busy++;
-        filmFrames[i] = { img, ok: false };
-        img.decoding = "async";
-        img.onload = () => { filmFrames[i].ok = true; busy--; if (i === 0 || filmShown < 0) schedule(); pump(); };
-        img.onerror = () => { busy--; pump(); };
-        img.src = frameSrc(i);
-      }
+    document.querySelector(".story").classList.add("story--play");
+    document.querySelector(".scroll-cue")?.setAttribute("hidden", "");
+    ctl.hidden = false;
+    setCtl();
+    const timed = () => {
+      CHAPTERS[CHAPTERS.length - 1].u = film.duration + (FILM.end ?? 0.6); // the end card, just after the last shot
+      filmEnd = CHAPTERS[CHAPTERS.length - 1].u + 0.3;
     };
-    pump();
+    if (film.readyState >= 1) timed(); else film.addEventListener("loadedmetadata", timed, { once: true });
+    film.addEventListener("playing", run);
+    film.addEventListener("seeked", () => render());
+    film.addEventListener("ended", () => { endedAt = performance.now(); setCtl(); run(); });
+    film.addEventListener("error", () => {   // the video didn't load: skip straight to the end card
+      CHAPTERS[CHAPTERS.length - 1].u = 0;
+      filmEnd = 0.3;
+      introDone = true;
+      endedAt = 1;
+      ctl.hidden = true;
+      render();
+    }, true);
+    ctl.addEventListener("click", () => {
+      if (endedAt) { endedAt = 0; film.currentTime = 0; wanted = true; play(); }
+      else if (wanted) { wanted = false; film.pause(); }
+      else { wanted = true; play(); }
+      setCtl();
+    });
+    // pause while it's scrolled off screen; carry on when it's back
+    let onScreen = true, started = false;
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(([e]) => {
+        onScreen = e.isIntersecting;
+        if (!onScreen) film.pause();
+        else if (wanted && !endedAt && film.paused && started) play();
+      }).observe(stage);
+    }
+    // the logo shows for a moment, then the film starts
+    setTimeout(() => { started = true; if (wanted && onScreen) play(); }, (FILM.hold ?? 0.5) * 1000);
   }
 
   function render() {
-    const u = clamp((scrollY - trackTop) / unit, 0, UNITS);
+    const u = film ? filmClock() : clamp((scrollY - trackTop) / unit, 0, UNITS);
     const cam = camera(u);
     const S = Math.min(vw, vh) / cam.r; // screen pixels per map unit
 
@@ -436,12 +444,13 @@ function startStory() {
     if (c !== chapter) setChapter(c);
 
     for (const w of WIPES) setWipe(w.key, ease(clamp((u - w.u0) / (w.u1 - w.u0), 0, 1)));
-    renderPlates(u);
-    if (film) renderFilm(u);
+    if (!film) renderPlates(u);
 
-    // Opening logo: zoom into the paintbrush and fade into the map
-    const zoom = ease(clamp((u - 0.04) / (INTRO - 0.04), 0, 1));
-    const fade = 1 - ease(clamp((u - INTRO * 0.4) / (INTRO * 0.6), 0, 1));
+    // Opening logo: zoom into the paintbrush and fade into the map (or the film)
+    if (film && u >= INTRO) introDone = true;
+    const su = introDone ? INTRO : u;
+    const zoom = ease(clamp((su - 0.04) / (INTRO - 0.04), 0, 1));
+    const fade = 1 - ease(clamp((su - INTRO * 0.4) / (INTRO * 0.6), 0, 1));
     if (fade !== logoFade || zoom !== logoZoom) {
       logoZoom = zoom;
       logoFade = fade;
@@ -451,7 +460,7 @@ function startStory() {
       root.classList.toggle("on-logo", fade > 0.5);
     }
 
-    bar.style.transform = `scaleX(${(u / UNITS).toFixed(4)})`;
+    bar.style.transform = `scaleX(${clamp(u / (film ? filmEnd : UNITS), 0, 1).toFixed(4)})`;
   }
 
   // Swap the words instantly: one element per line, its text replaced in one go, so two
@@ -475,7 +484,7 @@ function startStory() {
     const changed = setText(hud.place, ch.place);
     if (changed && fadeIn && hud.place.animate) {
       hud.place.getAnimations().forEach((an) => an.cancel());
-      hud.place.animate([{ opacity: 0.25, transform: "translateY(4px)" }, { opacity: 1, transform: "none" }], { duration: 260, easing: "ease-out" });
+      hud.place.animate([{ opacity: 0.7, transform: "translateY(4px)" }, { opacity: 1, transform: "none" }], { duration: 260, easing: "ease-out" });
     }
     const hasSteps = !!(ch.steps && ch.steps.length);
     if (hasSteps) {
@@ -501,13 +510,13 @@ function startStory() {
     w.el.setAttribute("transform", `translate(${(w.travel * t).toFixed(1)} 0)`);
   }
 
-  if (film) loadFilm();
+  if (film) startFilm();
   measure();
   render();
-  addEventListener("scroll", schedule, { passive: true });
+  if (!film) addEventListener("scroll", schedule, { passive: true });
   // if the words row changes height (e.g. labels wrap), re-fit the camera to the drawing row
-  if ("ResizeObserver" in window) new ResizeObserver(() => { measure(); sizeFilm(); schedule(); }).observe(sceneEl);
-  addEventListener("resize", () => { measure(); sizeFilm(); schedule(); });
+  if ("ResizeObserver" in window) new ResizeObserver(() => { measure(); schedule(); }).observe(sceneEl);
+  addEventListener("resize", () => { measure(); schedule(); });
 
   // "Skip to booking" and "Book a quote" jump straight there (no slow scroll through the story)
   // and move keyboard focus to the booking section.
@@ -546,8 +555,8 @@ function startStory() {
       console.warn(`Could not load ${src}`, err);
     }
   }
-  // Load the drawings while the logo shows
-  (async () => {
+  // Load the drawings while the logo shows (not needed when the film plays instead)
+  if (!film) (async () => {
     setupPlates();
     await loadLayer("fh");
     await Promise.all([loadLayer("house"), loadLayer("kitchen")]);
