@@ -505,7 +505,10 @@ function startStory() {
     });
     // arriving part-way down the page (a reload, the back button, a link to #book): no lock, no autoplay.
     // The film is simply there to scroll through, and the play button is in the bar.
-    if (location.hash.length > 1 || scrollY > 80) {
+    // (a "#" on the address only counts when it names a real section: a host page can add its own)
+    let deepLink = false;
+    try { deepLink = location.hash.length > 1 && !!document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch {}
+    if (deepLink || scrollY > 80) {
       mode = "scrub"; wanted = false; introDone = true; started = true;
       scrubU = filmEnd;
       setCtl();
@@ -514,6 +517,14 @@ function startStory() {
     lock();
     setTimeout(() => { held = true; go(); }, (FILM.hold ?? 0.5) * 1000);
     setTimeout(() => { ready = true; go(); }, 4000);
+    // safety net: if the film still hasn't started after 8 s (blocked, or stuck loading), show the first shot with a big Play button
+    // rather than leaving the visitor looking at a logo
+    setTimeout(() => {
+      if (mode !== "auto" || endedAt || !film.paused || !wanted) return;
+      enterScrub(INTRO);
+      ctl.hidden = true;
+      bigPlay.hidden = false;
+    }, 8000);
   }
 
   function render() {
