@@ -344,12 +344,13 @@ function startStory() {
     }
   }
 
-  /* ---------- Film: plays on its own, like a video ---------- */
+  /* ---------- Film: plays on its own, like a video, then ends on the logo ---------- */
   const film = FILM && document.querySelector("[data-film]");
   const ctl = document.querySelector("[data-story-ctl]");
-  let filmEnd = 1e4;      // story time when the end card is fully in
+  let outroAt = 1e4;      // story time when the logo starts coming back (just after the last shot)
+  let filmEnd = 1e4;      // story time when the logo is fully back
   let endedAt = 0;        // when the film finished (performance.now), 0 while it plays
-  let introDone = false;  // the logo only opens the first play, not a replay
+  let introDone = false;  // the opening logo has zoomed away
   let wanted = true;      // false once the visitor pauses
   let running = false;
   function filmClock() {
@@ -363,9 +364,8 @@ function startStory() {
   }
   function run() { if (!running) { running = true; requestAnimationFrame(tick); } }
   function setCtl() {
-    const state = endedAt ? "replay" : wanted ? "pause" : "play";
-    ctl.dataset.state = state;
-    ctl.setAttribute("aria-label", { pause: "Pause the film", play: "Play the film", replay: "Watch it again" }[state]);
+    ctl.dataset.state = wanted ? "pause" : "play";
+    ctl.setAttribute("aria-label", wanted ? "Pause the film" : "Play the film");
   }
   function play() {
     film.playbackRate = FILM.rate || 1;
@@ -384,26 +384,26 @@ function startStory() {
     document.querySelector(".scroll-cue")?.setAttribute("hidden", "");
     ctl.hidden = false;
     setCtl();
+    if (CHAPTERS[CHAPTERS.length - 1].finale) CHAPTERS.pop(); // the film ends on the logo, not on an end card
     const timed = () => {
-      CHAPTERS[CHAPTERS.length - 1].u = film.duration + (FILM.end ?? 0.6); // the end card, just after the last shot
-      filmEnd = CHAPTERS[CHAPTERS.length - 1].u + 0.3;
+      outroAt = film.duration + (FILM.end ?? 0.4);
+      filmEnd = outroAt + INTRO;
     };
     if (film.readyState >= 1) timed(); else film.addEventListener("loadedmetadata", timed, { once: true });
     film.addEventListener("playing", run);
     film.addEventListener("seeked", () => render());
-    film.addEventListener("ended", () => { endedAt = performance.now(); setCtl(); run(); });
-    film.addEventListener("error", () => {   // the video didn't load: skip straight to the end card
-      CHAPTERS[CHAPTERS.length - 1].u = 0;
-      filmEnd = 0.3;
+    film.addEventListener("ended", () => { endedAt = performance.now(); ctl.hidden = true; run(); });
+    film.addEventListener("error", () => {   // the video didn't load: just show the logo
+      outroAt = 0;
+      filmEnd = INTRO;
       introDone = true;
-      endedAt = 1;
+      endedAt = performance.now() - INTRO * 1000;
       ctl.hidden = true;
       render();
     }, true);
     ctl.addEventListener("click", () => {
-      if (endedAt) { endedAt = 0; film.currentTime = 0; wanted = true; play(); }
-      else if (wanted) { wanted = false; film.pause(); }
-      else { wanted = true; play(); }
+      wanted = !wanted;
+      if (wanted) play(); else film.pause();
       setCtl();
     });
     // pause while it's scrolled off screen; carry on when it's back
@@ -415,8 +415,19 @@ function startStory() {
         else if (wanted && !endedAt && film.paused && started) play();
       }).observe(stage);
     }
-    // the logo shows for a moment, then the film starts
-    setTimeout(() => { started = true; if (wanted && onScreen) play(); }, (FILM.hold ?? 0.5) * 1000);
+    // the logo shows for a moment and covers the loading: the film starts once enough of it
+    // has downloaded to play straight through without stalling (or after 4 s on a slow connection)
+    let held = false, ready = film.readyState >= 4;
+    const go = () => {
+      if (started || !held || !ready) return;
+      started = true;
+      if (wanted && onScreen) play();
+    };
+    film.addEventListener("canplaythrough", () => { ready = true; go(); }, { once: true });
+    setTimeout(() => { held = true; go(); }, (FILM.hold ?? 0.5) * 1000);
+    setTimeout(() => { ready = true; go(); }, 4000);
+    // the header stays hidden while the logo fills the screen, until the visitor scrolls
+    addEventListener("scroll", schedule, { passive: true });
   }
 
   function render() {
@@ -448,7 +459,8 @@ function startStory() {
 
     // Opening logo: zoom into the paintbrush and fade into the map (or the film)
     if (film && u >= INTRO) introDone = true;
-    const su = introDone ? INTRO : u;
+    // (film: the logo opens it, and comes back at the end, zooming out)
+    const su = film && endedAt ? INTRO * (1 - clamp((u - outroAt) / INTRO, 0, 1)) : introDone ? INTRO : u;
     const zoom = ease(clamp((su - 0.04) / (INTRO - 0.04), 0, 1));
     const fade = 1 - ease(clamp((su - INTRO * 0.4) / (INTRO * 0.6), 0, 1));
     if (fade !== logoFade || zoom !== logoZoom) {
@@ -457,8 +469,8 @@ function startStory() {
       logo.style.transform = `scale(${Math.pow(9, zoom).toFixed(4)})`;
       splash.style.opacity = fade.toFixed(3);
       splash.style.visibility = fade > 0.001 ? "visible" : "hidden";
-      root.classList.toggle("on-logo", fade > 0.5);
     }
+    root.classList.toggle("on-logo", fade > 0.5 && !(film && scrollY > 40));
 
     bar.style.transform = `scaleX(${clamp(u / (film ? filmEnd : UNITS), 0, 1).toFixed(4)})`;
   }

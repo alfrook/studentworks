@@ -2,7 +2,7 @@
 
 A fast website made of plain HTML, CSS, JavaScript and SVG drawings. It has no frameworks, no paid services, no API keys and no map tiles.
 
-The homepage opens on the logo, then a short film that plays on its own (see "The film" below): Toronto from the air, down into Forest Hill, then a house being painted, with the words changing above it, ending on Book a quote.
+The homepage opens on the logo, then a short film that plays on its own (see "The film" below): Toronto from the air, down into Forest Hill, then a house being painted, with the words changing above it, ending back on the logo.
 
 After the film come the services, **Meet the operator**, how it works, packages, FAQ and **Book a quote**.
 
@@ -78,18 +78,18 @@ All colours and the font live in `:root` at the top of `css/styles.css`: `--bg` 
 
 ## The film (top of the homepage)
 
-The story at the top plays on its own like a video. Nobody has to scroll. The logo shows for half a second and zooms away. Then your AI video plays at real speed (about 6.6 s), with the words above it changing as each shot comes up. It ends on "ForestHill Student Painters" and Book a quote. A button in the bottom bar pauses it, and it becomes "watch again" at the end. The film also pauses if you scroll away, and carries on when you come back.
+The story at the top plays on its own like a video. Nobody has to scroll. The logo shows for half a second and zooms away. Then your AI video plays at real speed (about 6.6 s), with the words above it changing as each shot comes up. At the end it zooms back out to the logo, which stays on screen (the header appears once you scroll). The film waits until enough of it has downloaded to play without stalling, and the logo covers that wait. It runs at 60 frames a second, so it plays evenly on phones. A button in the bottom bar pauses it, and it also pauses if you scroll away.
 
-- The video: `images/film/film.mp4` (2 MB) and its first frame, `images/film/poster.webp`.
+- The video: `images/film/film.mp4` (1.7 MB) and its first frame, `images/film/poster.webp`.
 - The settings: the `film-data` block in `index.html`.
   - `chapters`: when each word appears, in seconds of the video.
   - `hold`: how long the logo shows first.
   - `rate`: playback speed (1 = real speed, 0.75 = slower).
-  - `end`: the pause on the last shot before the end card.
+  - `end`: the pause on the last shot before it zooms back out to the logo.
   - `"use": false`: back to the drawn story you scroll through.
 - People with "reduce motion" turned on, or JavaScript off, see the drawn step-by-step version instead.
 - To use a new video (free, with ffmpeg):
-  `ffmpeg -i new.mp4 -an -vf scale=1280:-2 -c:v libx264 -crf 25 -pix_fmt yuv420p -movflags +faststart images/film/film.mp4`
+  `ffmpeg -i new.mp4 -an -vf "minterpolate=fps=60,scale=1280:-2" -c:v libx264 -crf 27 -pix_fmt yuv420p -movflags +faststart images/film/film.mp4`
   then `ffmpeg -i images/film/film.mp4 -frames:v 1 images/film/poster.webp`, and update the times in `chapters`.
 
 ## Your photos (data/scenes.json) *(drawn story)*

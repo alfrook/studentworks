@@ -173,6 +173,7 @@
 .film-label { position: absolute; z-index: 2; left: 10px; bottom: 8px; margin: 0; padding: 2px 8px; border-radius: 999px;
   background: rgb(17 17 17 / 0.55); color: #fff; font: 600 0.6875rem/1.6 var(--font-brand); letter-spacing: 0.04em; pointer-events: none; }
 .story--play .story__track { height: var(--stage-h); }   /* one screen: it plays, it doesn't scroll */
+.story--play .grain { display: none; }                   /* no blended grain over the video: it made playback stutter */
 .story-ctl { flex: none; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border-radius: 50%;
   border: 1px solid var(--hairline-strong); background: #fff; color: var(--brand-black); cursor: pointer; }
 .story-ctl[hidden] { display: none; }

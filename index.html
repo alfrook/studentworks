@@ -31,9 +31,10 @@
   <script type="module" src="js/book.js"></script>
   <!-- FILM: the story plays this video (instead of the drawings) while "use" is true. It plays on its own, no scrolling.
        hold: seconds the logo shows before the film starts. rate: playback speed (1 = real speed, about 6.6 s).
+       end: seconds on the last shot before it zooms back out to the logo.
        chapters: when the words change, in seconds of the video. Set "use" to false to go back to the drawn, scroll-driven story. -->
   <script type="application/json" id="film-data">
-  { "use": true, "src": "images/film/film.mp4", "hold": 0.5, "rate": 1, "end": 0.6,
+  { "use": true, "src": "images/film/film.mp4", "hold": 0.5, "rate": 1, "end": 0.4,
     "chapters": [
       { "t": 0,    "lead": "Located in", "place": "Toronto" },
       { "t": 2.3,  "lead": "We paint",   "place": "Forest Hill", "sub": "and surrounding areas" },
@@ -86,7 +87,7 @@
     <!-- THE STORY: plays on its own like a video (js/story.js): logo, the film with words above it, then Book a quote -->
     <section class="story" aria-labelledby="story-title" aria-describedby="story-desc">
       <h1 class="visually-hidden" id="story-title">ForestHill Student Painters, house painting in Toronto</h1>
-      <p class="visually-hidden" id="story-desc">A short film that plays on its own: Toronto from the air, down into Forest Hill, then a stone house being painted. Navy walls with white trim, a yellow front door, a black garage door and a stained deck. It ends with a Book a quote button.</p>
+      <p class="visually-hidden" id="story-desc">A short film that plays on its own: Toronto from the air, down into Forest Hill, then a stone house being painted. Navy walls with white trim, a yellow front door, a black garage door and a stained deck. It ends on the ForestHill Student Painters logo.</p>
 
       <div class="story__track" data-track>
         <div class="stage" data-stage>
