@@ -78,13 +78,13 @@ All colours and the font live in `:root` at the top of `css/styles.css`: `--bg` 
 
 ## The film (top of the homepage)
 
-The story at the top plays on its own like a video. Nobody has to scroll. The logo shows for half a second and zooms away. Then your AI video plays at real speed (about 6.6 s), with the words above it changing as each shot comes up. At the end it zooms back out to the logo, which stays on screen (the header appears once you scroll). The film waits until enough of it has downloaded to play without stalling, and the logo covers that wait. It runs at 60 frames a second, so it plays evenly on phones. A button in the bottom bar pauses it, and it also pauses if you scroll away.
+The story at the top plays on its own like a video. Nobody has to scroll. The logo shows for half a second and zooms away. Then your AI video plays (about 14 s), with the words above it changing as each shot comes up. At the end it zooms back out to the logo, which stays on screen (the header appears once you scroll). The film waits until enough of it has downloaded to play without stalling, and the logo covers that wait. It runs at 60 frames a second, so it plays evenly on phones. A button in the bottom bar pauses it, and it also pauses if you scroll away.
 
-- The video: `images/film/film.mp4` (1.7 MB) and its first frame, `images/film/poster.webp`.
+- The video: `images/film/film.mp4` (2.6 MB) and its first frame, `images/film/poster.webp`. It was made from the 6.6 s Hailuo clip by slowing each shot separately (2.3–3×, so every shot gets about 2 seconds), adding in-between frames up to 60 fps, and replacing the hard cuts with half-second dissolves.
 - The settings: the `film-data` block in `index.html`.
   - `chapters`: when each word appears, in seconds of the video.
   - `hold`: how long the logo shows first.
-  - `rate`: playback speed (1 = real speed, 0.75 = slower).
+  - `rate`: playback speed (1 = as made, 0.85 = a bit slower, 1.2 = faster).
   - `end`: the pause on the last shot before it zooms back out to the logo.
   - `"use": false`: back to the drawn story you scroll through.
 - People with "reduce motion" turned on, or JavaScript off, see the drawn step-by-step version instead.
