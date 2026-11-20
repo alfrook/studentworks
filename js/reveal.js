@@ -17,3 +17,6 @@ if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: re
 } else {
   items.forEach((el) => el.classList.add("is-in"));
 }
+
+// the footer year, from the visitor's clock (the page has "2026" written in as a fallback)
+document.querySelectorAll("[data-year]").forEach((el) => { el.textContent = new Date().getFullYear(); });

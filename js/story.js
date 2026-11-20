@@ -406,6 +406,16 @@ function startStory() {
     render();
   }
   function lock() { root.classList.add("story-lock"); }
+  function unlockInPlace() {                          // stop the film and free the page, without moving the scroll position
+    if (mode !== "auto") return;
+    mode = "scrub"; running = false; wanted = false; endedAt = 0; introDone = true;
+    film.pause();
+    root.classList.remove("story-lock");
+    bigPlay.hidden = true;
+    ctl.hidden = false;
+    setCtl();
+    schedule();
+  }
   function restart() {                                // watch it again from the start
     scrollTo({ top: 0, behavior: "instant" });
     lock();
@@ -448,8 +458,6 @@ function startStory() {
     document.querySelector(".scroll-cue")?.setAttribute("hidden", "");
     track.style.setProperty("--units", SCRUB);
     ctl.hidden = false;
-    lock();
-    setCtl();
     if (CHAPTERS[CHAPTERS.length - 1].finale) CHAPTERS.pop(); // the film ends on the logo, not on an end card
     const timed = () => {
       if (film.duration && isFinite(film.duration)) D = film.duration;
@@ -480,13 +488,7 @@ function startStory() {
     });
     bigPlay.addEventListener("click", restart);
     // scrolling moves through the film once it has ended
-    addEventListener("scroll", () => {
-      if (mode !== "scrub") return;
-      const end = trackTop + (SCRUB + 1.5) * unit;
-      scrubU = clamp((scrollY - trackTop) / (SCRUB * unit), 0, 1) * filmEnd;
-      if (scrollY < end) schedule();
-      setCtl();
-    }, { passive: true });
+    addEventListener("scroll", () => { if (mode === "scrub") schedule(); }, { passive: true });
     let started = false;   // (no need to pause when scrolled away: while it plays by itself the page is locked)
     // the logo shows for a moment and covers the loading: the film starts once enough of it
     // has downloaded to play straight through without stalling (or after 4 s on a slow connection)
@@ -501,13 +503,23 @@ function startStory() {
       if (started && wanted && mode === "auto" && !endedAt && film.paused) play(); // e.g. ready after downloading it whole
       go();
     });
+    // arriving part-way down the page (a reload, the back button, a link to #book): no lock, no autoplay.
+    // The film is simply there to scroll through, and the play button is in the bar.
+    if (location.hash.length > 1 || scrollY > 80) {
+      mode = "scrub"; wanted = false; introDone = true; started = true;
+      scrubU = filmEnd;
+      setCtl();
+      return;
+    }
+    lock();
     setTimeout(() => { held = true; go(); }, (FILM.hold ?? 0.5) * 1000);
     setTimeout(() => { ready = true; go(); }, 4000);
   }
 
   function render() {
+    if (film && mode === "scrub") scrubU = clamp((scrollY - trackTop) / (SCRUB * unit), 0, 1) * filmEnd;
     const u = film ? filmClock() : clamp((scrollY - trackTop) / unit, 0, UNITS);
-    if (film && mode === "scrub") seekTo(Math.min(u, D));
+    if (film && mode === "scrub") { seekTo(Math.min(u, D)); setCtl(); }
     const cam = camera(u);
     const S = Math.min(vw, vh) / cam.r; // screen pixels per map unit
 
@@ -603,12 +615,20 @@ function startStory() {
   }
 
   if (film) startFilm();
+  if (film) document.addEventListener("focusin", (e) => { if (!e.target.closest(".story, .site-header")) unlockInPlace(); });
   measure();
   render();
   if (!film) addEventListener("scroll", schedule, { passive: true });
   // if the words row changes height (e.g. labels wrap), re-fit the camera to the drawing row
-  if ("ResizeObserver" in window) new ResizeObserver(() => { measure(); schedule(); }).observe(sceneEl);
-  addEventListener("resize", () => { measure(); schedule(); });
+  // when the layout changes size (turning the phone, resizing the window) keep the film at the same point
+  function relayout() {
+    const keep = film && mode === "scrub" && scrollY < trackTop + SCRUB * unit ? scrubU / filmEnd : null, was = unit;
+    measure();
+    if (keep !== null && Math.abs(unit - was) > 2) scrollTo({ top: trackTop + keep * SCRUB * unit, behavior: "instant" });
+    schedule();
+  }
+  if ("ResizeObserver" in window) new ResizeObserver(relayout).observe(sceneEl);
+  addEventListener("resize", relayout);
 
   // "Skip to booking" and "Book a quote" jump straight there (no slow scroll through the story)
   // and move keyboard focus to the booking section.
@@ -617,6 +637,7 @@ function startStory() {
       const target = document.querySelector(a.getAttribute("href"));
       if (!target) return;
       e.preventDefault();
+      if (film) unlockInPlace();
       const headerH = parseFloat(getComputedStyle(root).getPropertyValue("--header-h")) || 60;
       scrollTo({ top: target.getBoundingClientRect().top + scrollY - headerH - 8, behavior: "instant" });
       const heading = target.querySelector("h2");

@@ -124,7 +124,8 @@ class Scene:
             for pk in PREP.get(key, []):                      # prep coats, before the colour
                 self.out.append(f'<path class="{cls} p" clip-path="url(#w-{pk})" d="{d}" fill="{shade(PAINT[pk], n)}"/>')
                 self._grow(pk, pts)
-            self.out.append(f'<path class="{cls} p" clip-path="url(#w-{CLIP_OF[key]})" d="{d}" fill="{shade(PAINT[key], n)}"/>')
+            # data-k / data-n let the "try a colour" section repaint this shape live (js/colours.js)
+            self.out.append(f'<path class="{cls} p" data-k="{key}" data-n="{n}" clip-path="url(#w-{CLIP_OF[key]})" d="{d}" fill="{shade(PAINT[key], n)}"/>')
             self._grow(key, pts)
         else:
             self.out.append(f'<path class="{cls}" d="{d}" fill="{shade(fixed, n)}"/>')
@@ -147,7 +148,7 @@ class Scene:
         """Thin pickets and balusters: an ink line, then a painted stroke on top."""
         d = "".join(f"M{f(self.P(*a)[0])} {f(self.P(*a)[1])}L{f(self.P(*b)[0])} {f(self.P(*b)[1])}" for a, b in segs)
         self.out.append(f'<path class="bal u" style="stroke-width:{width}" stroke="{BEFORE.get(key, UNPAINTED)}" d="{d}"/>')
-        self.out.append(f'<path class="bal p" style="stroke-width:{width}" clip-path="url(#w-{CLIP_OF[key]})" stroke="{PAINT[key]}" d="{d}"/>')
+        self.out.append(f'<path class="bal p" data-k="{key}" style="stroke-width:{width}" clip-path="url(#w-{CLIP_OF[key]})" stroke="{PAINT[key]}" d="{d}"/>')
         self._grow(key, [p for s in segs for p in s])
 
     def anchor(self, name, x, y, z):

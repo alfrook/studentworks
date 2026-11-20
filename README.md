@@ -97,6 +97,18 @@ The top of the page plays your AI video like a video, and then lets the visitor 
   `ffmpeg -i new.mp4 -an -vf "minterpolate=fps=60,scale=1280:-2" -c:v libx264 -crf 28 -g 24 -bf 0 -pix_fmt yuv420p -movflags +faststart images/film/film.mp4`
   then `ffmpeg -i images/film/film.mp4 -frames:v 1 images/film/poster.webp`, and update `duration` and the times in `chapters`.
 
+## The sections under the film
+
+After the film, in order: **What we paint** (swipeable cards on phones), **See your house in a new colour**, **Meet the operator**, **How it works**, **Book a quote**, then the **FAQ** at the very bottom.
+
+- **What we paint:** the four pictures are stills from the AI film (`images/services/*.webp`, made from the video with ffmpeg). When you have real photos of your own jobs, replace those four files (800 x 600) and update the `alt` text in `index.html`. The cards don't say these are past jobs; keep it that way until the pictures are real.
+- **See your house in a new colour** (`js/colours.js`): the drawn house, repainted live. Walls, trim, front door and garage door each have a row of colours, and there are six one-tap looks. To change the colours, edit the `PARTS` and `LOOKS` lists at the top of `js/colours.js`. It uses colour names only (no paint brands, no prices) and says the colours on screen are approximate. The drawing is `images/scenes/steps/99-finished.svg`, made by `tools/build-scenes.py` (shapes tagged `data-k` can be recoloured).
+- **Meet the operator:** the three chips under the name come from your bio (Forest Hill Collegiate Institute, mechanical engineering at the University of Guelph, residential and commercial). The pull-quote is the last line of your bio. The bio itself is unchanged.
+- **FAQ:** every answer is written without anything we can't back up, and no placeholders show on the page. The things to confirm are in HTML comments marked `CONFIRM:` next to each answer. One to watch: the parent Student Works site says it is "proudly partnered with Dulux". Only put a paint brand on this page if that is true for you.
+- The footer year updates itself. The "Licensed & insured" line is left out until you've confirmed your real coverage (there's a `CONFIRM:` comment where it goes).
+- The thank-you page (`thanks.html`) and the not-found page (`404.html`) match the rest of the site.
+- Social sharing: the picture people see when the link is shared is `images/og-image-1200.jpg` (the navy house and the logo). The tab icon is `favicon.svg`, and `apple-touch-icon.png` is what phones use when the site is saved to the home screen.
+
 ## Your photos (data/scenes.json) *(drawn story)*
 
 The story is drawn until your photos arrive. For each beat, shoot a **before** and an **after** from the same locked camera position (tripod, same zoom, same time of day). The deck needs four: **before** (grey and dirty), **washed**, **sanded** and **after**. Put the files in `images/plates/` and their paths in `data/scenes.json`.

@@ -19,37 +19,45 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#ffffff">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Montserrat:wght@400..700&family=Playfair+Display:ital,wght@0,700;1,700;1,800&display=swap">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/site.css">
   <script>document.documentElement.className = "js";</script>
   <script type="module" src="js/reveal.js"></script>
 </head>
-<body id="top">
+<body id="top" class="status-page">
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
     <div class="wrap">
       <a class="wordmark" href="./"><img src="images/logo-fhsp-header.png" width="400" height="228" alt="ForestHill Student Painters"></a>
-      <a class="button button--header button--cta" href="index.html#book">Book a quote</a>
+      <div class="header-actions">
+        <a class="button button--call" href="tel:+16473888488" aria-label="Call 647-388-8488"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg><span>Call</span><span class="call-number"> 647-388-8488</span></a>
+        <a class="button button--header button--cta" href="index.html#book">Book a quote</a>
+      </div>
     </div>
   </header>
 
   <main id="main" tabindex="-1">
     <div class="wrap">
-      <header class="page-head reveal">
+      <section class="status reveal" aria-labelledby="status-title">
         <p class="eyebrow">Page not found</p>
-        <h1>Nothing painted here.</h1>
-        <p class="lede">The page you asked for does not exist. Head back to the <a href="./">home page</a>.</p>
-      </header>
+        <h1 id="status-title">Nothing painted here.</h1>
+        <p class="lede">The page you asked for does not exist. Head back to the home page, or book a free quote.</p>
+        <div class="status__actions">
+          <a class="button button--dark" href="./">Back to the homepage</a>
+          <a class="button button--cta" href="index.html#book">Book a quote</a>
+        </div>
+      </section>
     </div>
   </main>
 
   <footer class="site-footer">
     <div class="wrap footer-slim">
-      <span>© 2027 ForestHill Student Painters · Forest Hill and surrounding areas, Toronto</span>
+      <span>© <span data-year>2026</span> ForestHill Student Painters · Forest Hill and surrounding areas, Toronto</span>
       <nav aria-label="Footer">
         <a href="./">Home</a>
         <a href="index.html#book">Book a quote</a>

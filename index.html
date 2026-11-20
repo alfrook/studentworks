@@ -14,10 +14,12 @@
   <meta property="og:image" content="https://alfrook.github.io/studentworks/images/og-image-1200.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A navy house with white trim in Forest Hill, with the ForestHill Student Painters logo.">
   <meta property="og:locale" content="en_CA">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#ffffff">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Montserrat:wght@400..700&family=Playfair+Display:ital,wght@0,700;1,700;1,800&display=swap">
@@ -29,6 +31,7 @@
   <script>document.documentElement.className = "js";</script>
   <script type="module" src="js/story.js"></script>
   <script type="module" src="js/book.js"></script>
+  <script type="module" src="js/colours.js"></script>
   <!-- FILM: the story plays this video (instead of the drawings) while "use" is true. It plays on its own, no scrolling.
        hold: seconds the logo shows before the film starts. rate: playback speed (1 = normal; the video is about 14 s).
        end: seconds on the last shot before it zooms back out to the logo.
@@ -55,13 +58,13 @@
     "slogan": "Student-Powered Painting. Professional Results.",
     "url": "https://alfrook.github.io/studentworks/",
     "logo": "https://alfrook.github.io/studentworks/images/logo-fhsp.png",
-    "image": "https://alfrook.github.io/studentworks/images/logo-fhsp.png",
+    "image": "https://alfrook.github.io/studentworks/images/og-image-1200.jpg",
     "telephone": "+1-647-388-8488",
     "email": "paintwithfrook@gmail.com",
-    "description": "Student-run house painting in Forest Hill, Toronto: exterior siding and trim, front and garage doors, interior walls, cabinets and trim, decks and fences.",
+    "description": "Student-run house painting in Forest Hill, Toronto: exterior siding and trim, front and garage doors, interior walls and trim, decks and fences.",
     "founder": { "@type": "Person", "name": "Alexander Frook" },
     "areaServed": [{ "@type": "Place", "name": "Forest Hill, Toronto" }, { "@type": "Place", "name": "Lawrence Park, Toronto" }, { "@type": "Place", "name": "Deer Park, Toronto" }, { "@type": "Place", "name": "Casa Loma, Toronto" }, { "@type": "Place", "name": "Yorkville, Toronto" }, { "@type": "Place", "name": "Rosedale, Toronto" }, { "@type": "Place", "name": "Leaside, Toronto" }, { "@type": "Place", "name": "Midtown Toronto, Toronto" }],
-    "knowsAbout": ["Exterior painting", "Interior painting", "Door painting", "Cabinet painting", "Deck staining", "Fence staining", "Pressure washing"],
+    "knowsAbout": ["Exterior painting", "Interior painting", "Door painting", "Deck staining", "Fence staining", "Pressure washing"],
     "hasOfferCatalog": { "@type": "OfferCatalog", "name": "Painting services", "itemListElement": [
       { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Exterior painting" } },
       { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Door painting" } },
@@ -180,37 +183,57 @@
     <section class="bsec bsec--cream" id="services" aria-labelledby="services-title">
       <div class="wrap">
         <div class="bhead reveal">
-          <p class="eyebrow">Our services</p>
+          <p class="eyebrow">What we paint</p>
           <h2 id="services-title">Exterior &amp; interior painting, done properly.</h2>
+          <p>From the front door to the back deck.</p>
         </div>
         <ul class="svc-grid">
-        <li class="svc-card reveal">
-          <div class="svc-card__img"><img src="images/scenes/steps/04-siding.svg" width="800" height="560" loading="lazy" decoding="async" alt="Drawing of a three-storey house with dark navy siding and white trim."></div>
-          <h3>Exterior</h3>
-          <p>Siding and trim, washed, scraped, primed and painted.</p>
-          <a class="svc-card__link" href="#book">Get a free quote <span aria-hidden="true">→</span></a>
-        </li>
-        <li class="svc-card reveal">
-          <div class="svc-card__img"><img src="images/scenes/steps/05-door.svg" width="800" height="560" loading="lazy" decoding="async" alt="Drawing of an arched front door painted sunflower yellow."></div>
-          <h3>Doors</h3>
-          <p>Front doors and garage doors, sanded and finished in hard enamel.</p>
-          <a class="svc-card__link" href="#book">Get a free quote <span aria-hidden="true">→</span></a>
-        </li>
-        <li class="svc-card reveal">
-          <div class="svc-card__img"><img src="images/scenes/steps/07-walls.svg" width="800" height="560" loading="lazy" decoding="async" alt="Drawing of an open kitchen and living room with bright white walls and cabinets."></div>
-          <h3>Interior</h3>
-          <p>Walls, cabinets and trim, with clean lines and floors protected.</p>
-          <a class="svc-card__link" href="#book">Get a free quote <span aria-hidden="true">→</span></a>
-        </li>
-        <li class="svc-card reveal">
-          <div class="svc-card__img"><img src="images/scenes/steps/09-deck-4.svg" width="800" height="560" loading="lazy" decoding="async" alt="Drawing of a backyard deck stained walnut brown with black railings."></div>
-          <h3>Decks &amp; Fences</h3>
-          <p>Pressure washed, sanded smooth, then stained.</p>
-          <a class="svc-card__link" href="#book">Get a free quote <span aria-hidden="true">→</span></a>
-        </li>
+          <li class="svc-card reveal" style="--i:0">
+            <div class="svc-card__img"><img src="images/services/exterior.webp" width="800" height="600" loading="lazy" decoding="async" alt="A three-storey house painted deep navy with white trim."></div>
+            <h3>Exterior</h3>
+            <p>Siding and trim, prepped and painted with clean, crisp lines.</p>
+            <a class="svc-card__link" href="#book">Get a free quote <span aria-hidden="true">→</span></a>
+          </li>
+          <li class="svc-card reveal" style="--i:1">
+            <div class="svc-card__img"><img src="images/services/doors.webp" width="800" height="600" loading="lazy" decoding="async" alt="An arched front door painted sunflower yellow."></div>
+            <h3>Doors</h3>
+            <p>Front doors and garage doors, prepped and painted for a clean finish.</p>
+            <a class="svc-card__link" href="#book">Get a free quote <span aria-hidden="true">→</span></a>
+          </li>
+          <li class="svc-card reveal" style="--i:2">
+            <div class="svc-card__img"><img src="images/services/interior.webp" width="800" height="600" loading="lazy" decoding="async" alt="A bright white open kitchen and living room with a wood floor."></div>
+            <h3>Interior</h3>
+            <p>Walls and trim, with clean lines and your floors and furniture protected.</p>
+            <a class="svc-card__link" href="#book">Get a free quote <span aria-hidden="true">→</span></a>
+          </li>
+          <li class="svc-card reveal" style="--i:3">
+            <div class="svc-card__img"><img src="images/services/decks.webp" width="800" height="600" loading="lazy" decoding="async" alt="A backyard deck stained walnut brown with dark railings and a cedar fence."></div>
+            <h3>Decks &amp; Fences</h3>
+            <p>Pressure washed, sanded smooth, then stained.</p>
+            <a class="svc-card__link" href="#book">Get a free quote <span aria-hidden="true">→</span></a>
+          </li>
         </ul>
       </div>
     </section>
+
+    <!-- TRY A COLOUR: the finished house drawing, repainted live (js/colours.js). Colour names only, no paint brands. -->
+    <section class="bsec viz" id="colours" aria-labelledby="colours-title" data-viz>
+      <div class="wrap">
+        <div class="bhead bhead--center reveal">
+          <p class="eyebrow">Try it on</p>
+          <h2 id="colours-title">See your house in a new colour.</h2>
+          <p>Tap a look, or pick each colour yourself. Then book a free quote for the one you love.</p>
+        </div>
+        <div class="viz__grid">
+          <div class="viz__stage reveal" data-viz-stage>
+            <img src="images/scenes/steps/99-finished.svg" width="800" height="594" loading="lazy" decoding="async" alt="Drawing of a house with deep navy walls, white trim, a sunflower yellow front door and a black garage door.">
+          </div>
+          <div class="viz__panel reveal" data-viz-panel hidden></div>
+        </div>
+        <p class="viz__static reveal"><a class="button button--cta button--big" href="#book">Get a free quote <span aria-hidden="true">→</span></a></p>
+      </div>
+    </section>
+
 
     <!-- MEET THE OPERATOR -->
     <section class="section wrap" id="operator" aria-labelledby="operator-title">
@@ -224,14 +247,19 @@
           <p class="eyebrow">Meet the operator</p>
           <h2 id="operator-title">Alexander Frook</h2>
           <p class="operator__role">Owner/Operator, ForestHill Student Painters</p>
+                    <ul class="operator__facts" aria-label="About Alexander">
+            <li>Forest Hill Collegiate Institute graduate</li>
+            <li>Mechanical engineering, University of Guelph</li>
+            <li>Residential and commercial</li>
+          </ul>
           <!-- BIO START: edit these paragraphs freely. Keep it factual. -->
           <div class="operator__bio">
             <p>This coming season, I'll be running the Student Works Painting division in Forest Hill! I'm a graduate of Forest Hill Collegiate Institute and I'm headed into my second year of mechanical engineering at the University of Guelph. I'll be devoting my season to painting homes and servicing past, present and future clients, possibly you! I'm bringing plenty of painting experience from across Grey-Bruce to our neighborhood.</p>
             <p>It's my goal to run one of the top Student Works divisions in the province this year. Running a successful painting business means combining a large number of projects with top levels of service, quality and customer satisfaction, and that's exactly what I'm aiming for.</p>
             <p>No matter what type of painting or staining project you have in mind, residential or commercial, we can help with a crew you can count on in the Forest Hill area.</p>
-            <p>I'd welcome the chance to earn your business.</p>
           </div>
           <!-- BIO END -->
+          <blockquote class="operator__quote"><p>I'd welcome the chance to earn your business.</p></blockquote>
           <a class="button button--cta" href="#book">Book a quote</a>
         </div>
       </div>
@@ -251,20 +279,12 @@
           <p class="eyebrow">How it works</p>
           <h2 id="process-title">Four steps to a fresh finish.</h2>
         </div>
-        <ol class="pstep">
-          <li class="reveal"><span class="pstep__no">01</span><h3>Call</h3><p>Call, text or book online. We&#8217;ll set up a time to talk about your project.</p></li>
-          <li class="reveal"><span class="pstep__no">02</span><h3>Quote</h3><p>We talk it through and give you a free, clear quote. No pressure, no surprises.</p></li>
-          <li class="reveal"><span class="pstep__no">03</span><h3>Prep &amp; Paint</h3><p>Cleaning, scraping, sanding and taping first, then even coats and clean lines, with your space protected.</p></li>
-          <li class="reveal"><span class="pstep__no">04</span><h3>Done Right</h3><p>A final walkthrough, touch-ups and cleanup before we leave.</p></li>
+        <ol class="pstep reveal">
+          <li style="--i:0"><span class="pstep__no">01</span><h3>Call</h3><p>Call, text or book online. We&#8217;ll set up a time to talk about your project.</p></li>
+          <li style="--i:1"><span class="pstep__no">02</span><h3>Quote</h3><p>We talk it through and give you a free, clear quote. No pressure, no surprises.</p></li>
+          <li style="--i:2"><span class="pstep__no">03</span><h3>Prep &amp; Paint</h3><p>Cleaning, scraping, sanding and taping first, then even coats and clean lines, with your space protected.</p></li>
+          <li style="--i:3"><span class="pstep__no">04</span><h3>Done Right</h3><p>A final walkthrough, touch-ups and cleanup before we leave.</p></li>
         </ol>
-      </div>
-    </section>
-
-    <section class="closing" aria-labelledby="closing-title">
-      <div class="wrap">
-        <h2 id="closing-title" class="reveal">Professional painting in Forest Hill.</h2>
-        <p class="reveal">Student-powered painting. Professional results. Book your free quote in three taps.</p>
-        <a class="button button--big button--cta reveal" href="#book">Get a free quote <span aria-hidden="true">→</span></a>
       </div>
     </section>
 
@@ -356,13 +376,20 @@
           <h2 id="faq-title">Frequently asked questions</h2>
         </div>
         <div class="faq">
-          <details class="faq__item reveal"><summary>How does the free quote work?</summary><div class="faq__a"><p>Book with the form below or call or text 647-388-8488. We call you at the time you choose, talk through the project and give you a free, clear quote. <span class="ph">[PLACEHOLDER: do you also visit the house to measure before quoting? Add it here.]</span></p></div></details>
-          <details class="faq__item reveal"><summary>What areas do you serve?</summary><div class="faq__a"><p>Forest Hill and the surrounding areas of Toronto. If you&#8217;re nearby and not sure, ask. Book a quote and tell us your street.</p></div></details>
-          <details class="faq__item reveal"><summary>How long does a job take?</summary><div class="faq__a"><p>It depends on the size of the job and the weather. We&#8217;ll tell you how long we expect to be on site when we give you your quote. <span class="ph">[PLACEHOLDER: typical timelines, e.g. a front door, a room, a full exterior.]</span></p></div></details>
+          <details class="faq__item reveal"><summary>How does the free quote work?</summary><div class="faq__a"><p>Book with the form above or call or text 647-388-8488. We reach you at the time you choose, talk through the project and give you a free, clear quote.</p><!-- CONFIRM: do you also visit the house to measure before quoting? If so, add it here. --></div></details>
+          <details class="faq__item reveal"><summary>What areas do you serve?</summary><div class="faq__a"><p>Forest Hill and the surrounding areas of Toronto. If you&#8217;re nearby and not sure, ask: book a quote and tell us your street.</p></div></details>
+          <details class="faq__item reveal"><summary>How long does a job take?</summary><div class="faq__a"><p>It depends on the size of the job and the weather. We&#8217;ll tell you how long we expect to be on site when we give you your quote.</p><!-- CONFIRM: typical timelines, e.g. a front door, a room, a full exterior. --></div></details>
           <details class="faq__item reveal"><summary>How does prep work?</summary><div class="faq__a"><p>Prep comes first, because it&#8217;s what makes the paint last: cleaning, scraping, sanding and taping so the new coat bonds and holds up, with floors, furniture and plants protected.</p></div></details>
-          <details class="faq__item reveal"><summary>What paint do you use?</summary><div class="faq__a"><p>We use Dulux paints and stains, a leading Canadian paint brand we&#8217;re proud to partner with. <span class="ph">[PLACEHOLDER: confirm the product lines you use.]</span></p></div></details>
-          <details class="faq__item reveal"><summary>Do I need to be home?</summary><div class="faq__a"><p>For interior work, someone needs to let us in. For exterior work you usually don&#8217;t need to be home, as long as we can reach the areas being painted. <span class="ph">[PLACEHOLDER: confirm your policy.]</span></p></div></details>
-          <details class="faq__item reveal"><summary>What happens if it rains?</summary><div class="faq__a"><p>Exterior paint and stain need dry weather to cure properly, so if rain is in the forecast we&#8217;ll let you know and move your job to the next good day. <span class="ph">[PLACEHOLDER: confirm how you handle rescheduling.]</span></p></div></details>
+          <details class="faq__item reveal"><summary>What paint do you use?</summary><div class="faq__a"><p>It depends on the surface: siding, doors, decks and interior walls each need something different. We&#8217;ll go through the options with you when we give your quote.</p><!-- CONFIRM before naming a paint brand: the parent Student Works site says "Proudly partnered with Dulux", but that has not been confirmed for ForestHill. Only add it if it is true for you. --></div></details>
+          <details class="faq__item reveal"><summary>Do I need to be home?</summary><div class="faq__a"><p>We&#8217;ll sort this out when we book. For interior work someone needs to let us in; for exterior work we just need to be able to reach the areas being painted.</p><!-- CONFIRM: your policy on being home. --></div></details>
+          <details class="faq__item reveal"><summary>What happens if it rains?</summary><div class="faq__a"><p>Exterior paint and stain need dry weather, so rain can move an exterior job. We&#8217;ll keep you posted and agree the new day with you.</p><!-- CONFIRM: how you handle rescheduling. --></div></details>
+        </div>
+        <div class="faq__more reveal">
+          <p>Still have a question?</p>
+          <div class="faq__more-actions">
+            <a class="button button--call" href="tel:+16473888488"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg><span>Call or text 647-388-8488</span></a>
+            <a class="button button--cta" href="#book">Book a quote</a>
+          </div>
         </div>
       </div>
     </section>
@@ -390,7 +417,8 @@
         </div>
       </div>
       <div class="foot-base">
-        <span>© 2027 ForestHill Student Painters · <span class="ph">[PLACEHOLDER: Licensed &amp; insured, confirm coverage]</span></span>
+        <span>© <span data-year>2026</span> ForestHill Student Painters</span>
+        <!-- CONFIRM: add "Licensed & insured" here only once you have confirmed your real coverage. -->
         <a href="#top">Back to the top ↑</a>
       </div>
     </div>
