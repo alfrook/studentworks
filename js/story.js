@@ -390,7 +390,6 @@ function startStory() {
   }
   function startFilm() {
     film.hidden = false;
-    document.querySelector("[data-film-label]")?.removeAttribute("hidden");
     document.querySelector(".story").classList.add("story--play");
     document.querySelector(".scroll-cue")?.setAttribute("hidden", "");
     ctl.hidden = false;
