@@ -347,6 +347,7 @@ function startStory() {
   /* ---------- Film: plays on its own, like a video, then ends on the logo ---------- */
   const film = FILM && document.querySelector("[data-film]");
   const ctl = document.querySelector("[data-story-ctl]");
+  const bigPlay = document.querySelector("[data-film-play]");
   let outroAt = 1e4;      // story time when the logo starts coming back (just after the last shot)
   let filmEnd = 1e4;      // story time when the logo is fully back
   let endedAt = 0;        // when the film finished (performance.now), 0 while it plays
@@ -368,14 +369,24 @@ function startStory() {
     ctl.setAttribute("aria-label", wanted ? "Pause the film" : "Play the film");
   }
   function play() {
+    film.muted = true;
     film.playbackRate = FILM.rate || 1;
     const p = film.play();
-    if (p && p.catch) p.catch(() => {        // autoplay blocked (e.g. iPhone Low Power Mode): skip the logo, show a play button
+    if (p && p.catch) p.catch((e) => {
+      if (e && e.name !== "NotAllowedError") return; // still loading: it starts when it's ready
+      // autoplay blocked (iPhone Low Power Mode, some in-app browsers): skip the logo, show a big play button
       wanted = false;
       introDone = true;
+      bigPlay.hidden = false;
       setCtl();
       render();
     });
+  }
+  function showStill() {                     // the video can't play here at all: show its first picture and words
+    introDone = true;
+    ctl.hidden = true;
+    bigPlay.hidden = true;
+    render();
   }
   function startFilm() {
     film.hidden = false;
@@ -393,17 +404,26 @@ function startStory() {
     film.addEventListener("playing", run);
     film.addEventListener("seeked", () => render());
     film.addEventListener("ended", () => { endedAt = performance.now(); ctl.hidden = true; run(); });
-    film.addEventListener("error", () => {   // the video didn't load: just show the logo
-      outroAt = 0;
-      filmEnd = INTRO;
-      introDone = true;
-      endedAt = performance.now() - INTRO * 1000;
-      ctl.hidden = true;
-      render();
+    // Some hosts can't send a video in pieces, and iPhones won't play it then: download it whole and play it from memory.
+    let triedWhole = false;
+    film.addEventListener("error", () => {
+      if (triedWhole) return showStill();
+      triedWhole = true;
+      fetch(FILM.src)
+        .then((r) => (r.ok ? r.blob() : Promise.reject(r.status)))
+        .then((b) => { film.src = URL.createObjectURL(b.type ? b : new Blob([b], { type: "video/mp4" })); film.load(); })
+        .catch(showStill);
     }, true);
     ctl.addEventListener("click", () => {
       wanted = !wanted;
+      bigPlay.hidden = true;
       if (wanted) play(); else film.pause();
+      setCtl();
+    });
+    bigPlay.addEventListener("click", () => {
+      wanted = true;
+      bigPlay.hidden = true;
+      play();
       setCtl();
     });
     // pause while it's scrolled off screen; carry on when it's back
@@ -423,7 +443,11 @@ function startStory() {
       started = true;
       if (wanted && onScreen) play();
     };
-    film.addEventListener("canplaythrough", () => { ready = true; go(); }, { once: true });
+    film.addEventListener("canplaythrough", () => {
+      ready = true;
+      if (started && wanted && onScreen && !endedAt && film.paused) play(); // e.g. ready after downloading it whole
+      go();
+    });
     setTimeout(() => { held = true; go(); }, (FILM.hold ?? 0.5) * 1000);
     setTimeout(() => { ready = true; go(); }, 4000);
     // the header stays hidden while the logo fills the screen, until the visitor scrolls
