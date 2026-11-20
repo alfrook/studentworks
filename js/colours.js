@@ -89,6 +89,37 @@ if (root) {
   });
   apply();
 
+  /* ---------- sample house / your own room ---------- */
+  const grid = root.querySelector(".viz__grid");
+  const roomStage = document.createElement("div");
+  roomStage.className = "viz__stage viz__stage--room";
+  roomStage.hidden = true;
+  const roomPanel = document.createElement("div");
+  roomPanel.className = "viz__panel viz__panel--room";
+  roomPanel.hidden = true;
+  grid.append(roomStage, roomPanel);
+  const modes = document.createElement("div");
+  modes.className = "viz__modes";
+  modes.setAttribute("role", "group");
+  modes.setAttribute("aria-label", "What to try colours on");
+  modes.innerHTML = `<button type="button" data-mode="house" aria-pressed="true">Sample house</button><button type="button" data-mode="room" aria-pressed="false">Your own room</button>`;
+  grid.before(modes);
+  let roomMounted = false;
+  modes.addEventListener("click", async (e) => {
+    const b = e.target.closest("button[data-mode]");
+    if (!b) return;
+    const room = b.dataset.mode === "room";
+    modes.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    stage.hidden = room; panel.hidden = room;
+    roomStage.hidden = !room; roomPanel.hidden = !room;
+    if (room && !roomMounted) {                       // the photo tool is only fetched if someone wants it
+      roomMounted = true;
+      roomStage.textContent = "Loading\u2026";
+      try { (await import("./room.js")).mountRoom(roomStage, roomPanel); }
+      catch { roomMounted = false; roomStage.textContent = "Sorry, that didn\u2019t load. Please try again."; }
+    }
+  });
+
   /* ---------- the drawing: fetched when the section is near the screen ---------- */
   async function load() {
     try {
