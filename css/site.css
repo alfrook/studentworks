@@ -302,3 +302,21 @@ html.story-lock, html.story-lock body { overflow: hidden; overscroll-behavior: n
   .viz__stage--room.is-photo { position: sticky; top: calc(var(--header-h) + 6px); z-index: 4; box-shadow: 0 10px 24px rgb(0 0 0 / 0.14); }
   .room__work canvas { max-height: 42vh; }
 }
+
+/* ---------- Your own room: sensing animation, compare button, chips ---------- */
+.room__scan[hidden], .room__compare[hidden] { display: none; }
+.room__scan { position: absolute; inset: 0; display: grid; align-items: end; justify-items: center; padding-bottom: 18px; background: rgb(255 255 255 / 0.35); overflow: hidden; pointer-events: none; }
+.room__scan::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 28%; background: linear-gradient(180deg, transparent, rgb(177 31 36 / 0.4), transparent); animation: room-scan 1.3s ease-in-out infinite alternate; }
+@keyframes room-scan { from { transform: translateY(-100%); } to { transform: translateY(360%); } }
+@media (prefers-reduced-motion: reduce) { .room__scan::before { animation: none; transform: translateY(150%); } }
+.room__scan span { position: relative; padding: 6px 14px; border-radius: var(--r-pill); background: rgb(17 17 17 / 0.78); color: #fff; font: 600 0.8125rem/1.4 var(--font-brand); }
+.room__compare { position: absolute; right: 10px; bottom: 10px; z-index: 2; min-height: 44px; padding: 0 16px; border: 0; border-radius: var(--r-pill); background: rgb(17 17 17 / 0.78); color: #fff; font: 700 0.8125rem/1 var(--font-brand); cursor: pointer; touch-action: manipulation; -webkit-user-select: none; user-select: none; }
+.room__compare[aria-pressed="true"] { background: var(--brand-red); }
+.room__compare:focus-visible { outline: 3px solid #fff; outline-offset: 2px; box-shadow: 0 0 0 5px var(--brand-red); }
+.area.is-off i { background: transparent; border: 1.5px dashed var(--muted); box-shadow: none; }
+.area.is-off { color: var(--muted); border-style: dashed; }
+.area.is-off[aria-pressed="true"] { background: #fff; color: var(--brand-black); border-color: var(--brand-black); }
+@media (prefers-reduced-motion: no-preference) { .room__areas .area { animation: area-in 0.4s var(--ease) both; } .room__areas .area:nth-child(2) { animation-delay: 0.08s; } .room__areas .area:nth-child(3) { animation-delay: 0.16s; } .room__areas .area:nth-child(4) { animation-delay: 0.24s; } @keyframes area-in { from { opacity: 0; transform: translateY(6px); } } }
+.viz { overflow-x: clip; }   /* a button's glow ring must never make the page scroll sideways (clip, unlike hidden, keeps the pinned photo working) */
+.viz__stage--room.is-photo { min-height: 0; }
+@media (max-width: 959px) { .room__work canvas { max-height: 38vh; } }
