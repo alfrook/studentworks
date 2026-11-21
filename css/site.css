@@ -123,12 +123,6 @@
 .faq__item[open] { border-color: var(--brand-black); box-shadow: var(--shadow-card); }
 .faq__item summary:hover { color: var(--brand-red); }
 @media (prefers-reduced-motion: no-preference) { .faq__item[open] .faq__a { animation: faq-in 0.35s var(--ease); } @keyframes faq-in { from { opacity: 0; transform: translateY(-6px); } } }
-.faq__more { margin-top: 36px; text-align: center; }
-.faq__more > p { margin: 0 0 14px; font: italic 800 1.5rem/1.2 var(--font-display); color: var(--brand-black); }
-.faq__more-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-.faq__more .button--call { width: auto; min-height: 46px; padding: 0 20px; }
-.faq__more .button--call span { display: inline; }
-.faq__more .button--cta { min-height: 46px; }
 .faq__a p { margin: 0; color: var(--muted); line-height: 1.65; }
 
 /* ---------- Booking: same form, brand type ---------- */
