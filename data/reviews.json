@@ -1,0 +1,21 @@
+{
+  "_readme": [
+    "Client reviews for the homepage. The section stays completely hidden until this list has at least one review.",
+    "To add a review: copy one entry below into the list, fill it in, save. The website updates by itself (no other step).",
+    "Only add REAL reviews, in the client's own words, from clients who agreed to be quoted. Never invent or reword one.",
+    "Fields: name (required: first name and last initial is fine), text (required: the review, exactly as written),",
+    "permission (required: must be true, meaning the client said you can show it; entries without it are never shown),",
+    "area (optional, e.g. Forest Hill), project (optional, e.g. Front door), date (optional, e.g. June 2026),",
+    "stars (optional, 1 to 5: only add it if the client actually gave a star rating)."
+  ],
+  "example_entry_not_shown": {
+    "name": "First name and last initial",
+    "text": "The client's own words go here.",
+    "permission": true,
+    "area": "Forest Hill",
+    "project": "Front door",
+    "date": "June 2026",
+    "stars": 5
+  },
+  "reviews": []
+}

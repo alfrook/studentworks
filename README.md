@@ -15,12 +15,14 @@ student-works-painting/
 ├── gallery.html, project.html, about.html, contact.html, credits.html, 404.html
 │                           Older pages. Still online, no longer linked from the homepage.
 ├── site.config.json        ← your web address (SITE_URL)
+├── data/reviews.json       ← client reviews (add real ones here)
 ├── data/story.json         ← the paint beats: labels, colours, captions
 ├── data/projects.json      Projects for the (unlinked) gallery pages
 ├── css/styles.css          Shared colours, fonts, header, forms
 ├── css/home.css            The homepage story, operator and booking styles
 ├── css/site.css            Brand styles: header, film, sections, footer
 ├── js/book.js              The Book a quote form
+├── js/reviews.js           Shows data/reviews.json (hidden when empty)
 ├── js/story.js             The story engine: plays the film (or scrolls the drawings)
 ├── js/contact.js           Quote form helpers (subject line, call/email switch)
 ├── images/
@@ -65,7 +67,7 @@ All colours and the font live in `:root` at the top of `css/styles.css`: `--bg` 
 
 - **Slow reveals:** add `class="reveal"` to any element and `js/reveal.js` fades it up once as it comes into view. With reduced motion turned on, nothing moves.
 - **Header:** transparent over the opening screen, then a blurred white bar once you scroll (also `js/reveal.js`).
-- **Reviews slot:** in `index.html`, after "Meet the operator", there's a hidden `<div id="reviews" hidden>`. When you have real reviews from real clients who agreed to be quoted, put them there and remove the word `hidden`. Never add invented reviews, ratings or press mentions.
+- **Client reviews:** the section between "Meet the operator" and "How it works" is **hidden until there is at least one real review**. To add one, open `data/reviews.json` (instructions are at the top of the file), copy the example entry into the `"reviews"` list, fill it in and save (on GitHub you can do this in the browser with the pencil button). The site updates by itself. Each review needs the client's name, their exact words, and `"permission": true` (the client agreed to be quoted): entries without permission are never shown. `area`, `project`, `date` and `stars` are optional; only add `stars` if the client really gave a star rating. Reviews are shown as plain text, in the client's own words. Never add invented reviews. Under the reviews there's a "Send us a few words" email link so past clients can send you one.
 
 ## November update
 
@@ -99,7 +101,7 @@ The top of the page plays your AI video like a video, and then lets the visitor 
 
 ## The sections under the film
 
-After the film, in order: **What we paint** (swipeable cards on phones), **Meet the operator**, **How it works**, **Book a quote**, then the **FAQ** at the very bottom.
+After the film, in order: **What we paint** (swipeable cards on phones), **Meet the operator**, **Client reviews** (only once you have real ones), **How it works**, **Book a quote**, then the **FAQ** at the very bottom.
 
 - **What we paint:** the four pictures are stills from the AI film (`images/services/*.webp`, made from the video with ffmpeg). When you have real photos of your own jobs, replace those four files (800 x 600) and update the `alt` text in `index.html`. The cards don't say these are past jobs; keep it that way until the pictures are real.
 - **Meet the operator:** your photo, name and bio, with the last line of the bio as a pull-quote under it. The bio text is unchanged.

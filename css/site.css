@@ -195,3 +195,20 @@ html.story-lock, html.story-lock body { overflow: hidden; overscroll-behavior: n
 .bhead:not(.bhead--center) { text-align: left; }
 .bhead:not(.bhead--center) .eyebrow { text-align: left; }
 .bhead:not(.bhead--center) p { margin-inline: 0; }
+
+/* ---------- Client reviews (shown only when data/reviews.json has real, permitted reviews) ---------- */
+#reviews[hidden] { display: none; }
+.rev-grid { list-style: none; display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); margin: 0; padding: 0; }
+.rev-grid[data-count="1"] { grid-template-columns: minmax(0, 680px); }
+.rev-grid[data-count="2"] { grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+.rev-card { position: relative; display: flex; flex-direction: column; gap: 16px; padding: 30px 26px 24px; background: #fff; border-radius: var(--r-lg); box-shadow: var(--shadow-card); overflow: hidden; }
+.rev-card::before { content: "\201C"; position: absolute; top: 4px; right: 18px; font: italic 800 5.5rem/1 var(--font-display); color: var(--brand-red); opacity: 0.16; pointer-events: none; }
+.rev-card__stars { display: inline-flex; gap: 3px; color: var(--brand-red); }
+.rev-card__stars svg { width: 18px; height: 18px; fill: currentColor; }
+.rev-card blockquote { margin: 0; flex: 1; }
+.rev-card blockquote p { margin: 0; font: italic 700 1.125rem/1.55 var(--font-display); color: var(--brand-black); }
+.rev-card footer { display: grid; gap: 2px; padding-top: 14px; border-top: 1px solid var(--brand-grey); font: 400 0.875rem/1.45 var(--font-brand); color: var(--muted); }
+.rev-card footer strong { color: var(--brand-black); font-weight: 700; font-size: 0.9375rem; }
+.rev-more { margin: 28px 0 0; font: 400 0.9375rem/1.5 var(--font-brand); color: var(--muted); }
+.rev-more a { color: var(--brand-red); font-weight: 700; }
+.js .rev-card.reveal { transition-delay: calc(var(--i, 0) * 80ms); }

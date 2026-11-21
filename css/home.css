@@ -201,8 +201,6 @@
 .book-form__note a { color: var(--text); }
 @media (min-width: 700px) { .book-form__send { justify-items: start; } }
 
-/* Reviews slot: hidden until it holds real reviews */
-.reviews { margin-top: var(--section); }
 
 /* ---------- Short screens (a phone held sideways) ---------- */
 @media (max-height: 520px) {

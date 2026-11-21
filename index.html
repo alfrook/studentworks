@@ -31,6 +31,7 @@
   <script>document.documentElement.className = "js";</script>
   <script type="module" src="js/story.js"></script>
   <script type="module" src="js/book.js"></script>
+  <script type="module" src="js/reviews.js"></script>
   <!-- FILM: the story plays this video (instead of the drawings) while "use" is true. It plays on its own, no scrolling.
        hold: seconds the logo shows before the film starts. rate: playback speed (1 = normal; the video is about 14 s).
        end: seconds on the last shot before it zooms back out to the logo.
@@ -234,15 +235,20 @@
           <a class="button button--cta" href="#book">Book a quote</a>
         </div>
       </div>
-
-      <!-- REVIEWS SLOT: hidden until you have real reviews from real clients who agreed to be quoted.
-           To show it: remove the word "hidden" below and replace the placeholder. Never add invented reviews. -->
-      <div class="reviews" id="reviews" hidden>
-        <p class="eyebrow">In their words</p>
-        <p class="ph">[PLACEHOLDER: real client reviews go here]</p>
-      </div>
     </section>
 
+    <!-- CLIENT REVIEWS: hidden until data/reviews.json holds at least one real review the client agreed to share (js/reviews.js).
+         To add one, edit data/reviews.json (instructions are inside it). Never add invented reviews. -->
+    <section class="bsec bsec--cream" id="reviews" aria-labelledby="reviews-title" hidden>
+      <div class="wrap">
+        <div class="bhead reveal">
+          <p class="eyebrow">Reviews</p>
+          <h2 id="reviews-title">What our clients say.</h2>
+        </div>
+        <ul class="rev-grid" data-reviews></ul>
+        <p class="rev-more reveal">Worked with us? <a href="mailto:paintwithfrook@gmail.com?subject=Review%20for%20ForestHill%20Student%20Painters">Send us a few words</a> and we may add your review here.</p>
+      </div>
+    </section>
 
     <section class="bsec" id="process" aria-labelledby="process-title">
       <div class="wrap">
