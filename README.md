@@ -102,7 +102,7 @@ The top of the page plays your AI video like a video, and then lets the visitor 
 After the film, in order: **What we paint** (swipeable cards on phones), **Meet the operator**, **How it works**, **Book a quote**, then the **FAQ** at the very bottom.
 
 - **What we paint:** the four pictures are stills from the AI film (`images/services/*.webp`, made from the video with ffmpeg). When you have real photos of your own jobs, replace those four files (800 x 600) and update the `alt` text in `index.html`. The cards don't say these are past jobs; keep it that way until the pictures are real.
-- **Meet the operator:** the three chips under the name come from your bio (Forest Hill Collegiate Institute, mechanical engineering at the University of Guelph, residential and commercial). The pull-quote is the last line of your bio. The bio itself is unchanged.
+- **Meet the operator:** your photo, name and bio, with the last line of the bio as a pull-quote under it. The bio text is unchanged.
 - **FAQ:** every answer is written without anything we can't back up, and no placeholders show on the page. The things to confirm are in HTML comments marked `CONFIRM:` next to each answer. One to watch: the parent Student Works site says it is "proudly partnered with Dulux". Only put a paint brand on this page if that is true for you.
 - The footer year updates itself. The "Licensed & insured" line is left out until you've confirmed your real coverage (there's a `CONFIRM:` comment where it goes).
 - The thank-you page (`thanks.html`) and the not-found page (`404.html`) match the rest of the site.

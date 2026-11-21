@@ -69,8 +69,6 @@
 /* ---------- Meet the operator ---------- */
 #operator { font-family: var(--font-brand); }
 #operator .operator__photo img { box-shadow: 0 0 0 6px var(--brand-cream), 0 0 0 7px var(--brand-grey); }
-.operator__facts { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 4px; padding: 0; }
-.operator__facts li { padding: 8px 14px; border-radius: var(--r-pill); background: var(--brand-cream); border: 1px solid var(--brand-grey); font: 600 0.8125rem/1.3 var(--font-brand); color: var(--brand-black); }
 .operator__bio { max-width: 62ch; }
 .operator__bio p { font-size: 1.0625rem; line-height: 1.75; color: #3d3d3d; margin: 0 0 1em; }
 .operator__quote { margin: 26px 0 28px; padding: 4px 0 4px 20px; border-left: 4px solid var(--brand-red); }
