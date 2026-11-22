@@ -606,6 +606,52 @@ function startStory() {
     el.textContent = text;
     return true;
   }
+  // The words glide instead of snapping. The old word slides up and fades out first; only then does the new one rise into
+  // place and fade in, one after the other inside a clipped box, so two words are never on screen over each other.
+  const ghost = document.querySelector("[data-hud-ghost]");
+  let placeToken = 0, leadToken = 0;
+  function flowPlace(text) {
+    const old = hud.place.textContent;
+    hud.place.style.opacity = "";
+    if (old === text) return;
+    hud.place.textContent = text;
+    if (!fadeIn || !hud.place.animate || !ghost || !old) return;
+    const my = ++placeToken;
+    hud.place.getAnimations().forEach((a) => a.cancel());
+    ghost.getAnimations().forEach((a) => a.cancel());
+    ghost.textContent = old;
+    ghost.hidden = false;
+    hud.place.style.opacity = "0";                      // waits, unseen, until the old word has gone
+    const out = ghost.animate([{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateY(-40%)" }], { duration: 170, easing: "cubic-bezier(.5,0,.9,.6)", fill: "forwards" });
+    out.onfinish = () => {
+      if (my !== placeToken) return;
+      ghost.hidden = true;
+      hud.place.animate([{ opacity: 0, transform: "translateY(42%)" }, { opacity: 1, transform: "none" }], { duration: 430, easing: "cubic-bezier(.2,.8,.2,1)" });
+      hud.place.style.opacity = "";                     // from here the animation sets the opacity
+    };
+  }
+  function flowLead(text) {
+    const had = hud.lead.textContent;
+    if (had === text) { hud.lead.hidden = !text; return; }
+    const quick = !fadeIn || !hud.lead.animate;
+    const set = () => { setText(hud.lead, text); hud.lead.hidden = !text; };
+    const my = ++leadToken;
+    hud.lead.getAnimations().forEach((a) => a.cancel());
+    if (quick) { set(); return; }
+    if (!had) { set(); hud.lead.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 380, delay: 200, easing: "ease-out", fill: "backwards" }); return; }
+    const out = hud.lead.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, fill: "forwards" });
+    out.onfinish = () => {
+      if (my !== leadToken) return;
+      set();
+      out.cancel();
+      if (text) hud.lead.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 340, easing: "ease-out" });
+    };
+  }
+  function flowSub(text) {
+    if (hud.sub.textContent === text) return;
+    setText(hud.sub, text);
+    if (fadeIn && hud.sub.animate && text) hud.sub.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 460, delay: 260, easing: "ease-out", fill: "backwards" });
+  }
   function setChapter(i) {
     chapter = i;
     const ch = CHAPTERS[i];
@@ -613,14 +659,9 @@ function startStory() {
     root.classList.toggle("finale-on", !!ch.finale);
     finale.inert = !ch.finale;
     const lead = ch.lead ?? "We paint"; // the small line above the big word
-    setText(hud.lead, lead);
-    hud.lead.hidden = !lead;
-    setText(hud.sub, ch.sub || "");
-    const changed = setText(hud.place, ch.place);
-    if (changed && fadeIn && hud.place.animate) {
-      hud.place.getAnimations().forEach((an) => an.cancel());
-      hud.place.animate([{ opacity: 0.7, transform: "translateY(4px)" }, { opacity: 1, transform: "none" }], { duration: 260, easing: "ease-out" });
-    }
+    flowLead(lead);
+    flowSub(ch.sub || "");
+    flowPlace(ch.place);
     const hasSteps = !!(ch.steps && ch.steps.length);
     if (hasSteps) {
       const html = ch.steps.map((label, k) => `<li${k === ch.stage ? ' class="is-now"' : k < ch.stage ? ' class="is-done"' : ""}><b>${k + 1}</b>${label}</li>`).join("");

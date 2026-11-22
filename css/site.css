@@ -219,3 +219,7 @@ html.story-lock, html.story-lock body { overflow: hidden; overscroll-behavior: n
 .splash__replay:hover { background: var(--brand-black); color: #fff; }
 .splash__replay:focus-visible { outline: 3px solid var(--brand-red); outline-offset: 3px; }
 .show-cue .splash__replay { opacity: 1; visibility: visible; }
+/* the words glide in and out inside a clipped box (js/story.js, flowPlace) */
+.hud__slot { position: relative; overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
+.hud__place--ghost { position: absolute; left: 0; right: 0; top: 0; min-height: 0 !important; pointer-events: none; }
+.hud__place--ghost[hidden] { display: none; }
