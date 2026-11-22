@@ -42,24 +42,24 @@
 .bsec h3 { font-family: var(--font-brand); font-weight: 700; font-size: var(--step-1); letter-spacing: -0.01em; color: var(--brand-black); }
 .bsec p { font-family: var(--font-brand); }
 
-/* ---------- Service cards: real pictures; swipeable on phones, a grid on bigger screens ---------- */
-.svc-grid { list-style: none; display: grid; gap: 20px; grid-template-columns: repeat(2, 1fr); }
-@media (min-width: 1080px) { .svc-grid { grid-template-columns: repeat(4, 1fr); } }
-@media (max-width: 639px) {
-  .svc-grid { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); overscroll-behavior-x: contain;
-    margin-inline: calc(var(--gutter) * -1); padding: 4px var(--gutter) 22px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-  .svc-grid::-webkit-scrollbar { display: none; }
-  .svc-card { flex: 0 0 80%; scroll-snap-align: start; }
-}
-.svc-card { position: relative; background: #fff; border-radius: var(--r-md); box-shadow: var(--shadow-card); overflow: hidden; display: flex; flex-direction: column;
-  transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease); }
-.svc-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
-.svc-card__img { aspect-ratio: 4 / 3; background: var(--brand-grey); overflow: hidden; }
-.svc-card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s var(--ease); }
-.svc-card:hover .svc-card__img img { transform: scale(1.06); }
-.svc-card h3 { margin: 20px 22px 6px; font-family: var(--font-display); font-style: italic; font-weight: 800; font-size: 1.5rem; }
-.svc-card p { margin: 0 22px 26px; color: var(--muted); font-size: 0.9375rem; line-height: 1.55; flex: 1; }
-.js .svc-card.reveal { transition-delay: calc(var(--i, 0) * 80ms); }
+/* ---------- What we paint: two real photos, then the services as text ---------- */
+.work { display: grid; gap: 20px; grid-template-columns: 1fr; margin-bottom: clamp(36px, 5vw, 60px); }
+@media (min-width: 760px) { .work { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); } .work__ph { height: clamp(380px, 46vw, 600px); } }
+.work__ph { position: relative; margin: 0; overflow: hidden; border-radius: var(--r-lg); background: var(--brand-grey); box-shadow: var(--shadow-card); }
+.work__ph img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s var(--ease); }
+.work__ph--house img { object-position: 50% 62%; }
+.work__ph--ladder img { object-position: 40% 30%; }
+@media (max-width: 759px) { .work__ph--house { aspect-ratio: 4 / 3; } .work__ph--ladder { aspect-ratio: 4 / 5; } }
+.work__ph:hover img { transform: scale(1.03); }
+.work__ph figcaption { position: absolute; left: 14px; bottom: 14px; max-width: calc(100% - 28px); padding: 6px 14px; border-radius: var(--r-pill); background: rgb(17 17 17 / 0.72); color: #fff; font: 600 0.8125rem/1.4 var(--font-brand); }
+.js .work__ph.reveal { transition-delay: calc(var(--i, 0) * 100ms); }
+.svc-list { list-style: none; display: grid; gap: 28px 32px; grid-template-columns: 1fr; margin: 0; padding: 0; }
+@media (min-width: 560px) { .svc-list { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 960px) { .svc-list { grid-template-columns: repeat(4, 1fr); } }
+.svc-list li { padding-top: 16px; border-top: 3px solid var(--brand-red); }
+.svc-list h3 { margin: 0 0 8px; font: italic 800 1.5rem/1.2 var(--font-display); color: var(--brand-black); }
+.svc-list p { margin: 0; color: var(--muted); font-size: 0.9375rem; line-height: 1.6; }
+.js .svc-list li.reveal { transition-delay: calc(var(--i, 0) * 80ms); }
 
 /* ---------- Meet the operator ---------- */
 #operator { font-family: var(--font-brand); }
