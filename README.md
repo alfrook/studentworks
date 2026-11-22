@@ -26,7 +26,7 @@ student-works-painting/
 ├── js/story.js             The story engine: plays the film (or scrolls the drawings)
 ├── js/contact.js           Quote form helpers (subject line, call/email switch)
 ├── images/
-│   ├── logo-fhsp*.png      The ForestHill logo (opening screen and header)
+│   ├── logo-fhsp*.png      The ForestHill logo (opening screen, header, footer); made from tools/logo-original.png by tools/make-logo.py
 │   ├── film/               The film and its poster
 │   ├── operator.jpg        ← your photo (placeholder now)
 │   ├── scenes/             The drawings: forest-hill.svg, house.svg, kitchen.svg

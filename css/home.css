@@ -432,7 +432,7 @@
 
 /* ---------- ForestHill Student Painters logo: opening screen and header ---------- */
 .splash { background: #fff; }
-.splash__logo { width: min(86vw, 760px); height: auto; transform-origin: 54% 27%; } /* zoom into the space under the roof */
+.splash__logo { width: min(86vw, 760px); height: auto; transform-origin: 53% 25%; } /* zoom into the space under the roof */
 .wordmark { display: block; line-height: 0; }
 .wordmark img { height: 56px; width: auto; display: block; }
 @media (max-width: 380px) { .wordmark img { height: 50px; } }
