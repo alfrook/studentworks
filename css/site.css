@@ -222,3 +222,16 @@ html.story-lock, html.story-lock body { overflow: hidden; overscroll-behavior: n
 .hud__slot { position: relative; overflow: hidden; padding-bottom: 0.14em; margin-bottom: -0.14em; }
 .hud__place--ghost { position: absolute; left: 0; right: 0; top: 0; min-height: 0 !important; pointer-events: none; }
 .hud__place--ghost[hidden] { display: none; }
+
+/* Film mode: the film is the whole screen. No words, no bars: just the film and a small pause button. */
+.story--play { --stage-h: 100svh; }
+.story--play .stage { top: 0; background: #000; }
+.story--play .hud { display: none; }
+.story--play .scene-area { position: absolute; inset: 0; background: #000; }
+.story--play .progress { display: none; }
+.story--play .hud-foot { position: absolute; top: auto; left: auto; right: 14px; bottom: max(14px, env(safe-area-inset-bottom)); width: auto; min-height: 0; padding: 0; background: none; border: 0; z-index: 6; }
+.story--play .story-ctl { background: rgb(255 255 255 / 0.9); border-color: transparent; box-shadow: 0 4px 16px rgb(0 0 0 / 0.35); }
+.story--play { margin-top: calc(var(--header-h) * -1); }   /* the film starts at the very top of the screen, under the (hidden) top bar; js/story.js sets the exact height */
+.site-header { z-index: 60; }
+/* while the bar is hidden it must not paint a white strip over the film either */
+.on-logo .site-header { background: transparent; border-bottom-color: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; pointer-events: none; }

@@ -82,13 +82,12 @@ All colours and the font live in `:root` at the top of `css/styles.css`: `--bg` 
 
 The top of the page plays your AI video like a video, and then lets the visitor scroll through it.
 
-1. **It plays by itself.** The logo shows for a moment and zooms away over the first picture (the film waits on that picture until the logo has gone). Then the video plays (about 7 s) with the words above it changing on each shot. The page is locked while it plays, so it behaves like a video. Pausing unlocks it.
+1. **It plays by itself.** The logo shows for a moment and zooms away over the first picture (the film waits on that picture until the logo has gone). Then the video plays (about 7 s) **full screen, with no words or bars around it**: just the film and a small pause button in the corner. The top bar (logo, Call, Book a quote) stays out of the way while it plays. The page is locked while it plays, so it behaves like a video. Pausing unlocks it.
 2. **It ends on the logo.** The last shot zooms back out to the logo, with a "Watch again" button and a small "Scroll" hint.
-3. **Then scrolling moves through it.** Scroll up to rewind through the shots (the words follow), scroll down to go forward again. Past the end of it, the page carries on as normal and the header (logo, Call, Book a quote) appears. A button in the bottom bar plays, pauses or "watches again".
+3. **Then scrolling moves through it.** Scroll up to rewind through the shots, scroll down to go forward again. Past the end of it, the page carries on as normal and the header (logo, Call, Book a quote) appears. A button in the bottom bar plays, pauses or "watches again".
 
 - The video: `images/film/film.mp4` (1.8 MB) and its first frame, `images/film/poster.webp`. It is about 7 seconds long. It was made from the 6.6 s Hailuo clip by slowing each shot a little (about 1.5x) so none is rushed, adding in-between frames up to 60 fps, leaving out the blurry dive through the trees, and joining the shots with 0.4 s dissolves. A keyframe every 24 frames keeps scrolling through it smooth.
 - The settings: the `film-data` block in `index.html`.
-  - `chapters`: when each word appears, in seconds of the video.
   - `scrub`: how many screens of scrolling it takes to go through the whole film (more = slower).
   - `hold`: how long the logo shows first. `end`: the pause on the last shot before the logo comes back.
   - `rate`: playback speed (1 = as made). `duration`: the length in seconds (a fallback; the real length is read from the file).

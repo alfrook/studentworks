@@ -141,7 +141,7 @@ if (FILM) {
   CAMERA.push({ u: 0, x: 470, y: 300, r: 760 });
   for (const L of Object.values(LAYERS)) L.opacity = [[0, 0]];  // drawings hidden
   CHAPTERS.length = 0;
-  for (const c of FILM.chapters) CHAPTERS.push({ u: Math.max(0, c.t - INTRO), fig: "", lead: c.lead, place: c.place, sub: c.sub || "", chip: null });
+  for (const c of FILM.chapters || []) CHAPTERS.push({ u: Math.max(0, c.t - INTRO), fig: "", lead: c.lead, place: c.place, sub: c.sub || "", chip: null });
   WIPES.length = 0;
   SPANS.length = 0;
   t = 1e4; // the end card's time is set from the video's length once it loads
@@ -473,7 +473,11 @@ function startStory() {
   }
   function startFilm() {
     film.hidden = false;
-    document.querySelector(".story").classList.add("story--play");
+    const storyEl = document.querySelector(".story"), headerEl = document.querySelector(".site-header");
+    storyEl.classList.add("story--play");
+    const tuck = () => { if (headerEl) storyEl.style.marginTop = `-${headerEl.getBoundingClientRect().height}px`; };   // the film starts at the very top, under the (hidden) top bar
+    tuck();
+    addEventListener("resize", tuck);
     document.querySelector(".scroll-cue")?.setAttribute("hidden", "");
     track.style.setProperty("--units", SCRUB);
     ctl.hidden = false;
@@ -592,7 +596,9 @@ function startStory() {
       splash.style.pointerEvents = fade > 0.9 ? "auto" : "none"; // a fading logo must not block the buttons underneath
     }
     // the header stays hidden while the logo fills the screen, and comes back once the story has scrolled away
-    root.classList.toggle("on-logo", fade > 0.5 && (!film || track.getBoundingClientRect().bottom > innerHeight * 0.6));
+    // The top bar stays out of the way while the film plays by itself and while the logo fills the screen;
+    // as soon as it ends (or is paused) and the visitor scrolls, the bar is back.
+    root.classList.toggle("on-logo", film ? mode === "auto" || (fade > 0.5 && track.getBoundingClientRect().bottom > innerHeight * 0.6) : fade > 0.5);
     if (film) root.classList.toggle("show-cue", mode === "scrub" && fade > 0.9 && bigPlay.hidden);
 
     bar.style.transform = `scaleX(${clamp(u / (film ? filmEnd : UNITS), 0, 1).toFixed(4)})`;
@@ -654,6 +660,7 @@ function startStory() {
   }
   function setChapter(i) {
     chapter = i;
+    if (FILM) return;                    // the film is just the film: no words around it
     const ch = CHAPTERS[i];
     finale.classList.toggle("is-on", !!ch.finale);
     root.classList.toggle("finale-on", !!ch.finale);
