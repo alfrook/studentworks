@@ -51,7 +51,6 @@
 .work__ph--ladder img { object-position: 40% 30%; }
 @media (max-width: 759px) { .work__ph--house { aspect-ratio: 4 / 3; } .work__ph--ladder { aspect-ratio: 4 / 5; } }
 .work__ph:hover img { transform: scale(1.03); }
-.work__ph figcaption { position: absolute; left: 14px; bottom: 14px; max-width: calc(100% - 28px); padding: 6px 14px; border-radius: var(--r-pill); background: rgb(17 17 17 / 0.72); color: #fff; font: 600 0.8125rem/1.4 var(--font-brand); }
 .js .work__ph.reveal { transition-delay: calc(var(--i, 0) * 100ms); }
 .svc-list { list-style: none; display: grid; gap: 28px 32px; grid-template-columns: 1fr; margin: 0; padding: 0; }
 @media (min-width: 560px) { .svc-list { grid-template-columns: repeat(2, 1fr); } }
