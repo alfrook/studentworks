@@ -212,3 +212,10 @@ html.story-lock, html.story-lock body { overflow: hidden; overscroll-behavior: n
 .rev-more { margin: 28px 0 0; font: 400 0.9375rem/1.5 var(--font-brand); color: var(--muted); }
 .rev-more a { color: var(--brand-red); font-weight: 700; }
 .js .rev-card.reveal { transition-delay: calc(var(--i, 0) * 80ms); }
+/* "Watch again" on the end logo screen, above the Scroll hint */
+.splash__replay { position: absolute; left: 50%; bottom: max(84px, calc(env(safe-area-inset-bottom) + 76px)); transform: translateX(-50%); display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 22px;
+  border: 1.5px solid var(--brand-black); border-radius: var(--r-pill); background: #fff; color: var(--brand-black); font: 700 0.9375rem/1 var(--font-brand); cursor: pointer; opacity: 0; visibility: hidden; transition: opacity 0.5s var(--ease), background-color 0.25s, color 0.25s; }
+.splash__replay svg { width: 18px; height: 18px; fill: currentColor; }
+.splash__replay:hover { background: var(--brand-black); color: #fff; }
+.splash__replay:focus-visible { outline: 3px solid var(--brand-red); outline-offset: 3px; }
+.show-cue .splash__replay { opacity: 1; visibility: visible; }

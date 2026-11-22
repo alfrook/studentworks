@@ -358,6 +358,7 @@ function startStory() {
   let scrubU = 0;         // story time (seconds) in scrub mode
   let endedAt = 0;        // when the film finished (performance.now), 0 while it plays
   let introDone = false;  // the opening logo has zoomed away
+  let zooming = false, zoomStart = 0;   // the logo is zooming away (the film waits on its first picture until it is gone)
   let wanted = true;      // false once the visitor pauses
   let running = false;
   let seeking = false, seekWanted = null;
@@ -373,6 +374,23 @@ function startStory() {
     else running = false;
   }
   function run() { if (!running) { running = true; requestAnimationFrame(tick); } }
+  // The logo zooms away first, over the film's first picture, and only then does the film play,
+  // so none of the film's seconds are hidden behind the logo.
+  function beginZoom() {
+    if (introDone) { play(); return; }
+    zooming = true; zoomStart = performance.now();
+    requestAnimationFrame(zoomLoop);
+  }
+  function zoomLoop() {
+    if (!zooming) return;
+    render();
+    if ((performance.now() - zoomStart) / 1000 >= INTRO) {
+      zooming = false; introDone = true; render();
+      if (wanted && mode === "auto") play();
+      return;
+    }
+    requestAnimationFrame(zoomLoop);
+  }
   let ctlState = "";
   function setCtl() {
     const state = mode === "auto" ? "pause" : scrubU >= D - 0.05 ? "replay" : "play";
@@ -391,6 +409,7 @@ function startStory() {
   }
   function enterScrub(u) {
     mode = "scrub";
+    zooming = false;
     running = false;
     wanted = false;
     endedAt = 0;
@@ -408,7 +427,7 @@ function startStory() {
   function lock() { root.classList.add("story-lock"); }
   function unlockInPlace() {                          // stop the film and free the page, without moving the scroll position
     if (mode !== "auto") return;
-    mode = "scrub"; running = false; wanted = false; endedAt = 0; introDone = true;
+    mode = "scrub"; running = false; wanted = false; endedAt = 0; introDone = true; zooming = false;
     film.pause();
     root.classList.remove("story-lock");
     bigPlay.hidden = true;
@@ -419,13 +438,13 @@ function startStory() {
   function restart() {                                // watch it again from the start
     scrollTo({ top: 0, behavior: "instant" });
     lock();
-    mode = "auto"; wanted = true; endedAt = 0; introDone = false; scrubU = 0;
+    mode = "auto"; wanted = true; endedAt = 0; introDone = false; zooming = false; scrubU = 0;
     bigPlay.hidden = true; ctl.hidden = false;
     seekWanted = null;
     try { film.currentTime = 0; } catch {}
     setCtl();
-    play();
     render();
+    beginZoom();
   }
   function resume() {                                 // carry on from where it was paused
     if (scrubU >= D - 0.05) return restart();
@@ -482,6 +501,7 @@ function startStory() {
         .then((b) => { film.src = URL.createObjectURL(b.type ? b : new Blob([b], { type: "video/mp4" })); film.load(); })
         .catch(showStill);
     }, true);
+    document.querySelector("[data-splash-replay]")?.addEventListener("click", restart);   // "Watch again" on the end logo screen
     ctl.addEventListener("click", () => {
       if (mode === "auto") { wanted = false; film.pause(); enterScrub(film.currentTime); }   // pausing lets you look around
       else resume();
@@ -496,7 +516,7 @@ function startStory() {
     const go = () => {
       if (started || !held || !ready) return;
       started = true;
-      if (wanted && mode === "auto") play();
+      if (wanted && mode === "auto") beginZoom();
     };
     film.addEventListener("canplaythrough", () => {
       ready = true;
@@ -559,7 +579,7 @@ function startStory() {
     // Opening logo: zoom into the paintbrush and fade into the map (or the film)
     if (film && u >= INTRO) introDone = true;
     // film: the logo opens it, and comes back at the end (zooming out); scrolling back through it plays this both ways
-    let su = introDone ? INTRO : u;
+    let su = introDone ? INTRO : zooming ? (performance.now() - zoomStart) / 1000 : u;
     if (film) su = u >= outroAt ? INTRO * (1 - clamp((u - outroAt) / INTRO, 0, 1)) : mode === "scrub" ? Math.min(u, INTRO) : su;
     const zoom = ease(clamp((su - 0.04) / (INTRO - 0.04), 0, 1));
     const fade = 1 - ease(clamp((su - INTRO * 0.4) / (INTRO * 0.6), 0, 1));
