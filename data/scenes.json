@@ -1,0 +1,53 @@
+{
+  "_readme": "Photos for the homepage story. Drop your photos in images/plates/ and put their paths here. A beat switches from the drawing to your photos as soon as ALL of its paths are filled in; until then the drawing is shown. Every before/after pair must be shot from the same locked camera position (tripod, same zoom). Landscape 3:2 works best, at least 2000 px wide; if you also save a smaller copy for phones (same name ending in -1200.jpg, 1200 px wide), set \"phoneSizes\" to true. Write a short 'alt' description of what the photo shows. The kitchen and deck already point at placeholder files (\"PHOTO COMING\"): overwrite those files with your photos (same names), then change \"use\" from false to true.",
+  "phoneSizes": false,
+  "scenes": {
+    "toronto": {
+      "photo": "",
+      "alt": "Aerial view of Toronto."
+    },
+    "forest-hill": {
+      "photo": "",
+      "alt": "A tree-lined street in Forest Hill."
+    },
+    "house": {
+      "before": "",
+      "after": "",
+      "alt": "The full house: three floors, garage built into the ground floor."
+    },
+    "siding": {
+      "before": "",
+      "after": "",
+      "alt": "The siding and trim, before and after painting."
+    },
+    "door": {
+      "before": "",
+      "after": "",
+      "alt": "The front door, before and after painting."
+    },
+    "garage": {
+      "before": "",
+      "after": "",
+      "alt": "The garage door, before and after painting."
+    },
+    "walls": {
+      "use": false,
+      "before": "images/plates/kitchen-before.jpg",
+      "after": "images/plates/kitchen-after.jpg",
+      "alt": "The kitchen: dated beige walls and cabinets, then bright white."
+    },
+    "fence": {
+      "before": "",
+      "after": "",
+      "alt": "The fence, before and after staining."
+    },
+    "deck": {
+      "use": false,
+      "before": "images/plates/deck-1-weathered.jpg",
+      "washed": "images/plates/deck-2-pressure-washed.jpg",
+      "sanded": "images/plates/deck-3-sanded.jpg",
+      "after": "images/plates/deck-4-stained.jpg",
+      "alt": "The deck and balcony: weathered, pressure washed, sanded, then stained."
+    }
+  }
+}

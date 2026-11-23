@@ -1,0 +1,5 @@
+{
+  "_readme": "Put your real web address in SITE_URL (no slash at the end), then run: python3 tools/set-site-url.py. Leave APPLIED_URL alone; the script uses it to know what to replace.",
+  "SITE_URL": "https://alfrook.github.io/studentworks",
+  "APPLIED_URL": "https://alfrook.github.io/studentworks"
+}
