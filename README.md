@@ -107,6 +107,7 @@ After the film, in order: **What we paint** (swipeable cards on phones), **Meet 
 - **FAQ:** every answer is written without anything we can't back up, and no placeholders show on the page. The things to confirm are in HTML comments marked `CONFIRM:` next to each answer. One to watch: the parent Student Works site says it is "proudly partnered with Dulux". Only put a paint brand on this page if that is true for you.
 - The footer year updates itself. The "Licensed & insured" line is left out until you've confirmed your real coverage (there's a `CONFIRM:` comment where it goes).
 - The thank-you page (`thanks.html`) and the not-found page (`404.html`) match the rest of the site.
+- **Privacy notice** (`privacy.html`, linked from every footer): plain language, says what the booking form collects, that it is emailed through FormSubmit, that the site sets no cookies and has no tracking, and that people can ask to see, correct or delete their details. It only states things that are true of the site today. There is a `CONFIRM:` comment in it for the practices only you can vouch for (deleting details on request, not sharing them). If you add analytics, a mailing list or anything else that collects data, update it. It is a plain-language notice, not legal advice.
 - Social sharing: the picture people see when the link is shared is `images/og-image-1200.jpg` (the navy house and the logo). The tab icon is `favicon.svg`, and `apple-touch-icon.png` is what phones use when the site is saved to the home screen.
 
 ## Your photos (data/scenes.json) *(drawn story)*
