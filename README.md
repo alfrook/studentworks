@@ -135,12 +135,18 @@ That redraws the house and kitchen in the new colours, rebuilds the still frames
 
 The two map drawings come from `tools/build-map.py`. If you ever change it, run `build-map.py` first, then `build-scenes.py`, because the still frames include the maps.
 
-## Your web address (SITE_URL)
+## Your web address: fhpainters.ca
 
-Search engines and link previews read the page tags, sitemap and schema without running JavaScript, so the address has to be written into the files themselves. Change it in one place:
+The site's address is in `site.config.json` (`SITE_URL`). Search engines and link previews read it from the page files, so after changing it run `python3 tools/set-site-url.py` and it updates every page, the sitemap and robots.txt. The file `CNAME` (just the domain name) tells GitHub Pages which domain the site answers to.
 
-1. Put your address in `site.config.json`, for example `"SITE_URL": "https://studentworkspainting.ca"`.
-2. Run `python3 tools/set-site-url.py`.
+**Going live on fhpainters.ca (do these in order):**
+1. Register `fhpainters.ca` at a registrar (you pay for this; it is the only cost).
+2. At the registrar's DNS settings add four **A** records for the main domain (`@`): `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, and a **CNAME** record for `www` pointing to `alfrook.github.io`. (GitHub's docs list the current addresses: "Managing a custom domain for your GitHub Pages site".)
+3. Merge the `custom-domain` branch into `main` (this puts the new address and the `CNAME` file on the live site).
+4. In the GitHub repo: Settings, Pages, Custom domain, enter `fhpainters.ca`, Save. When GitHub says the DNS check passed, tick **Enforce HTTPS** (the certificate can take up to an hour).
+5. Send a test request through the booking form on the new address and check it arrives at paintwithfrook@gmail.com (look in spam too).
+
+Do step 3 only after step 2 works, or the live site will point at an address that doesn't answer yet. The old address (alfrook.github.io/studentworks) then forwards to the new one.
 
 ## The booking form (FormSubmit, free)
 
