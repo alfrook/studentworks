@@ -130,6 +130,7 @@ for (const beat of DATA.beats) {
    The drawings stay for reduced motion / no JavaScript, and come back (scroll-driven)
    when "use" is false. */
 const INTRO = 0.8; // the opening logo screen: screens of scrolling, or seconds in film mode
+const OUTRO = 1.9; // the ending: the film washes to white and the logo settles in (seconds), slower and softer than the opening
 const FILM = (() => {
   try {
     const f = JSON.parse(document.getElementById("film-data")?.textContent || "null");
@@ -173,7 +174,7 @@ function startStory() {
   const stage = document.querySelector("[data-stage]");
   const splash = document.querySelector("[data-splash]");
   const logo = document.querySelector("[data-splash-logo]");
-  let logoZoom = -1, logoFade = -1;
+  let logoZoom = -1, logoFade = -1, logoKey = "";
   const bar = document.querySelector("[data-progress]");
   const hudEl = document.querySelector(".hud");
   const footEl = document.querySelector(".hud-foot");
@@ -200,6 +201,7 @@ function startStory() {
   /* ---------- maths ---------- */
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const ease = (t) => t * t * (3 - 2 * t); // smoothstep
+  const smoother = (t) => t * t * t * (t * (6 * t - 15) + 10); // smootherstep: even gentler at both ends
 
   const wipes = {}; // key -> { el, travel, t }, filled as the drawings load
   let keys = []; // CAMERA resolved for the current screen size: { u, x, y, r }
@@ -353,7 +355,7 @@ function startStory() {
   const SCRUB = FILM ? FILM.scrub ?? 6 : 0;       // screens of scrolling for the whole film
   let D = FILM ? FILM.duration || 13 : 0;         // film length in seconds (corrected from the file once it loads)
   let outroAt = D + (FILM ? FILM.end ?? 0.4 : 0); // story time when the logo starts coming back
-  let filmEnd = outroAt + INTRO;                  // story time when the logo is fully back
+  let filmEnd = outroAt + OUTRO;                  // story time when the logo is fully back
   let mode = "auto";
   let scrubU = 0;         // story time (seconds) in scrub mode
   let endedAt = 0;        // when the film finished (performance.now), 0 while it plays
@@ -485,7 +487,7 @@ function startStory() {
     const timed = () => {
       if (film.duration && isFinite(film.duration)) D = film.duration;
       outroAt = D + (FILM.end ?? 0.4);
-      filmEnd = outroAt + INTRO;
+      filmEnd = outroAt + OUTRO;
     };
     if (film.readyState >= 1) timed(); else film.addEventListener("loadedmetadata", timed, { once: true });
     film.addEventListener("playing", run);
@@ -584,16 +586,43 @@ function startStory() {
     if (film && u >= INTRO) introDone = true;
     // film: the logo opens it, and comes back at the end (zooming out); scrolling back through it plays this both ways
     let su = introDone ? INTRO : zooming ? (performance.now() - zoomStart) / 1000 : u;
-    if (film) su = u >= outroAt ? INTRO * (1 - clamp((u - outroAt) / INTRO, 0, 1)) : mode === "scrub" ? Math.min(u, INTRO) : su;
-    const zoom = ease(clamp((su - 0.04) / (INTRO - 0.04), 0, 1));
-    const fade = 1 - ease(clamp((su - INTRO * 0.4) / (INTRO * 0.6), 0, 1));
-    if (fade !== logoFade || zoom !== logoZoom) {
-      logoZoom = zoom;
-      logoFade = fade;
-      logo.style.transform = `scale(${Math.pow(9, zoom).toFixed(4)})`;
-      splash.style.opacity = fade.toFixed(3);
-      splash.style.visibility = fade > 0.001 ? "visible" : "hidden";
-      splash.style.pointerEvents = fade > 0.9 ? "auto" : "none"; // a fading logo must not block the buttons underneath
+    if (film) su = mode === "scrub" ? Math.min(u, INTRO) : su;
+    const outro = film && u > outroAt;
+    let fade;
+    if (outro) {
+      // The ending (both ways when scrubbing): the film drifts in slowly while it washes to white, then the logo fades up
+      // and settles into place. Smooth in, smooth out: no sudden zoom and no hard cut.
+      const p = clamp((u - outroAt) / OUTRO, 0, 1);
+      const wash = smoother(clamp(p / 0.72, 0, 1));
+      const logoA = smoother(clamp((p - 0.28) / 0.72, 0, 1));
+      const settle = 1.22 - 0.22 * smoother(clamp((p - 0.18) / 0.82, 0, 1));
+      fade = Math.min(wash, logoA);
+      const key = `o${wash.toFixed(3)}|${logoA.toFixed(3)}|${settle.toFixed(4)}`;
+      if (key !== logoKey) {
+        logoKey = key; logoFade = -1; logoZoom = -1;
+        film.style.transform = `scale(${(1 + 0.05 * smoother(p)).toFixed(4)})`;
+        splash.style.opacity = "1";
+        splash.style.background = `rgb(255 255 255 / ${wash.toFixed(3)})`;
+        logo.style.opacity = logoA.toFixed(3);
+        logo.style.transform = `scale(${settle.toFixed(4)})`;
+        splash.style.visibility = wash > 0.001 || logoA > 0.001 ? "visible" : "hidden";
+        splash.style.pointerEvents = logoA > 0.9 ? "auto" : "none";
+      }
+    } else {
+      const zoom = ease(clamp((su - 0.04) / (INTRO - 0.04), 0, 1));
+      fade = 1 - ease(clamp((su - INTRO * 0.4) / (INTRO * 0.6), 0, 1));
+      if (logoKey) {                                   // back out of the ending: put the opening's look back
+        logoKey = ""; logoFade = -1; logoZoom = -1;
+        film.style.transform = ""; splash.style.background = ""; logo.style.opacity = "";
+      }
+      if (fade !== logoFade || zoom !== logoZoom) {
+        logoZoom = zoom;
+        logoFade = fade;
+        logo.style.transform = `scale(${Math.pow(9, zoom).toFixed(4)})`;
+        splash.style.opacity = fade.toFixed(3);
+        splash.style.visibility = fade > 0.001 ? "visible" : "hidden";
+        splash.style.pointerEvents = fade > 0.9 ? "auto" : "none"; // a fading logo must not block the buttons underneath
+      }
     }
     // the header stays hidden while the logo fills the screen, and comes back once the story has scrolled away
     // The top bar stays out of the way while the film plays by itself and while the logo fills the screen;

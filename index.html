@@ -39,7 +39,7 @@
        duration: the film's length in seconds (a fallback; the real length is read from the file).
        Set "use" to false to go back to the drawn, scroll-driven story (that one has words; the film is just the film). -->
   <script type="application/json" id="film-data">
-  { "use": true, "src": "images/film/film.mp4", "duration": 6.9, "scrub": 6, "hold": 0.4, "rate": 1, "end": 0.5 }
+  { "use": true, "src": "images/film/film.mp4", "duration": 6.9, "scrub": 6, "hold": 0.4, "rate": 1, "end": 0.15 }
   </script>
   <script>/* decide the film layout before anything is drawn, so the page doesn't jump when the script loads */
     try { if (!matchMedia("(prefers-reduced-motion: reduce)").matches && JSON.parse(document.getElementById("film-data").textContent).use) document.documentElement.classList.add("film-on"); } catch (e) {}</script>
