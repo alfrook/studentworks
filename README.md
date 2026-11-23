@@ -136,12 +136,11 @@ That redraws the house and kitchen in the new colours, rebuilds the still frames
 
 The two map drawings come from `tools/build-map.py`. If you ever change it, run `build-map.py` first, then `build-scenes.py`, because the still frames include the maps.
 
-## Your web address (SITE_URL)
+## Your web address: fhpainters.github.io
 
-Search engines and link previews read the page tags, sitemap and schema without running JavaScript, so the address has to be written into the files themselves. Change it in one place:
+The site's address is in `site.config.json` (`SITE_URL`). Search engines and link previews read it from the page files, so after changing it run `python3 tools/set-site-url.py` and it updates every page, the sitemap and robots.txt.
 
-1. Put your address in `site.config.json`, for example `"SITE_URL": "https://studentworkspainting.ca"`.
-2. Run `python3 tools/set-site-url.py`.
+`fhpainters.github.io` is free. It comes from the GitHub account (an organization) named `fhpainters` owning a repository named exactly `fhpainters.github.io`, with Pages publishing from the `main` branch. If you later buy your own domain (for example `fhpainters.ca`), the `custom-domain` branch has the change ready: add the DNS records, merge it, then set the custom domain in Settings, Pages.
 
 ## The booking form (FormSubmit, free)
 
