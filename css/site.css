@@ -235,3 +235,16 @@ html.story-lock, html.story-lock body { overflow: hidden; overscroll-behavior: n
 .site-header { z-index: 60; }
 /* while the bar is hidden it must not paint a white strip over the film either */
 .on-logo .site-header { background: transparent; border-bottom-color: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; pointer-events: none; }
+
+/* ---------- Privacy notice (a plain text page) ---------- */
+.doc { max-width: 720px; margin-inline: auto; padding-block: clamp(56px, 10vw, 110px) clamp(56px, 9vw, 100px); font-family: var(--font-brand); }
+.doc .eyebrow { color: var(--brand-red); font-weight: 700; letter-spacing: 0.16em; font-size: 0.75rem; }
+.doc h1 { font-family: var(--font-display); font-style: italic; font-weight: 800; letter-spacing: -0.01em; line-height: 1.08; font-size: var(--step-4); color: var(--brand-black); margin: 10px 0 0; }
+.doc__lede { margin: 30px 0 0; font-size: 1.125rem; line-height: 1.6; color: var(--muted); }
+.doc h2 { margin: 36px 0 8px; font: italic 800 1.5rem/1.2 var(--font-display); color: var(--brand-black); }
+.doc p { margin: 0 0 14px; font-size: 1.0625rem; line-height: 1.7; color: #333; }
+.doc a { color: var(--brand-black); text-underline-offset: 0.2em; }
+.doc a:hover { color: var(--brand-red); opacity: 1; }
+.doc__back { margin-top: 40px !important; }
+.foot-links { display: inline-flex; flex-wrap: wrap; gap: 4px 22px; }
+.foot-links a { color: var(--brand-black); min-height: 44px; display: inline-flex; align-items: center; }
